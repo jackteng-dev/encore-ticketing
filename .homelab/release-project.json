@@ -1,0 +1,12 @@
+{
+  "project": "encore",
+  "repository": "ticket-platform",
+  "accepted_main": "9c6c1676f574e1ea84f573a3ac01b288c0e3bd77",
+  "accepted_ci": 39040806126,
+  "source_paths": [
+    "backend",
+    "frontend",
+    "infra"
+  ],
+  "github_repository": "encore-ticketing"
+}

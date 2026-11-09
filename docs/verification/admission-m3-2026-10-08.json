@@ -1,0 +1,444 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "milestone": "M3 Redis waiting room, member limiter, short-lived admission and complete customer UI",
+  "sourceBaseline": "74c3d851682e80aca31edc94135738e186226a34",
+  "backendCheckpoint": "3603594fa1ba2e57afe64f8e0655f8b9ba4aeb47",
+  "postgresql": "17.11 isolated ticket-admission-20261008 / ticket_demo",
+  "redis": "7.4.11 isolated password-protected standalone with AOF everysec",
+  "maven": {
+    "tests": 113,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": "25",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": "21",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": "27",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  "frontendBuild": "vue-tsc + Vite production build passed",
+  "waitingRoomHTTP": {
+    "transport": "production JAR loopback HTTP + real Redis",
+    "phase": "normal",
+    "passed": 13,
+    "checks": [
+      "anonymous queue read denied",
+      "queue join requires customer CSRF and rejects owner spoof",
+      "poll without explicit join does not grant or reserve",
+      "first member admitted and original UUID never extends deadline",
+      "qualified customer can reserve through authoritative PG",
+      "other members wait in accepted FIFO order",
+      "waiting customer cannot bypass admission",
+      "qualification cannot cross ticket rooms",
+      "real fixed deadline promotes oldest live waiting member",
+      "expired original admission cannot renew or create a fresh hold",
+      "committed PLACE replay works after admission expiry",
+      "explicit new join returns to queue tail",
+      "real owner token bucket returns 429 with Retry-After"
+    ],
+    "redisInventory": false,
+    "realPayments": false
+  },
+  "waitingRoomBrowser": {
+    "transport": "Chromium against production JAR + dist and real Redis",
+    "passed": 11,
+    "checks": [
+      "checkout requires explicit waiting-room join before reservation",
+      "lost committed join ACK keeps original UUID and blocks booking",
+      "switching customer cannot take over stored pending join or qualification",
+      "reload and original UUID replay preserve fixed admission deadline",
+      "second customer queues and cannot bypass via direct reservation API",
+      "qualified customer reserves using PG while another waits",
+      "live polling promotes next waiting customer after first fixed lease expires",
+      "polling never renews admitted lease and expiry disables checkout",
+      "429 Retry-After pauses both join and polling before explicit retry",
+      "explicit rejoin and mobile waiting-room checkout work without overflow",
+      "pending queue storage contains no login password or bearer qualification"
+    ],
+    "physicalDevice": false
+  },
+  "redisFault": {
+    "prepare": {
+      "transport": "production JAR loopback HTTP + real Redis",
+      "phase": "prepare-fault",
+      "passed": 1,
+      "checks": [
+        "live admission, original order and unresolved mock payment stored privately before Redis fault"
+      ],
+      "redisInventory": false,
+      "realPayments": false
+    },
+    "whileDown": {
+      "transport": "production JAR loopback HTTP + real Redis",
+      "phase": "while-down",
+      "passed": 6,
+      "checks": [
+        "actual stopped Redis makes waiting-room unavailable",
+        "actual stopped Redis rejects fresh hold without fail-open fallback",
+        "known original PLACE replay succeeds while Redis is down",
+        "cancel and stock release work while Redis is down",
+        "existing payment reconciliation works while Redis is down",
+        "owned order history works while Redis is down"
+      ],
+      "redisInventory": false,
+      "realPayments": false
+    },
+    "aofRestart": {
+      "transport": "production JAR loopback HTTP + real Redis",
+      "phase": "after-restart",
+      "passed": 4,
+      "checks": [
+        "AOF restart after original Redis deadline does not extend admission",
+        "original queue UUID remains expired after actual Redis restart",
+        "unknown fresh PLACE cannot bypass expired restored qualification",
+        "original committed PG order remains cancelled after Redis restart"
+      ],
+      "redisInventory": false,
+      "realPayments": false
+    },
+    "fixtureRoomStateLost": {
+      "transport": "production JAR loopback HTTP + real Redis",
+      "phase": "state-lost",
+      "passed": 3,
+      "checks": [
+        "loss of only fixture room keys requires explicit join and does not auto-grant",
+        "lost room state rejects fresh hold without changing PG inventory",
+        "PG command history survives complete fixture room state loss"
+      ],
+      "redisInventory": false,
+      "realPayments": false
+    },
+    "actualStopRestart": {
+      "stoppedBeforeOriginalAdmissionDeadline": true,
+      "redisPortClosed": true,
+      "onlyOwnRedisStopped": true,
+      "stoppedAtMs": 1791453452313,
+      "originalDeadlineMs": 1791453463653,
+      "restartingAfterDeadline": true,
+      "restartingAtMs": 1791453463779
+    },
+    "stateLossScope": "Only five fixture ticket room keys DEL; no FLUSH or PostgreSQL stock edits"
+  },
+  "catalogHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 27,
+    "checks": [
+      "anonymous staff endpoint rejected",
+      "invalid credentials rejected",
+      "real session login and manager capability",
+      "write without csrf rejected",
+      "event create",
+      "same command replay same snapshot",
+      "command content conflict",
+      "unknown actor field rejected",
+      "draft hidden publicly",
+      "incomplete publish rejected",
+      "versioned event update",
+      "stale event rejected",
+      "session create",
+      "invalid sales interval rejected",
+      "ticket type create",
+      "invalid price rejected",
+      "session update",
+      "ticket update",
+      "publish",
+      "public detail real price and ordering disabled",
+      "public projection no staff secrets",
+      "published conditions immutable",
+      "bounded pagination",
+      "durable audit read",
+      "archive",
+      "archived hidden publicly",
+      "logout revokes session"
+    ],
+    "ownFixturesArchived": 1,
+    "realPayment": false
+  },
+  "catalogBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 16,
+    "checks": [
+      "anonymous admin redirects login",
+      "real staff login",
+      "committed write response lost freezes new writes",
+      "pending command survives page reload",
+      "exact UUID body retry returns same event",
+      "one event after acknowledgement loss",
+      "session acknowledgement loss and reload retry restore parent event",
+      "ticket create from form",
+      "GET failure after successful write does not resurrect pending",
+      "publish locks edit controls",
+      "public content safely escaped",
+      "ordering visibly disabled",
+      "mobile no horizontal overflow",
+      "archive from UI",
+      "logout from UI",
+      "archived event hidden publicly"
+    ],
+    "physicalDevice": false
+  },
+  "paymentBrowser": {
+    "transport": "Chromium against production JAR + dist",
+    "passed": 15,
+    "checks": [
+      "payment UI clearly states free simulation without card data or charges",
+      "committed payment initiation response loss freezes all new writes",
+      "original payment UUID and body survive reload",
+      "other customer cannot retry pending payment or see original order",
+      "401 payment retry retains original ambiguous command",
+      "original owner replays one attempt instead of starting another payment",
+      "committed successful reconciliation response loss retains original command",
+      "exact reconcile replay survives reload and older GET cannot overwrite paid receipt",
+      "confirmed paid order remains sold once and refuses ordinary cancellation",
+      "declined mock UI preserves hold until explicit cancellation without a second payment",
+      "cancelled payment late success shows review and does not revive held inventory",
+      "successful payment ACK followed by GET failure retains paid receipt and clears pending",
+      "malformed committed payment ACK retains original command and resolves without another attempt",
+      "mobile paid and reviewed payment history has no horizontal overflow",
+      "confirmed payment receipt never leaks after switching customer"
+    ],
+    "realPayments": false
+  },
+  "ordersHTTP": {
+    "transport": "real loopback JAR HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "anonymous orders denied",
+      "reservation requires customer CSRF",
+      "owner spoof field denied",
+      "server quote rejects client total",
+      "invalid quantity rejected",
+      "real hold and immutable priced order snapshot",
+      "same original command replays once",
+      "same request changed body rejected",
+      "public remaining ticket availability reflects hold",
+      "other customer cannot read or cancel order",
+      "limit includes holds across orders",
+      "request ID cannot cross place and cancel actions",
+      "cancel releases held ticket",
+      "cancel and place replay do not revive order",
+      "own history survives catalog archive",
+      "last ticket over actual concurrent HTTP has one winner",
+      "real sales deadline scheduler expires and releases exactly once",
+      "own order pagination is bounded"
+    ],
+    "realPayments": false
+  },
+  "paymentsHTTP": {
+    "transport": "production JAR loopback HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "mock payment requires customer CSRF",
+      "other customer cannot initiate payment on owned order",
+      "client cannot inject provider event field",
+      "server rejects altered payment quote amount",
+      "initiation persists one unresolved attempt without selling",
+      "original initiation UUID replays same payment",
+      "same UUID changed payment body conflicts",
+      "new UUID cannot create another attempt",
+      "other customer cannot reconcile payment",
+      "successful reconcile converts order to paid",
+      "same and different command replay one provider event without reselling",
+      "paid order refuses ordinary cancellation",
+      "paid quantity remains in per-customer quota",
+      "paid quantity remains unavailable",
+      "declined mock does not sell and allows cancellation",
+      "cancelled late success becomes review without reclaiming inventory",
+      "real deadline expiry then delayed success stays expired and reviewed",
+      "concurrent real HTTP reconciliation applies one provider event"
+    ],
+    "realPayments": false
+  },
+  "customerHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 17,
+    "checks": [
+      "anonymous customer access rejected",
+      "registration login logout require customer CSRF",
+      "staff CSRF cannot authorize customer write",
+      "unknown customer owner field rejected",
+      "bcrypt UTF-8 byte bound enforced",
+      "registration creates safe profile and authenticates",
+      "customer cookie HttpOnly Strict and scoped path",
+      "authenticated profile",
+      "customer cannot access staff identity or admin",
+      "duplicate handle registration rejected",
+      "known and unknown invalid login give same response",
+      "successful login rotates and revokes previous browser token",
+      "staff and customer coexist in one cookie jar",
+      "staff logout preserves customer session",
+      "customer logout preserves staff session",
+      "anonymous logout retry safely succeeds",
+      "private persistence fixture saved for separate JAR restart verification"
+    ]
+  },
+  "customerRecoveryHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 2,
+    "checks": [
+      "database customer session survives actual JAR restart",
+      "persisted session logout revokes original token"
+    ]
+  },
+  "ordersBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 15,
+    "checks": [
+      "anonymous checkout registers and returns to original selection",
+      "committed hold response loss freezes new reservations",
+      "original UUID body survives page reload",
+      "401 retry retains unknown committed command",
+      "other customer cannot take over pending command or see original order",
+      "original owner retries exact UUID body and still has one order",
+      "order snapshot safely renders HTML-looking title",
+      "lost cancellation ACK reloads and replays without double release",
+      "older delayed GET cannot overwrite newer cancellation receipt",
+      "ACK success followed by GET failure keeps receipt and clears pending",
+      "new reservation after prior release and successful cancellation",
+      "acknowledged receipt from previous customer never leaks after account switch",
+      "mobile checkout has no horizontal overflow",
+      "actual deadline scheduler updates expired UI and restores ticket availability",
+      "mobile order history has no horizontal overflow"
+    ],
+    "realPayments": false
+  },
+  "customerBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 14,
+    "checks": [
+      "anonymous member page redirects to customer login",
+      "committed registration response loss directs login and clears password",
+      "password and registration body never persist in browser storage",
+      "same handle login resolves unknown registration result",
+      "customer display name escaped as text",
+      "session cookie cannot be read by page script",
+      "customer login survives page reload",
+      "customer cookie does not grant staff access",
+      "staff login preserves customer identity",
+      "committed logout response loss safely retries while anonymous",
+      "customer logout preserves staff authorization",
+      "staff logout preserves customer authorization",
+      "member page and navigation fit mobile width",
+      "customer registration form fits mobile width"
+    ]
+  },
+  "regressionArtifactNote": "Order/customer HTTP, browser and actual customer restart verified this milestone before final retired-UUID Lua-only fix. Final JAR repeats waiting-room HTTP/browser/outage, payment browser, catalog HTTP/browser and retained-V4 projection verification. All 113 tests use final backend source.",
+  "upgradeFromRetainedV4": {
+    "baselineJarSha256": "015ef9111f10a854b2d6932d0ddaae65075ab479073e1a21af02fd7ba8b0e0da",
+    "finalJarProjection": {
+      "legacyCatalogProjectionPreserved": true,
+      "availableFieldInitializedToCapacity": false,
+      "availabilityPreserved": true,
+      "catalogAuditRecordsPreserved": 4,
+      "staffLoginStillValid": true,
+      "orderingEnabled": true,
+      "waitingRoomEnabled": false
+    },
+    "schemaVersion": 4,
+    "publishedMigrationBytesUnchanged": true
+  },
+  "invariants": {
+    "inventoryBounds": 0,
+    "heldVsPending": 0,
+    "soldVsPaid": 0,
+    "heldVsLedgers": 0,
+    "soldVsLedger": 0,
+    "orderHoldRelease": 0,
+    "orderPaidConversion": 0,
+    "purchaseLimits": 0,
+    "pendingOrderLimit": 0,
+    "amountDeadlines": 0,
+    "orderLifecycle": 0,
+    "commandOwnership": 0,
+    "placeCommand": 0,
+    "paymentSnapshotCommand": 0,
+    "providerEventAllocation": 0,
+    "attemptState": 0,
+    "orderVersion": 0,
+    "faultConstraintsRemaining": 0
+  },
+  "migrationSha256": {
+    "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "backendJarSha256": "87f2738df0f6848116bc6d5b21e89792a2d05bd078a543ddae3e9bc86e891053",
+  "redisScriptSha256": {
+    "waiting-room.lua": "6d7b41f22e66a6e72ba62364b4080c8dc981383d8631d7d329f4a95cb57cba0f",
+    "rate-limit.lua": "e124d6ee864ef9f1c295de0385e36c6f29b86f32dd691d9e38b888053b2f196b"
+  },
+  "frontendArtifacts": {
+    "assets/index-CKdD0CNy.css": "ce5f9b891967bc0acee573dd31cbbf24f92b63b5a78d75ce4d03198434f7b0ef",
+    "assets/index-DDkoicxB.js": "c8b0a69b0ae54cba8d51fda3d3ffae609bede41a42468d1059642cc6ced73bfd",
+    "index.html": "857acc551deadbaeab660cd3c919ee988261c4fa5e715c7a7515ff6f60b5fa4d"
+  },
+  "generator": {
+    "privateFiles0600": true,
+    "refusesOverwrite": true,
+    "redisOnlyPreservesOldDBStaff": true
+  },
+  "verificationNotes": [
+    "Browser payment GET503 injection is armed only after successful reconcile POST; prevents background poll from consuming fault before payment ACK. All 15 original assertions retained.",
+    "First parallel customer browser verification timed out at staff heading; isolated rerun passed all 14 assertions with unchanged production auth source.",
+    "Redis restart readiness was checked through authenticated API, beyond container PONG."
+  ],
+  "admissionEnabledByDefault": false,
+  "redisTicketInventory": false,
+  "rabbitMQ": false,
+  "cluster": false,
+  "throughputBenchmark": false,
+  "realPayments": false,
+  "externalHTTPSVerified": false,
+  "physicalDeviceTested": false,
+  "cleanup": {
+    "scope": "ticket-admission-20261008",
+    "portsClosed": {
+      "25432": true,
+      "26379": true,
+      "19110": true,
+      "15180": true
+    },
+    "ownResourcesRemaining": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    }
+  },
+  "otherProjectsUntouched": true
+}

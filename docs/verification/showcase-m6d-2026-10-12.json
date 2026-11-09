@@ -1,0 +1,113 @@
+{
+  "milestone": "M6D",
+  "date": "2026-10-12",
+  "timezone": "Asia/Taipei",
+  "baselineCommit": "9e9e088d57e54eba73f1b447520b1276a0f15e39",
+  "scope": "controlled cloud showcase closeout; not production or sustained predebit",
+  "backend": {
+    "suites": 30,
+    "tests": 629,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "package": "passed",
+    "dependencies": "fresh isolated PostgreSQL17/Redis7/RabbitMQ4.1",
+    "fixedReviewSuite": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "frontend": {
+    "typecheck": true,
+    "productionBuild": true
+  },
+  "browser": {
+    "passed": 10,
+    "checks": [
+      "actual staff UI creates event/session/12-ticket type and publishes with audit",
+      "actual staff UI configures DB admission window OPEN using Taipei input",
+      "actual customer registration coexists with original staff session",
+      "waiting-room UI admission and 202 async acceptance resolve through real MQ to formal order",
+      "actual mock UI reconciles PAID and explicitly issues two original tickets/QR",
+      "actual UI third ticket rejected by PG account limit after paid two",
+      "separate synthetic customer reserves and cancels via actual UI, keeping first buyer limit unchanged",
+      "production QR image decode only fills code; explicit inspect/check-in succeeds once, rescan has no second action",
+      "actual staff UI explicitly revokes unused second ticket",
+      "readonly monitoring EMBEDDED role and mobile viewport fit"
+    ],
+    "transport": "Chromium151/final production dist/host EMBEDDED JAR/real isolated PG Redis RabbitMQ",
+    "physicalDevice": false,
+    "realPayments": false
+  },
+  "postgres": {
+    "checks": [
+      "24 successful migrations",
+      "capacity12 held0 sold2",
+      "one paid one cancelled order",
+      "one reserved async request",
+      "one issuance two units",
+      "one checkin one revoke",
+      "two terminal admission audits"
+    ],
+    "violations": 0
+  },
+  "artifacts": {
+    "backend/target/ticket-platform-0.1.0.jar": "e2b0d10faf27e0ae83cf50ab9b7c5464353816d6d021dceb9d28378700f5b364",
+    "frontend/dist/index.html": "1779805578cc4f3b9845308dcae66ba492040acd6e6fe3aaaf4835c7fabf718d",
+    "frontend/dist/assets/index-C2FRQd4L.css": "3725ca6308268bf2e9887335232910c76dbffb7b76b0bfa2e925aa1479631eee",
+    "frontend/dist/assets/index-CH8ZALSJ.js": "35b8503a3933e92277296475fe0faaaf0963c8799285da4391809e9c6eca6b6a"
+  },
+  "migrations": {
+    "versions": 24,
+    "sourceAndPackagedBytesEqualBaseline": true
+  },
+  "cleanup": {
+    "resources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "hostProcessesStopped": true,
+    "portsClosed": 5
+  },
+  "failuresPreserved": [
+    {
+      "scope": "initial full package",
+      "tests": 627,
+      "errors": 1,
+      "cause": "existing StockReview registration/terminal-peer READ COMMITTED race"
+    },
+    {
+      "scope": "deterministic old-code regression",
+      "tests": 2,
+      "errors": 2,
+      "cause": "original UNUSED/SETTLEMENT peer completes after missing command read"
+    },
+    {
+      "scope": "showcase runtime1",
+      "cause": "harness invalid monitoring expected role counts zero; startup refused",
+      "fixed": "valid counts2/2; show missing split-role warnings in EMBEDDED mode"
+    },
+    {
+      "scope": "showcase runtime2",
+      "cause": "harness did not accept publication confirmation; no publication POST",
+      "fixed": "explicit accept actual confirm dialog"
+    },
+    {
+      "scope": "showcase runtime3",
+      "cause": "early captured SVG PNG not a complete decodable QR; scan safely refused",
+      "fixed": "fresh exact ticket page read and enabled read control before SVG screenshot; actual decoder unchanged"
+    }
+  ],
+  "notVerifiedThisRound": [
+    "physical phone/camera",
+    "HTTPS/secure-cookie deployment",
+    "latest full Nginx/API/worker container fleet",
+    "sustained throughput or DIRTY gate improvement",
+    "Redis Cluster or multi-broker/cross-host HA",
+    "full-service restore/PITR/nonempty sequences"
+  ],
+  "privateEvidence": "work/m6d-full*, work/m6d-demo1/2/3, work/m6d-demo; credentials/codes/logs/backups not published"
+}

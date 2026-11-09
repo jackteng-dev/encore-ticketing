@@ -1,0 +1,335 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "milestone": "M2C free durable mock payments, complete UI and recovery",
+  "sourceBaseline": "6bbfae239b2640dc97d61bb76fcfa96ac8dea8ea",
+  "backendCheckpoint": "f48df9c466f63a322c8267d5fbaa68e4bdb18f99",
+  "postgresql": "17 isolated ticket-payments-20261008 / ticket_demo",
+  "maven": {
+    "tests": 88,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": "21",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": "27",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  "frontendBuild": "vue-tsc + Vite production build passed",
+  "paymentHTTP": {
+    "transport": "production JAR loopback HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "mock payment requires customer CSRF",
+      "other customer cannot initiate payment on owned order",
+      "client cannot inject provider event field",
+      "server rejects altered payment quote amount",
+      "initiation persists one unresolved attempt without selling",
+      "original initiation UUID replays same payment",
+      "same UUID changed payment body conflicts",
+      "new UUID cannot create another attempt",
+      "other customer cannot reconcile payment",
+      "successful reconcile converts order to paid",
+      "same and different command replay one provider event without reselling",
+      "paid order refuses ordinary cancellation",
+      "paid quantity remains in per-customer quota",
+      "paid quantity remains unavailable",
+      "declined mock does not sell and allows cancellation",
+      "cancelled late success becomes review without reclaiming inventory",
+      "real deadline expiry then delayed success stays expired and reviewed",
+      "concurrent real HTTP reconciliation applies one provider event"
+    ],
+    "realPayments": false
+  },
+  "paymentBrowser": {
+    "transport": "Chromium against production JAR + dist",
+    "passed": 15,
+    "checks": [
+      "payment UI clearly states free simulation without card data or charges",
+      "committed payment initiation response loss freezes all new writes",
+      "original payment UUID and body survive reload",
+      "other customer cannot retry pending payment or see original order",
+      "401 payment retry retains original ambiguous command",
+      "original owner replays one attempt instead of starting another payment",
+      "committed successful reconciliation response loss retains original command",
+      "exact reconcile replay survives reload and older GET cannot overwrite paid receipt",
+      "confirmed paid order remains sold once and refuses ordinary cancellation",
+      "declined mock UI preserves hold until explicit cancellation without a second payment",
+      "cancelled payment late success shows review and does not revive held inventory",
+      "successful payment ACK followed by GET failure retains paid receipt and clears pending",
+      "malformed committed payment ACK retains original command and resolves without another attempt",
+      "mobile paid and reviewed payment history has no horizontal overflow",
+      "confirmed payment receipt never leaks after switching customer"
+    ],
+    "realPayments": false
+  },
+  "recoveryHTTP": {
+    "transport": "production JAR loopback HTTP",
+    "phase": "verify-restart",
+    "passed": 7,
+    "checks": [
+      "paid order and persistent customer session survive real JAR restart",
+      "restart sweeper releases overdue hold but preserves unresolved durable payment",
+      "feature-off original payment UUID replays same unresolved attempt",
+      "durable mock receipt after restart becomes late-success review without revival",
+      "original reconcile UUID safely replays review after restart",
+      "late restarted payment does not reclaim released availability",
+      "disabled mock feature blocks new payment while existing reconciliation works"
+    ],
+    "realPayments": false
+  },
+  "ordersHTTP": {
+    "transport": "real loopback JAR HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "anonymous orders denied",
+      "reservation requires customer CSRF",
+      "owner spoof field denied",
+      "server quote rejects client total",
+      "invalid quantity rejected",
+      "real hold and immutable priced order snapshot",
+      "same original command replays once",
+      "same request changed body rejected",
+      "public remaining ticket availability reflects hold",
+      "other customer cannot read or cancel order",
+      "limit includes holds across orders",
+      "request ID cannot cross place and cancel actions",
+      "cancel releases held ticket",
+      "cancel and place replay do not revive order",
+      "own history survives catalog archive",
+      "last ticket over actual concurrent HTTP has one winner",
+      "real sales deadline scheduler expires and releases exactly once",
+      "own order pagination is bounded"
+    ],
+    "realPayments": false
+  },
+  "ordersBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 15,
+    "checks": [
+      "anonymous checkout registers and returns to original selection",
+      "committed hold response loss freezes new reservations",
+      "original UUID body survives page reload",
+      "401 retry retains unknown committed command",
+      "other customer cannot take over pending command or see original order",
+      "original owner retries exact UUID body and still has one order",
+      "order snapshot safely renders HTML-looking title",
+      "lost cancellation ACK reloads and replays without double release",
+      "older delayed GET cannot overwrite newer cancellation receipt",
+      "ACK success followed by GET failure keeps receipt and clears pending",
+      "new reservation after prior release and successful cancellation",
+      "acknowledged receipt from previous customer never leaks after account switch",
+      "mobile checkout has no horizontal overflow",
+      "actual deadline scheduler updates expired UI and restores ticket availability",
+      "mobile order history has no horizontal overflow"
+    ],
+    "realPayments": false
+  },
+  "customerHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 17,
+    "checks": [
+      "anonymous customer access rejected",
+      "registration login logout require customer CSRF",
+      "staff CSRF cannot authorize customer write",
+      "unknown customer owner field rejected",
+      "bcrypt UTF-8 byte bound enforced",
+      "registration creates safe profile and authenticates",
+      "customer cookie HttpOnly Strict and scoped path",
+      "authenticated profile",
+      "customer cannot access staff identity or admin",
+      "duplicate handle registration rejected",
+      "known and unknown invalid login give same response",
+      "successful login rotates and revokes previous browser token",
+      "staff and customer coexist in one cookie jar",
+      "staff logout preserves customer session",
+      "customer logout preserves staff session",
+      "anonymous logout retry safely succeeds",
+      "private persistence fixture saved for separate JAR restart verification"
+    ]
+  },
+  "customerBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 14,
+    "checks": [
+      "anonymous member page redirects to customer login",
+      "committed registration response loss directs login and clears password",
+      "password and registration body never persist in browser storage",
+      "same handle login resolves unknown registration result",
+      "customer display name escaped as text",
+      "session cookie cannot be read by page script",
+      "customer login survives page reload",
+      "customer cookie does not grant staff access",
+      "staff login preserves customer identity",
+      "committed logout response loss safely retries while anonymous",
+      "customer logout preserves staff authorization",
+      "staff logout preserves customer authorization",
+      "member page and navigation fit mobile width",
+      "customer registration form fits mobile width"
+    ]
+  },
+  "customerRecoveryHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 2,
+    "checks": [
+      "database customer session survives actual JAR restart",
+      "persisted session logout revokes original token"
+    ]
+  },
+  "catalogHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 27,
+    "checks": [
+      "anonymous staff endpoint rejected",
+      "invalid credentials rejected",
+      "real session login and manager capability",
+      "write without csrf rejected",
+      "event create",
+      "same command replay same snapshot",
+      "command content conflict",
+      "unknown actor field rejected",
+      "draft hidden publicly",
+      "incomplete publish rejected",
+      "versioned event update",
+      "stale event rejected",
+      "session create",
+      "invalid sales interval rejected",
+      "ticket type create",
+      "invalid price rejected",
+      "session update",
+      "ticket update",
+      "publish",
+      "public detail real price and ordering disabled",
+      "public projection no staff secrets",
+      "published conditions immutable",
+      "bounded pagination",
+      "durable audit read",
+      "archive",
+      "archived hidden publicly",
+      "logout revokes session"
+    ],
+    "ownFixturesArchived": 1,
+    "realPayment": false
+  },
+  "catalogBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 16,
+    "checks": [
+      "anonymous admin redirects login",
+      "real staff login",
+      "committed write response lost freezes new writes",
+      "pending command survives page reload",
+      "exact UUID body retry returns same event",
+      "one event after acknowledgement loss",
+      "session acknowledgement loss and reload retry restore parent event",
+      "ticket create from form",
+      "GET failure after successful write does not resurrect pending",
+      "publish locks edit controls",
+      "public content safely escaped",
+      "ordering visibly disabled",
+      "mobile no horizontal overflow",
+      "archive from UI",
+      "logout from UI",
+      "archived event hidden publicly"
+    ],
+    "physicalDevice": false
+  },
+  "actualOutage": {
+    "apiStoppedBeforePaymentDeadline": true,
+    "apiPortConfirmedClosed": true,
+    "stoppedAt": "2026-10-08T08:54:24.010160+00:00",
+    "deadline": "2026-10-08T08:54:30.556685Z",
+    "restartingAfterPaymentDeadline": true,
+    "restartingAt": "2026-10-08T08:57:02.966123+00:00"
+  },
+  "dbInvariantViolations": {
+    "inventoryBounds": 0,
+    "heldVsPending": 0,
+    "soldVsPaid": 0,
+    "heldVsLedgers": 0,
+    "soldVsLedger": 0,
+    "orderHoldRelease": 0,
+    "orderPaidConversion": 0,
+    "purchaseLimits": 0,
+    "pendingOrderLimit": 0,
+    "amountDeadlines": 0,
+    "orderLifecycle": 0,
+    "commandOwnership": 0,
+    "placeCommand": 0,
+    "paymentSnapshotCommand": 0,
+    "providerEventAllocation": 0,
+    "attemptState": 0,
+    "orderVersion": 0,
+    "faultConstraintsRemaining": 0
+  },
+  "catalogUpgrade": {
+    "legacyCatalogProjectionPreserved": true,
+    "availableFieldInitializedToCapacity": false,
+    "availabilityPreserved": true,
+    "catalogAuditRecordsPreserved": 4,
+    "staffLoginStillValid": true,
+    "orderingEnabled": true
+  },
+  "v3OrderUpgrade": {
+    "actualV3CustomerTokenStillValid": true,
+    "originalV3OrderProjectionUnchanged": true,
+    "originalPlaceUUIDReplayedWithoutNewHold": true,
+    "newPaymentNull": true,
+    "mockPaymentsEnabled": true
+  },
+  "migrationSha256": {
+    "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "backendJarSha256": "015ef9111f10a854b2d6932d0ddaae65075ab479073e1a21af02fd7ba8b0e0da",
+  "frontendArtifacts": {
+    "index.html": "dad9585b719f0d1522ed40e977ea8bd1acbe0fec44736c5a6c74f0ac20d8e80f",
+    "assets/index-Di9eb1t8.js": "2d5d87e047af5928f15187cd076fec36573cef63e7ef18361635c2436c997cc2",
+    "assets/index-CKdD0CNy.css": "ce5f9b891967bc0acee573dd31cbbf24f92b63b5a78d75ce4d03198434f7b0ef"
+  },
+  "mockPaymentsEnabledByDefault": false,
+  "realPayments": false,
+  "physicalDeviceTested": false,
+  "externalHTTPSVerified": false,
+  "mobilePaymentScreenshotInspected": true,
+  "cleanup": {
+    "ownAPIAndPreviewStopped": true,
+    "ownPostgresContainerVolumeNetworkRemoved": true,
+    "closedPorts": [
+      25432,
+      19110,
+      15180
+    ],
+    "otherProjectsUntouched": true
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "actualV21JarToV22Upgrade": true,
+  "oldPublicTablesOriginalColumnsUnchanged": 67,
+  "oldPublicRowsOriginalColumnsUnchanged": 6,
+  "noMemorySessionImport": true,
+  "twoFinalJarApiProcesses": true,
+  "actualBothApisStopRestart": true,
+  "actualRedisStopAndTcpClosed": true,
+  "actualPgStopAndTcpClosed": true,
+  "actualPgRestartSameVolume": true,
+  "artifactsUnchangedThroughoutRuntime": true,
+  "requestsToApis": {
+    "a": 58,
+    "b": 44
+  },
+  "groups": 13,
+  "phases": [
+    {
+      "phase": "seed",
+      "passed": 1,
+      "checks": [
+        "actual V21 memory staff login commits original catalog command before lost ACK; customer PG session and pending saved privately"
+      ],
+      "transport": "Chromium / real V21 and final V22 JARs / final dist / own PG / loopback test proxy",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "prepare",
+      "passed": 5,
+      "checks": [
+        "V22 rejects old memory staff session, preserves original pending and customer PG identity",
+        "real login on A replaces legacy root cookie; original UUID/body replays on B exactly once without changing original actor",
+        "masked CSRF from A validates on B; original command replays on A, missing CSRF and switched expected actor reject",
+        "real VIEWER cookie is shared but remains read-only on both APIs and cannot take over original manager pending",
+        "second command truly commits on B before client ACK loss; shared staff/customer cookies and global freeze saved for actual restart"
+      ],
+      "transport": "Chromium / real V21 and final V22 JARs / final dist / own PG / loopback test proxy",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "resume",
+      "passed": 4,
+      "checks": [
+        "both API processes really restart with Redis TCP down; same cookies authenticate, alternating requests recover exact pending and one original effect",
+        "logout on B revokes saved session cookie at A while customer cookie/session remains valid",
+        "committed disable/re-enable and manager/viewer round trip revoke previous cookies across APIs without resurrection",
+        "actual password replacement rejects old credentials and tokens; fresh credentials work across APIs, restored password does not revive old session"
+      ],
+      "transport": "Chromium / real V21 and final V22 JARs / final dist / own PG / loopback test proxy",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "pg-off",
+      "passed": 1,
+      "checks": [
+        "actual own PG stop and TCP closure returns AUTH_UNAVAILABLE on both healthy APIs with no memory/Redis fallback"
+      ],
+      "transport": "Chromium / real V21 and final V22 JARs / final dist / own PG / loopback test proxy",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "finish",
+      "passed": 2,
+      "checks": [
+        "actual PG restart on original volume restores shared session on both APIs; final dist works with alternating proxy and mobile width",
+        "original command results remain immutable; actual DB expiry rejects same staff cookies at both APIs independently of browser lifetime or customer session"
+      ],
+      "transport": "Chromium / real V21 and final V22 JARs / final dist / own PG / loopback test proxy",
+      "realPayments": false,
+      "publicDeployment": false
+    }
+  ],
+  "zeroViolationChecks": [
+    "missing_new_revision_context",
+    "context_origin_audit_coverage",
+    "new_context_image",
+    "previous_context_image",
+    "no_historical_backfill",
+    "order_event_exact_images",
+    "payment_event_exact_images",
+    "catalog_original_result",
+    "accepted_original_commit",
+    "boundary_not_ahead_of_source",
+    "unattributed_revisions",
+    "issuance_original_conversion",
+    "issuance_complete_units",
+    "issuance_exact_audit",
+    "issuance_original_command",
+    "admission_command_effect",
+    "terminal_ticket_audited",
+    "issuance_fence_excludes_commands",
+    "admission_fence_excludes_command",
+    "issuance_fence_exact_audit",
+    "admission_fence_exact_audit",
+    "window_command_exact_audit",
+    "window_command_exact_policy",
+    "window_policy_contiguous",
+    "new_admission_time_proof",
+    "exact_admission_time_proof",
+    "legacy_has_no_invented_time_proof",
+    "shared_staff_current_identity_and_fixed_deadline"
+  ],
+  "baselineJarSha256": "ef7567aa9e8790dfc2bcfe7e8f1584a03e42e98e3077c9435403b2d912396c43",
+  "finalJarSha256": "cf975f8edc1c1959f7a3d7ce44ba00e8e74ee9a949579b585699b07b20d079e2",
+  "frontendAssetsSha256": {
+    "frontend/dist/assets/index-2jdYrfsH.css": "72c167c5c7dd1cb26d11cfdf3f12481c34f6f67299862ec07c7c0f856f6ff58b",
+    "frontend/dist/assets/index-C7NWNqKc.js": "362bf172b47a44c3995b44dff36f8cd28666a87be957ba1545fe66624a8d1d7e",
+    "frontend/dist/index.html": "47bfb5b56f2161b33c7123e0289e99221b8ea5f2cd117d7098ca322469019609"
+  },
+  "realPayments": false,
+  "publicDeployment": false,
+  "loadOrCrossHostHa": false,
+  "tcpCommitAckDropOrKill9": false,
+  "date": "2026-10-11",
+  "timezone": "Asia/Taipei",
+  "implementationCommit": "6ce41647f33a0bff8319e944799f02bb716b809c",
+  "backendPackage": {
+    "suites": 26,
+    "tests": 586,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "baselineJarSha256": "ef7567aa9e8790dfc2bcfe7e8f1584a03e42e98e3077c9435403b2d912396c43",
+    "finalJarSha256": "cf975f8edc1c1959f7a3d7ce44ba00e8e74ee9a949579b585699b07b20d079e2",
+    "migrationCount": 22,
+    "publishedMigrationBytesUnchanged": true
+  },
+  "frontendProductionBuild": {
+    "typecheck": true,
+    "vite": true,
+    "sourceAndLockUnchangedFromStartingMain": true,
+    "js": "index-C7NWNqKc.js",
+    "css": "index-2jdYrfsH.css"
+  },
+  "resourceCleanup": {
+    "fullTest": "3 containers / 3 volumes / 1 network disposed; remaining 0",
+    "runtime": "2 containers / 2 volumes / 1 network disposed; remaining 0",
+    "api19112Closed": true,
+    "api19113Closed": true,
+    "testProxy19114Closed": true,
+    "preview15182Closed": true,
+    "otherRepositoriesUntouched": true
+  },
+  "initialTestCompileFailure": {
+    "testCompile": "Java var compound declaration; no tests executed",
+    "fix": "Separate declarations and one exact DB clock stamp in expiry fixture",
+    "failedLogPreserved": true,
+    "automaticRerun": false
+  },
+  "runtimeFailuresOrReruns": 0,
+  "limits": {
+    "proxy": "loopback test tool, not production reverse proxy",
+    "proxyCountsIncludeV21Seed": true,
+    "ackLoss": "actual API commit completes via route.fetch before client route.abort; not TCP commit ACK loss",
+    "scope": "auth/catalog final JAR and dist; original ticket/window integration suites included in full package, prior M4 runtime reports remain historical",
+    "staffMutation": "isolated SQL fixtures; staff management API not implemented",
+    "inFlight": "revocation applies to new authentication after DB commit; does not cancel accepted transactions",
+    "crossHostHaOrLoadOrCluster": false,
+    "realPayments": false,
+    "publicDeployment": false,
+    "physicalDevices": false,
+    "publicReportContainsCredentialsOrCookiesOrBodies": false
+  }
+}

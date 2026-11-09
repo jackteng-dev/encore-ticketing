@@ -1,0 +1,81 @@
+{
+  "checked_at": "2026-10-15T23:12:46+0800",
+  "images": {
+    "pg17": {
+      "reference": "library/postgres:17-alpine",
+      "image": "library/postgres@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+      "digest": "sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24",
+      "amd64_manifest": "sha256:aa90e97ee862e558111d34cfb8b2c4bec768c2b039fb791341686928560263b3"
+    },
+    "pg18": {
+      "reference": "library/postgres:18-alpine",
+      "image": "library/postgres@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+      "digest": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+      "amd64_manifest": "sha256:d8703cd7fba306b9fec9268ecedfa8a966846c053036a60e3635791957eb2f66"
+    },
+    "redis7": {
+      "reference": "library/redis:7-alpine",
+      "image": "library/redis@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
+      "digest": "sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499",
+      "amd64_manifest": "sha256:ca0acbb137c1dc3339c8b147a58fd6f42775d4599327b50e7b116c23de501af2"
+    },
+    "redis8": {
+      "reference": "library/redis:8-alpine",
+      "image": "library/redis@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+      "digest": "sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0",
+      "amd64_manifest": "sha256:2d3814be5e9b06a30a0be54770b7e12052e7e79ec85271aefd34875c1f393b23"
+    },
+    "mysql": {
+      "reference": "library/mysql:8.4",
+      "image": "library/mysql@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70",
+      "digest": "sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70",
+      "amd64_manifest": "sha256:1f8411cc085d2f2f92060fca926746cbf97f87b76c3008e9741ad62e604c4ffa"
+    },
+    "seaweed": {
+      "reference": "chrislusf/seaweedfs:sha256:49312939c00c01e5ee6afbd7d728b18027821d3764c35a797a72acd4fdf3296a",
+      "image": "chrislusf/seaweedfs@sha256:49312939c00c01e5ee6afbd7d728b18027821d3764c35a797a72acd4fdf3296a",
+      "digest": "sha256:49312939c00c01e5ee6afbd7d728b18027821d3764c35a797a72acd4fdf3296a",
+      "amd64_manifest": "sha256:d67f9b5586f73b6623c143489849c958ae0ec36a698bf4243a19df07cfa28c22"
+    },
+    "rabbitmq": {
+      "reference": "library/rabbitmq:sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+      "image": "library/rabbitmq@sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+      "digest": "sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+      "amd64_manifest": "sha256:828dd8a9dec0d00d2e905979b9e6995d40e97e9ec08ca1da48dab19e96441c32"
+    },
+    "java17": {
+      "reference": "library/eclipse-temurin:17-jre-alpine",
+      "image": "library/eclipse-temurin@sha256:3c472129dc75a8d1d7a3f2df5b2093a8077e4493deff046754d4764d0371de63",
+      "digest": "sha256:3c472129dc75a8d1d7a3f2df5b2093a8077e4493deff046754d4764d0371de63",
+      "amd64_manifest": "sha256:d1c3a4f3577405164ba294be32ee85ba16ec544959a85e8fdc5a10bb04f46fc1"
+    },
+    "java21": {
+      "reference": "library/eclipse-temurin:sha256:51ab5e3302e7141ce665ca3ea85e8b5cd648eafbc3c0c90dd79d6537684e4555",
+      "image": "library/eclipse-temurin@sha256:51ab5e3302e7141ce665ca3ea85e8b5cd648eafbc3c0c90dd79d6537684e4555",
+      "digest": "sha256:51ab5e3302e7141ce665ca3ea85e8b5cd648eafbc3c0c90dd79d6537684e4555",
+      "amd64_manifest": "sha256:bec16bceecb1a89defa333c77ac76d29a6b0d59fcb4f50218b476efa68e30bb4"
+    },
+    "java25": {
+      "reference": "library/eclipse-temurin:25-jre",
+      "image": "library/eclipse-temurin@sha256:fd4b1c02c64eef378212e23656fc0b0caa41a357876fa0b60e51ceda94a3db64",
+      "digest": "sha256:fd4b1c02c64eef378212e23656fc0b0caa41a357876fa0b60e51ceda94a3db64",
+      "amd64_manifest": "sha256:bcc1a99b4bc676717bdc9841c363072ce10e3f34462c4017f7df08e730f485b0"
+    },
+    "nginx": {
+      "reference": "library/nginx:sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+      "image": "library/nginx@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+      "digest": "sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236",
+      "amd64_manifest": "sha256:0dcc88822d45581e65ae329f8be769762bf628d3b2bb7d2a077d4aa5c98b30e3"
+    },
+    "python": {
+      "reference": "library/python:3.14-slim-trixie",
+      "image": "library/python@sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170",
+      "digest": "sha256:a2b82f3c48559aa0a8446d9af49826b6e2b2016f4cd2afabfe6013ec53729170",
+      "amd64_manifest": "sha256:cfe2e24a75302a15934d37c2d86412893c0aa934dc3a97cbb439d04c01890ca9"
+    }
+  },
+  "errors": {
+    "minio": "HTTPError: HTTP Error 401: Unauthorized"
+  },
+  "blocked_reason_minio": "Official DockerHub and Quay repositories return 401; pinned official-source build in progress, not an untrusted mirror."
+}

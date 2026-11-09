@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "milestone": "M2C backend checkpoint",
+  "sourceBaseline": "6bbfae239b2640dc97d61bb76fcfa96ac8dea8ea",
+  "postgresql": "17 isolated ticket-payments-20261008 / ticket_demo",
+  "tests": [
+    {
+      "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+      "tests": "21",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+      "tests": "26",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "dev.elpsy.ticket.OrderIntegrationTest",
+      "tests": "27",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "testsTotal": 88,
+  "productionBackendBuild": true,
+  "frontendBuild": "vue-tsc + Vite; prior M2B UI retained at this checkpoint",
+  "migrationSha256": {
+    "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "backendJarSha256": "015ef9111f10a854b2d6932d0ddaae65075ab479073e1a21af02fd7ba8b0e0da",
+  "actualV3JarSeededBeforeMigration": true,
+  "socketAndPaymentBrowserVerification": "pending next checkpoint",
+  "realPayments": false,
+  "ownDatabaseRetainedForNextCheckpoint": true
+}

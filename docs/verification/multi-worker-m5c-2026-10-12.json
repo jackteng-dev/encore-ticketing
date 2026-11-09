@@ -1,0 +1,376 @@
+{
+  "milestone": "M5C",
+  "checks": [
+    "two hardened nonweb containers run identical production JAR and both consume one quorum queue",
+    "12 distinct purchase intents compete for five units: five reserved seven sold out and one publication attempt per intent",
+    "eight persistent original-ID duplicates reach both worker transactions; ACK waits for DB and only one stock/order effect remains",
+    "SIGKILL after real confirm loses PG receipt; surviving worker waits original 15-second lease and republishes same event with one business effect",
+    "SIGKILL of blocked consumer requeues original unACKed delivery; second container commits one reservation and first rejoins",
+    "all original intents publications orders stock origins and audits reconcile; no fixture trigger and unchanged build artifacts"
+  ],
+  "passed": 6,
+  "workers": 2,
+  "customersCompeting": 12,
+  "capacity": 5,
+  "reserved": 5,
+  "soldOut": 7,
+  "confirmedDuplicateCopies": 8,
+  "businessOrders": 8,
+  "immutableEvents": 15,
+  "lostReceiptPublicationAttempts": 2,
+  "leaseSecondsUnchanged": 15,
+  "faults": [
+    {
+      "boundary": "after real broker confirm before PG publication receipt",
+      "signal": "SIGKILL",
+      "exitCode": 137,
+      "oomKilled": false,
+      "automaticRestartSuppressed": true
+    },
+    {
+      "boundary": "consumer transaction blocked before commit",
+      "signal": "SIGKILL",
+      "exitCode": 137,
+      "oomKilled": false,
+      "automaticRestartSuppressed": true
+    }
+  ],
+  "zeroViolationChecks": [
+    "onePublicationPerIntent",
+    "publicationOwnership",
+    "claimPair",
+    "publishedNotLeased",
+    "publishedAfterAttempt",
+    "errorShape",
+    "deliveryFaultConstraintsRemaining",
+    "missing_new_revision_context",
+    "context_origin_audit_coverage",
+    "new_context_image",
+    "previous_context_image",
+    "no_historical_backfill",
+    "order_event_exact_images",
+    "payment_event_exact_images",
+    "catalog_original_result",
+    "accepted_original_commit",
+    "boundary_not_ahead_of_source"
+  ],
+  "operationalSignals": {
+    "unattributed_revisions": 0
+  },
+  "artifactSha256": {
+    "backend/target/ticket-platform-0.1.0.jar": "f5d9cc294c114ffd19c107c86985c64a061a66e6b227cd55d399aa146729e7a0",
+    "infra/nginx.conf": "b2bb6ff78f6cae10105b5fb7233c313399553443fbf64d520a264b424a0f4dfb",
+    "infra/compose.deploy.yml": "068b0610cabc7a3c475ba10c758d4abb9b6421f852d1838ec293d76ff73cea45",
+    "scripts/run_multi_worker_runtime.py": "98f8c2eaf9cc06b99db9018a9b3cb5376d06b49705e855ea99259ef20f501ce2",
+    "backend/src/test/java/dev/elpsy/ticket/delivery/MultiWorkerBrokerProbe.java": "2fe95ba19792620c1c343c44f6b04fb517a515211c9b2f34af642a5f2dce36ce",
+    "backend/target/test-classes/dev/elpsy/ticket/delivery/MultiWorkerBrokerProbe.class": "e53dd2ae1c5f25892455055fa419e191529b73a4dd877251006fe14ce7b843bb",
+    "frontend/dist/assets/index-2jdYrfsH.css": "72c167c5c7dd1cb26d11cfdf3f12481c34f6f67299862ec07c7c0f856f6ff58b",
+    "frontend/dist/assets/index-C7NWNqKc.js": "362bf172b47a44c3995b44dff36f8cd28666a87be957ba1545fe66624a8d1d7e",
+    "frontend/dist/index.html": "47bfb5b56f2161b33c7123e0289e99221b8ea5f2cd117d7098ca322469019609"
+  },
+  "diskSamples": [
+    {
+      "phase": "before startup",
+      "workspaceFreeBytes": 4317089792
+    },
+    {
+      "phase": "eight containers with two consumers",
+      "workspaceFreeBytes": 1057812480
+    }
+  ],
+  "publicTls": false,
+  "crossHostHa": false,
+  "loadBenchmark": false,
+  "stockPredebit": false,
+  "multipleBrokers": false,
+  "containerKillAfterBusinessCommitBeforeAck": false,
+  "verifiedDate": "2026-10-12",
+  "timezone": "Etc/UTC",
+  "baseRemoteMain": "cb31347c87d5f742fa416107448b2d7f1c9adf9d",
+  "backendPackage": {
+    "tests": {
+      "tests": 597,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 28,
+    "freshReports": true,
+    "noRerunOrFlaky": true,
+    "realIsolatedPostgresRedisRabbitmq": true,
+    "mavenHeapMiB": 256,
+    "suiteHeapMiB": 384,
+    "forkCount": 1,
+    "reuseForks": false,
+    "activeProcessorCount": 2,
+    "buildPassed": true
+  },
+  "frontendProductionBuild": {
+    "typecheckAndVite": true,
+    "sourceUnchanged": true
+  },
+  "publishedMigrationBytesUnchanged": 22,
+  "probeExcludedFromProductionJar": true,
+  "probeArchiveSingleClass": true,
+  "probeArchiveSha256": "e04dbda738bd44a7d4f5041bb9023022848c42bdb19ccb10f29c9e47748a030e",
+  "probeArchiveMode": "0o444",
+  "originalLeaseBeforeKill": {
+    "receipt": "1|true|true",
+    "businessStatus": "RESERVED"
+  },
+  "originalConsumerBeforeKill": {
+    "selectedByActualPgTransaction": true,
+    "originalPublicationConfirmed": true,
+    "status": "PROCESSING",
+    "businessOrders": 0
+  },
+  "queueChannelObservations": [
+    {
+      "consumers": 0,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 8,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 1,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 1,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 1,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    },
+    {
+      "consumers": 2,
+      "messages_ready": 0,
+      "messages_unacknowledged": 0,
+      "queueReportedUnacknowledged": 0
+    }
+  ],
+  "finalDisposeState": [
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-worker-1",
+      "service": "worker",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-worker-2",
+      "service": "worker",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-gateway-1",
+      "service": "gateway",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-api-b-1",
+      "service": "api-b",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-api-a-1",
+      "service": "api-a",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-postgres-1",
+      "service": "postgres",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-rabbitmq-1",
+      "service": "rabbitmq",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    },
+    {
+      "name": "ticket-deploy-20261012002838-d9c82777-redis-1",
+      "service": "redis",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0,
+      "paused": false
+    }
+  ],
+  "runtimeCleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "gatewayPortClosed": true
+  },
+  "fullPackageCleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    }
+  },
+  "priorRuntimeFailures": [
+    {
+      "cause": "nonroot probe could not traverse private Maven test-classes (0700/0600)",
+      "fix": "single secret-free class in read-only 0444 probe archive; parent remains 0700"
+    },
+    {
+      "cause": "queue unACKed statistics did not match the two blocked consumer transactions",
+      "fix": "consumer channel delivery count with both queue/channel values preserved; observed disagreement"
+    },
+    {
+      "cause": "confirm-loss fixture waited for RESERVED and failed the unexpired-lease assertion; original failing lease value was not saved",
+      "fix": "stop at actual publisher confirm/PG receipt boundary and save lease/business status first"
+    },
+    {
+      "cause": "requiring transient ready count timed out when another registered consumer could immediately receive redelivery",
+      "fix": "choose actual processing worker, confirm original publication first, then verify peer transaction and unACKed delivery before releasing PG lock"
+    }
+  ],
+  "priorRuntimeCleanup": [
+    {
+      "remainingOwnedResources": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "gatewayPortClosed": true
+    },
+    {
+      "remainingOwnedResources": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "gatewayPortClosed": true
+    },
+    {
+      "remainingOwnedResources": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "gatewayPortClosed": true
+    },
+    {
+      "remainingOwnedResources": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "gatewayPortClosed": true
+    }
+  ],
+  "coverageNotes": [
+    "Twelve HTTP submissions are issued sequentially; concurrent worker transactions and independent-store claims are verified, not an HTTP load benchmark.",
+    "Consumer container kill occurs before business commit. Commit-before-ACK loss is verified separately using independent consumer instances and real broker channel redelivery in the full integration suite.",
+    "Single broker quorum, private HTTP, normal async checkout only; no predebit, Redis Cluster, multi-host HA or real payment claim.",
+    "Production Java and frontend sources are unchanged; verified JAR SHA matches M5B."
+  ]
+}

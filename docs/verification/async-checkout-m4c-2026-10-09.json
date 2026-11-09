@@ -1,0 +1,394 @@
+{
+  "milestone": "M4C async checkout and owned purchase history",
+  "testedOnUtc": "2026-10-09",
+  "baselineMainCommit": "091696f847bd09464bca8378d09bea12de8a336f",
+  "scope": "ticket-async-ui-20261009",
+  "cloudPolicy": {
+    "startRevision": "203",
+    "endRevision": "204",
+    "observationsCurrent": true,
+    "mode": "unrestricted",
+    "state": "enforced",
+    "proxyAndCaPreserved": true
+  },
+  "runtimeImages": [
+    {
+      "service": "postgres",
+      "image": "postgres:17-alpine",
+      "imageId": "sha256:79bd7c99e923138f136f8009d6bffa66e21e9d4fda5c0c561b00fc9c90cfe537",
+      "running": true,
+      "composeProject": "ticket-async-ui-20261009"
+    },
+    {
+      "service": "redis",
+      "image": "redis:7-alpine",
+      "imageId": "sha256:f84b0c4678011602b9b98c227a4dcd5468bf8b088b02fdd4165cb7758bad8058",
+      "running": true,
+      "composeProject": "ticket-async-ui-20261009"
+    },
+    {
+      "service": "rabbitmq",
+      "image": "rabbitmq:4.1-alpine@sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+      "imageId": "sha256:d60811676b7caa2286c241ce54c3db4eaf6ca947685a032d5224f41fba05a33f",
+      "running": true,
+      "composeProject": "ticket-async-ui-20261009"
+    }
+  ],
+  "backend": {
+    "command": "JDK21 Maven package (no skipped tests)",
+    "totals": {
+      "tests": 165,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "suite": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "jarSha256": "dad314c3b8f385a9cbbed34cf4e68a8b745867d5e98d969240ae63c7418c9094"
+  },
+  "frontend": {
+    "command": "npm run build (vue-tsc + Vite)",
+    "passed": true,
+    "artifactsSha256": {
+      "assets/index-BN3ILrkG.css": "41f49b3e84629cbcb05b8f29805f7f54726950ae24fbabd96c4598f8f23db283",
+      "assets/index-BzoLYWM6.js": "5d3d8300b7653851bc5be94f07b74a5e7c2a0b40a9b7d7b333e14c2a0a442675",
+      "index.html": "f29808cb79339694f5404f71d00613d083b20d4f23e298b7a7abc78d6b377c36"
+    }
+  },
+  "immutablePublishedMigrations": {
+    "baselineSourceAndFinalJarBytesMatch": true,
+    "sha256": {
+      "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+      "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+      "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+      "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+      "V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+      "V6__outbox_publication.sql": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36"
+    },
+    "newMigrations": 0,
+    "upgradeDrillThisRound": false
+  },
+  "asyncProductionBrowser": {
+    "prepare": {
+      "transport": "Chromium against production JAR/dist and real PG/RabbitMQ, operator-controlled worker",
+      "phase": "prepare",
+      "passed": 13,
+      "checks": [
+        "published runtime flag defaults checkout to async and keeps explicit sync comparison",
+        "committed 202 response loss freezes both async and sync checkout instead of changing UUID",
+        "original async UUID and body survive page reload",
+        "401 retains the original ambiguous purchase command",
+        "another member cannot retry unknown command or read original purchase receipt",
+        "original member replays exact request after login without a second acceptance or order",
+        "real stopped worker leaves 202 processing UI without a stock hold or payment countdown",
+        "reading a cancelled receipt after lost cancellation ACK does not discard the original command",
+        "lost cancellation ACK reload replays exact UUID without reviving a purchase",
+        "injected older GET projection cannot overwrite newer confirmed cancellation receipt",
+        "successful cancellation ACK followed by GET failure retains confirmed receipt and only retries reads",
+        "malformed committed 202 keeps original UUID and resolves by exact replay after reload",
+        "mobile processing and terminal history have no horizontal overflow"
+      ],
+      "realPayments": false
+    },
+    "workerStartedBeforeDeadline": {
+      "transport": "Chromium against production JAR/dist and real PG/RabbitMQ, operator-controlled worker",
+      "phase": "verify-worker",
+      "passed": 5,
+      "checks": [
+        "actual restarted worker changes processing UI to one reserved PG order with deadline starting at reservation",
+        "actual delayed MQ delivery does not revive cancellation",
+        "accepted original session revoked by logout never creates a later reservation",
+        "reserved receipt links to actual owned order and safely renders HTML-looking event title",
+        "acknowledged purchase receipts do not leak after customer switch"
+      ],
+      "realPayments": false
+    },
+    "prepareExpiry": {
+      "transport": "Chromium against production JAR/dist and real PG/RabbitMQ, operator-controlled worker",
+      "phase": "prepare-expiry",
+      "passed": 1,
+      "checks": [
+        "fresh original request accepted through UI while real worker is stopped; private recovery state saved"
+      ],
+      "realPayments": false
+    },
+    "workerActuallyRestartedAfterDeadline": {
+      "transport": "Chromium against production JAR/dist and real PG/RabbitMQ, operator-controlled worker",
+      "phase": "verify-expiry",
+      "passed": 2,
+      "checks": [
+        "actual worker restart after original deadline updates UI to expired without any order or payment countdown",
+        "expired history survives reload without generating a new purchase command"
+      ],
+      "realPayments": false
+    },
+    "featureOffOwnedRead": {
+      "transport": "Chromium against production JAR/dist and real PG/RabbitMQ, operator-controlled worker",
+      "phase": "verify-expiry",
+      "passed": 2,
+      "checks": [
+        "actual worker restart after original deadline updates UI to expired without any order or payment countdown",
+        "expired history survives reload without generating a new purchase command"
+      ],
+      "realPayments": false
+    },
+    "workerCancelAndCookieSwitchRaces": {
+      "transport": "Chromium against production JAR/dist and real PG/RabbitMQ, operator-controlled worker",
+      "phase": "race",
+      "passed": 3,
+      "checks": [
+        "real worker wins before stale-view cancellation; 409 reads latest owned order and never releases held inventory",
+        "actual cookie switch between page load and POST is rejected by principal assertion without creating a purchase for the other member",
+        "switched-cookie history still freezes the original command and hides prior member receipts"
+      ],
+      "realPayments": false
+    }
+  },
+  "operatorWorkerProof": {
+    "initialConsumerLaunch": {
+      "startingAtUtcEpoch": 1791549944.4496856,
+      "originalDeadlineUtcEpoch": 1791550038.102764,
+      "startingBeforeOriginalDeadline": true,
+      "mode": "non-HTTP consumer only"
+    },
+    "laterActualStopAndRestart": {
+      "previousWorkerPid": 1351826,
+      "previousWorkerActuallyStoppedBeforeFreshAcceptance": true,
+      "apiExpirySweeperEnabled": false,
+      "restartingAtUtcEpoch": 1791550164.5048263,
+      "originalDeadlineUtcEpoch": 1791550086.878072,
+      "restartingAfterOriginalDeadline": true,
+      "originalDeadlineNotPatched": true
+    }
+  },
+  "browserMethod": {
+    "against": "production JAR/dist and real isolated PostgreSQL/RabbitMQ",
+    "routeFaultInjection": [
+      "lost committed ACK",
+      "401",
+      "malformed success JSON",
+      "503 GET",
+      "older PROCESSING GET projection"
+    ],
+    "productionAcceptanceCancellationAndWorkerLogicNotStubbed": true,
+    "originalDeadlineNotPatched": true,
+    "initialLaunchNotCalledRestartInEvidence": true,
+    "firstWorkerSmokeCheckLabelUsesRestartButWasInitialLaunch": true,
+    "mockPaymentsOnly": true
+  },
+  "existingRegressionsWithAsyncFeatureOff": {
+    "ordersHttp": {
+      "transport": "real loopback JAR HTTP",
+      "phase": "normal",
+      "passed": 18,
+      "checks": [
+        "anonymous orders denied",
+        "reservation requires customer CSRF",
+        "owner spoof field denied",
+        "server quote rejects client total",
+        "invalid quantity rejected",
+        "real hold and immutable priced order snapshot",
+        "same original command replays once",
+        "same request changed body rejected",
+        "public remaining ticket availability reflects hold",
+        "other customer cannot read or cancel order",
+        "limit includes holds across orders",
+        "request ID cannot cross place and cancel actions",
+        "cancel releases held ticket",
+        "cancel and place replay do not revive order",
+        "own history survives catalog archive",
+        "last ticket over actual concurrent HTTP has one winner",
+        "real sales deadline scheduler expires and releases exactly once",
+        "own order pagination is bounded"
+      ],
+      "realPayments": false
+    },
+    "paymentsHttp": {
+      "transport": "production JAR loopback HTTP",
+      "phase": "normal",
+      "passed": 18,
+      "checks": [
+        "mock payment requires customer CSRF",
+        "other customer cannot initiate payment on owned order",
+        "client cannot inject provider event field",
+        "server rejects altered payment quote amount",
+        "initiation persists one unresolved attempt without selling",
+        "original initiation UUID replays same payment",
+        "same UUID changed payment body conflicts",
+        "new UUID cannot create another attempt",
+        "other customer cannot reconcile payment",
+        "successful reconcile converts order to paid",
+        "same and different command replay one provider event without reselling",
+        "paid order refuses ordinary cancellation",
+        "paid quantity remains in per-customer quota",
+        "paid quantity remains unavailable",
+        "declined mock does not sell and allows cancellation",
+        "cancelled late success becomes review without reclaiming inventory",
+        "real deadline expiry then delayed success stays expired and reviewed",
+        "concurrent real HTTP reconciliation applies one provider event"
+      ],
+      "realPayments": false
+    },
+    "ordersBrowser": {
+      "transport": "Chromium against JAR + production dist",
+      "passed": 15,
+      "checks": [
+        "anonymous checkout registers and returns to original selection",
+        "committed hold response loss freezes new reservations",
+        "original UUID body survives page reload",
+        "401 retry retains unknown committed command",
+        "other customer cannot take over pending command or see original order",
+        "original owner retries exact UUID body and still has one order",
+        "order snapshot safely renders HTML-looking title",
+        "lost cancellation ACK reloads and replays without double release",
+        "older delayed GET cannot overwrite newer cancellation receipt",
+        "ACK success followed by GET failure keeps receipt and clears pending",
+        "new reservation after prior release and successful cancellation",
+        "acknowledged receipt from previous customer never leaks after account switch",
+        "mobile checkout has no horizontal overflow",
+        "actual deadline scheduler updates expired UI and restores ticket availability",
+        "mobile order history has no horizontal overflow"
+      ],
+      "realPayments": false
+    },
+    "paymentsBrowser": {
+      "transport": "Chromium against production JAR + dist",
+      "passed": 15,
+      "checks": [
+        "payment UI clearly states free simulation without card data or charges",
+        "committed payment initiation response loss freezes all new writes",
+        "original payment UUID and body survive reload",
+        "other customer cannot retry pending payment or see original order",
+        "401 payment retry retains original ambiguous command",
+        "original owner replays one attempt instead of starting another payment",
+        "committed successful reconciliation response loss retains original command",
+        "exact reconcile replay survives reload and older GET cannot overwrite paid receipt",
+        "confirmed paid order remains sold once and refuses ordinary cancellation",
+        "declined mock UI preserves hold until explicit cancellation without a second payment",
+        "cancelled payment late success shows review and does not revive held inventory",
+        "successful payment ACK followed by GET failure retains paid receipt and clears pending",
+        "malformed committed payment ACK retains original command and resolves without another attempt",
+        "mobile paid and reviewed payment history has no horizontal overflow",
+        "confirmed payment receipt never leaks after switching customer"
+      ],
+      "realPayments": false
+    }
+  },
+  "finalReadOnlyInvariants": {
+    "purchase": {
+      "oneOutboxPerRequest": 0,
+      "outboxShape": 0,
+      "submitReceipt": 0,
+      "commandOwnership": 0,
+      "pendingAcceptanceLimit": 0,
+      "requestLifecycle": 0,
+      "reservationProjection": 0,
+      "terminalWithoutReservation": 0,
+      "reservedPlaceCommand": 0,
+      "commandNamespace": 0,
+      "expiryDeadline": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "payment": {
+      "inventoryBounds": 0,
+      "heldVsPending": 0,
+      "soldVsPaid": 0,
+      "heldVsLedgers": 0,
+      "soldVsLedger": 0,
+      "orderHoldRelease": 0,
+      "orderPaidConversion": 0,
+      "purchaseLimits": 0,
+      "pendingOrderLimit": 0,
+      "amountDeadlines": 0,
+      "orderLifecycle": 0,
+      "commandOwnership": 0,
+      "placeCommand": 0,
+      "paymentSnapshotCommand": 0,
+      "providerEventAllocation": 0,
+      "attemptState": 0,
+      "orderVersion": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "delivery": {
+      "onePublicationPerIntent": 0,
+      "publicationOwnership": 0,
+      "claimPair": 0,
+      "publishedNotLeased": 0,
+      "publishedAfterAttempt": 0,
+      "errorShape": 0,
+      "deliveryFaultConstraintsRemaining": 0
+    }
+  },
+  "cleanup": {
+    "ownComposeProject": "ticket-async-ui-20261009",
+    "remainingResourceCounts": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "ownLoopbackPortsClosed": {
+      "25432": true,
+      "26379": true,
+      "25672": true,
+      "19110": true,
+      "15180": true
+    },
+    "otherProjectsUntouched": true
+  },
+  "limitations": [
+    "single-node demo; no HA or load claim",
+    "no Redis ticket pre-debit or Lua/PG cross-system reconciliation",
+    "receipt history has ticket IDs and quote, no event name snapshot",
+    "unknown commands use tab sessionStorage, not cross-device persistence",
+    "no real payment, issuance, notification or public deployment"
+  ]
+}

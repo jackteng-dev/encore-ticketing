@@ -1,0 +1,366 @@
+{
+  "milestone": "M4D2A durable PG generations and empty projection rebuild",
+  "userDateAsiaTaipei": "2026-10-10",
+  "testedDateUtc": "2026-10-09",
+  "baselineMainCommit": "0cfb9d26bb5f670dfa427f2dd5a74b79891edfb5",
+  "cloudPolicy": {
+    "startRevision": "209",
+    "endRevision": "209",
+    "observationsCurrent": true,
+    "state": "enforced",
+    "mode": "unrestricted",
+    "proxyAndCaPreserved": true
+  },
+  "backend": {
+    "command": "JDK21 Maven package, no skipped tests",
+    "totals": {
+      "tests": 207,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "suite": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "jarSha256": "cc56c64c396ce89502f71b195472c4cb72cf8dd89067df489bedbc3abcc56943"
+  },
+  "frontend": {
+    "command": "npm run build (vue-tsc + Vite)",
+    "passed": true,
+    "sourceUnchangedThisRound": true,
+    "artifactsSha256": {
+      "assets/index-BN3ILrkG.css": "41f49b3e84629cbcb05b8f29805f7f54726950ae24fbabd96c4598f8f23db283",
+      "assets/index-BzoLYWM6.js": "5d3d8300b7653851bc5be94f07b74a5e7c2a0b40a9b7d7b333e14c2a0a442675",
+      "index.html": "f29808cb79339694f5404f71d00613d083b20d4f23e298b7a7abc78d6b377c36"
+    }
+  },
+  "migrations": {
+    "V1ThroughV6BaselineSourceAndFinalJarMatch": true,
+    "newMigration": "V7__stock_projection.sql",
+    "sha256": {
+      "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+      "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+      "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+      "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+      "V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+      "V6__outbox_publication.sql": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36",
+      "V7__stock_projection.sql": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509"
+    }
+  },
+  "runtimeImages": [
+    {
+      "name": "ticket-projection-20261010-postgres-1",
+      "image": "postgres:17-alpine",
+      "imageId": "sha256:79bd7c99e923138f136f8009d6bffa66e21e9d4fda5c0c561b00fc9c90cfe537",
+      "project": "ticket-projection-20261010"
+    },
+    {
+      "name": "ticket-projection-20261010-redis-1",
+      "image": "redis:7-alpine",
+      "imageId": "sha256:f84b0c4678011602b9b98c227a4dcd5468bf8b088b02fdd4165cb7758bad8058",
+      "project": "ticket-projection-20261010"
+    },
+    {
+      "name": "ticket-projection-20261010-rabbitmq-1",
+      "image": "rabbitmq:4.1-alpine@sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+      "imageId": "sha256:d60811676b7caa2286c241ce54c3db4eaf6ca947685a032d5224f41fba05a33f",
+      "project": "ticket-projection-20261010"
+    },
+    {
+      "name": "ticket-projection-upgrade-20261010-postgres-1",
+      "image": "postgres:17-alpine",
+      "imageId": "sha256:79bd7c99e923138f136f8009d6bffa66e21e9d4fda5c0c561b00fc9c90cfe537",
+      "project": "ticket-projection-upgrade-20261010"
+    }
+  ],
+  "actualV6ToV7Upgrade": {
+    "retainedBaselineJarSha256": "a5f3ea868f95a63c254bad8e6e70ba5a49f818bbf1d9c291ce1f18cca17340f1",
+    "ownIsolatedMigrationOnlyScope": "ticket-projection-upgrade-20261010",
+    "publisherConsumerAndExpiryDisabled": true,
+    "proof": {
+      "migrations": 7,
+      "originalRowsPreserved": 34,
+      "tablesChecked": [
+        "event",
+        "event_session",
+        "ticket_type",
+        "catalog_command",
+        "customer_account",
+        "customer_session",
+        "ticket_order",
+        "order_command",
+        "order_inventory_event",
+        "payment_attempt",
+        "mock_payment_receipt",
+        "payment_event",
+        "payment_inventory_event",
+        "purchase_request",
+        "purchase_command",
+        "purchase_outbox",
+        "outbox_publication"
+      ],
+      "v6PendingPaidAndProcessingPreserved": true,
+      "originalTicketBackfillCount": 2,
+      "backfillDirtyGenerationZeroAndExactStock": true
+    },
+    "ownedHttpCheck": {
+      "transport": "production JAR loopback HTTP + real PostgreSQL",
+      "phase": "verify-upgrade",
+      "passed": 1,
+      "checks": [
+        "retained baseline pending and paid orders and public stock projection survive schema upgrade unchanged"
+      ],
+      "rabbitMQ": false,
+      "realPayments": false
+    }
+  },
+  "productionJarNonHttpProbes": {
+    "seed": {
+      "durableClosedEpochCommittedBeforeProcessExit": true,
+      "noRedisKeyYet": true
+    },
+    "ready-fault": {
+      "actualPgConstraintRollbackAfterRedisOpen": true,
+      "originalDurableClosedEpochPreserved": true
+    },
+    "offline": {
+      "realStoppedRedisReturnsUnknown": true,
+      "pgClosedAndOriginalUuidGenerationRetained": true
+    },
+    "complete": {
+      "newProcessOriginalUuidRecoversGenerationOne": true,
+      "pgAndRedisReadyCheckpointAgree": true
+    },
+    "key-loss": {
+      "controlledReadyKeyLossMarksDirtyWithoutReseed": true,
+      "nextDurableEpochIsTwoAndOldCommandFenced": true
+    },
+    "order": {
+      "actualFormalHoldInvalidatesReadyInSamePgTransaction": true,
+      "newCheckpointAvailableFour": true
+    },
+    "cancel": {
+      "actualOrderCancellationRecordsNextRevision": true,
+      "newCheckpointGenerationFourAvailableFive": true
+    }
+  },
+  "probeMethod": {
+    "loadsFinalJarClassesAndResources": true,
+    "actualSpringServiceAndPgTransactions": true,
+    "processExitsAfterEachPhase": true,
+    "privateSourceSha256": "b4251ad154d136e50a3f6ee19ec0ecf9b2edbf5de9c9153c9c90eb4f5625e715",
+    "actualRedisContainerStopped": {
+      "ownRedisActuallyStopped": true,
+      "loopback26379Closed": true,
+      "stoppedUtcEpoch": 1791573352.2514763,
+      "sameOwnVolumeWillBeReused": true
+    },
+    "sameOwnRedisVolumeRestarted": true,
+    "controlledLogicalKeyLossDistinctFromRestart": true
+  },
+  "productionHttpRegressions": {
+    "orders": {
+      "transport": "real loopback JAR HTTP",
+      "phase": "normal",
+      "passed": 18,
+      "checks": [
+        "anonymous orders denied",
+        "reservation requires customer CSRF",
+        "owner spoof field denied",
+        "server quote rejects client total",
+        "invalid quantity rejected",
+        "real hold and immutable priced order snapshot",
+        "same original command replays once",
+        "same request changed body rejected",
+        "public remaining ticket availability reflects hold",
+        "other customer cannot read or cancel order",
+        "limit includes holds across orders",
+        "request ID cannot cross place and cancel actions",
+        "cancel releases held ticket",
+        "cancel and place replay do not revive order",
+        "own history survives catalog archive",
+        "last ticket over actual concurrent HTTP has one winner",
+        "real sales deadline scheduler expires and releases exactly once",
+        "own order pagination is bounded"
+      ],
+      "realPayments": false
+    },
+    "payments": {
+      "transport": "production JAR loopback HTTP",
+      "phase": "normal",
+      "passed": 18,
+      "checks": [
+        "mock payment requires customer CSRF",
+        "other customer cannot initiate payment on owned order",
+        "client cannot inject provider event field",
+        "server rejects altered payment quote amount",
+        "initiation persists one unresolved attempt without selling",
+        "original initiation UUID replays same payment",
+        "same UUID changed payment body conflicts",
+        "new UUID cannot create another attempt",
+        "other customer cannot reconcile payment",
+        "successful reconcile converts order to paid",
+        "same and different command replay one provider event without reselling",
+        "paid order refuses ordinary cancellation",
+        "paid quantity remains in per-customer quota",
+        "paid quantity remains unavailable",
+        "declined mock does not sell and allows cancellation",
+        "cancelled late success becomes review without reclaiming inventory",
+        "real deadline expiry then delayed success stays expired and reviewed",
+        "concurrent real HTTP reconciliation applies one provider event"
+      ],
+      "realPayments": false
+    }
+  },
+  "finalReadOnlyInvariants": {
+    "purchase": {
+      "oneOutboxPerRequest": 0,
+      "outboxShape": 0,
+      "submitReceipt": 0,
+      "commandOwnership": 0,
+      "pendingAcceptanceLimit": 0,
+      "requestLifecycle": 0,
+      "reservationProjection": 0,
+      "terminalWithoutReservation": 0,
+      "reservedPlaceCommand": 0,
+      "commandNamespace": 0,
+      "expiryDeadline": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "payment": {
+      "inventoryBounds": 0,
+      "heldVsPending": 0,
+      "soldVsPaid": 0,
+      "heldVsLedgers": 0,
+      "soldVsLedger": 0,
+      "orderHoldRelease": 0,
+      "orderPaidConversion": 0,
+      "purchaseLimits": 0,
+      "pendingOrderLimit": 0,
+      "amountDeadlines": 0,
+      "orderLifecycle": 0,
+      "commandOwnership": 0,
+      "placeCommand": 0,
+      "paymentSnapshotCommand": 0,
+      "providerEventAllocation": 0,
+      "attemptState": 0,
+      "orderVersion": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "delivery": {
+      "onePublicationPerIntent": 0,
+      "publicationOwnership": 0,
+      "claimPair": 0,
+      "publishedNotLeased": 0,
+      "publishedAfterAttempt": 0,
+      "errorShape": 0,
+      "deliveryFaultConstraintsRemaining": 0
+    },
+    "stock-projection": {
+      "missing_projection": 0,
+      "revision_head_mismatch": 0,
+      "journal_gap": 0,
+      "current_stock_mismatch": 0,
+      "generation_head_mismatch": 0,
+      "command_snapshot_mismatch": 0,
+      "ready_checkpoint_mismatch": 0
+    }
+  },
+  "intermediateObservation": "Integration publisher claims legitimately changed mutable original outbox_publication lease state; migration-only verification was repeated in a separate own DB with publisher/consumer/expiry disabled and all 34 original rows then matched. Initial 205 tests passed; 2 extra epoch/cross-ticket race tests plus handling were added and full final 207 rerun passed.",
+  "limitations": [
+    "empty maintenance projection only, not checkout pre-debit or worker integration",
+    "no durable pre-debit intent or Redis-to-PG orphan reconciliation yet",
+    "old epoch keys have no automatic retirement or history compaction",
+    "PG READY is not Redis liveness or user admission",
+    "one Redis and one MQ node; no Cluster/HA/load claim",
+    "frontend browser regressions are historical, not rerun this round",
+    "no real payment, ticket issuance, notifications or public deployment"
+  ],
+  "cleanup": {
+    "ownScopeResourceCounts": {
+      "ticket-projection-20261010": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "ticket-projection-upgrade-20261010": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      }
+    },
+    "loopbackPortsClosed": {
+      "25432": true,
+      "25433": true,
+      "26379": true,
+      "25672": true,
+      "19110": true,
+      "19111": true,
+      "15180": true
+    },
+    "previewNotStartedThisRound": true,
+    "otherProjectsUntouched": true
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "milestone": "M4E3 local ticket QR and explicit scan/inspect/admission",
+  "date": "2026-10-11",
+  "baseCommit": "6f424c48cea5aba78c95db60648650adc1918edd",
+  "implementationCommit": "d068de881cd53ca6e76fa8539e251dd224d2f758",
+  "package": {
+    "backendTests": 540,
+    "suites": 24,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "automaticRerunsOrFlaky": false,
+    "finalJarSha256": "baae5e9687624f607295644195407672031451a849efe3e9f49fa723207a8cc7",
+    "migrations": 20,
+    "V1toV20BytesUnchanged": true,
+    "testOnlyHelpersNotPackaged": true,
+    "frontendAssets": [
+      "index-2jdYrfsH.css",
+      "index-TU2JXXuT.js"
+    ]
+  },
+  "runtime": {
+    "groups": 14,
+    "phases": [
+      {
+        "phase": "prepare",
+        "passed": 13,
+        "checks": [
+          "owner sees two distinct locally generated QR images with exact original codes and mobile layout",
+          "real production SVG screenshot decodes locally; scan performs no inspect, admission or image upload",
+          "wrong-session QR is refused by real API; changing session or manual code clears prior inspection",
+          "URL QR, SVG and oversized upload reject locally and clear stale bearer/inspection",
+          "late image decode after session change is discarded and ImageBitmap closes",
+          "real video frame decoding accepts second original code and stops stream without admission",
+          "camera permission resolving after explicit stop immediately closes late tracks and cannot fill a code",
+          "real MediaStream tracks close on session change, pagehide and route unmount",
+          "denied camera keeps local image/manual fallback available",
+          "scan requires explicit inspect/check-in; actual lost ACK freezes scanner and complete original lookup recovers one effect",
+          "terminal tickets hide QR/code, original codes and stock/order/source bytes persist, scanner mobile fits and no external requests",
+          "other customer and anonymous cannot retrieve or render original owner QR",
+          "VIEWER has no scanner and real API still rejects inspect"
+        ],
+        "transport": "Chromium/final JAR/dist/own PG; real QR screenshots and local decoder",
+        "cameraEvidence": "synthetic canvas MediaStream plus real video/jsQR; no physical camera/phone claim",
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "passed": 1,
+        "checks": [
+          "actual API restart with flags off preserves active QR decoding and inspection but prevents new admission"
+        ],
+        "transport": "Chromium/final JAR/dist/own PG; real QR screenshots and local decoder",
+        "cameraEvidence": "synthetic canvas MediaStream plus real video/jsQR; no physical camera/phone claim",
+        "realPayments": false
+      }
+    ],
+    "finalJarSha256": "baae5e9687624f607295644195407672031451a849efe3e9f49fa723207a8cc7",
+    "migrations": 20,
+    "actualApiRestartWithFlagsOff": true,
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "unattributed_revisions",
+      "issuance_original_conversion",
+      "issuance_complete_units",
+      "issuance_exact_audit",
+      "issuance_original_command",
+      "admission_command_effect",
+      "terminal_ticket_audited",
+      "issuance_fence_excludes_commands",
+      "admission_fence_excludes_command",
+      "issuance_fence_exact_audit",
+      "admission_fence_exact_audit"
+    ],
+    "physicalCameraOrPhoneVerified": false,
+    "admissionTimeWindowImplemented": false,
+    "realPayment": false,
+    "publicDeployment": false
+  },
+  "productionFrontendBytesAndRebuiltAssetsIdenticalToFirstSavedMilestone": true,
+  "stockOrderSourceTablesByteIdenticalAcrossTicketEffectsAndRestart": [
+    "ticket_type",
+    "ticket_order",
+    "order_inventory_event",
+    "payment_inventory_event",
+    "stock_revision",
+    "stock_revision_context",
+    "stock_revision_origin",
+    "stock_origin_audit"
+  ],
+  "readonlyInvariantCount": 20,
+  "operationalSignals": {
+    "unattributed_revisions": 0
+  },
+  "failedAttempts": [
+    {
+      "attempt": 1,
+      "passedGroupsBeforeFailure": 2,
+      "reason": "Tool checked admission button before audit GET completed; fixed wait for inspection loading to finish",
+      "productionChange": false
+    },
+    {
+      "attempt": 2,
+      "passedGroupsBeforeFailure": 5,
+      "reason": "Synthetic canvas stream painted only before captureStream; video play awaited its first frame; fixed continuous fixture painter",
+      "productionChange": false
+    }
+  ],
+  "finalAttempt": {
+    "freshEmptyOwnPG": true,
+    "passedGroups": 14,
+    "automaticReruns": false
+  },
+  "cleanup": {
+    "ownScopes": [
+      {
+        "project": "ticket-qr-full-e3",
+        "removed": {
+          "containers": 3,
+          "volumes": 3,
+          "networks": 1
+        },
+        "remaining": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      },
+      {
+        "project": "ticket-qr-runtime-e3",
+        "removed": {
+          "containers": 2,
+          "volumes": 2,
+          "networks": 1
+        },
+        "remaining": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      }
+    ],
+    "firstTwoFailedRuntimeScopesDisposedBeforeNewEmptyAttempt": true,
+    "ownApiAndPreviewPortsClosed": true,
+    "globalCleanupOrDaemonRestart": false
+  },
+  "noBearerImagesCookiesRawLogsOrFixtureIncluded": true,
+  "limitations": [
+    "No physical camera or phone verification; synthetic MediaStream exercises real video and jsQR",
+    "Admission time windows not implemented",
+    "No public HTTPS deployment, real payment, HA or load benchmark",
+    "Client-route ACK discard is not TCP PG commit-ACK injection or kill9"
+  ]
+}

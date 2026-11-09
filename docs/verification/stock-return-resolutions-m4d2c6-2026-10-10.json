@@ -1,0 +1,348 @@
+{
+  "milestone": "M4D2C6",
+  "testedUtcDate": "2026-10-10",
+  "displayAsiaTaipeiDate": "2026-10-11",
+  "baseMain": "2a98151c92090fc0d15fad8a10afa79c68b53afb",
+  "artifactAndTests": {
+    "baselineJarSha256": "9bc63c72a6021a538a2b76640538941f132a089a52e6fff98a7adbaad20b06fe",
+    "finalJarSha256": "623e3fd231ae905e55d318fe24fc10b0d7774e61a8c399ba6e8a855ac29a099b",
+    "unchangedOldProductionEntries": 145,
+    "changedProductionEntries": [
+      "BOOT-INF/classes/application.yml"
+    ],
+    "addedProductionEntries": [
+      "BOOT-INF/classes/db/migration/V16__stock_return_resolutions.sql",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionController.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Actor.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Audit.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Begin.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Preview.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Receipt.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Snapshot.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService.class"
+    ],
+    "unchangedLibraries": 68,
+    "unchangedMigrations": 15,
+    "testOnlyRunnersNotPackaged": true,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCheckoutIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCommitCursorExperimentTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockHoldIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockMaintenanceIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockMultiCursorExperimentTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockOriginIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockPurchaseIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockRecoveryIntegrationTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReturnIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReturnResolutionIntegrationTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReturnStaffIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReviewIntegrationTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "fullTests": 475,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "frontendProductionAssets": [
+      "index-BEWAzYoo.js",
+      "index-xFkyoLYb.css"
+    ],
+    "jvmCpuCap": 2,
+    "businessTimeoutsUnchanged": true,
+    "boundedSurefireReruns": [],
+    "maxRerunsPerFailedTest": 1,
+    "firstFullAttempt": {
+      "fullTests": 475,
+      "failures": 0,
+      "errors": 2,
+      "skipped": 0,
+      "cases": [
+        {
+          "test": "StockReturnIntegrationTest.fullSnapshotKeepsOtherSoldStockInsteadOfAddingReturnQuantityToCapacity",
+          "observed": "Redis ledger unknown; RedisCommandTimeoutException at 500ms"
+        },
+        {
+          "test": "StockCheckoutIntegrationTest.legacySubmitOriginalReplaySurvivesFlagOffButCommandCollisionDoesNot",
+          "observed": "TransactionTimedOutException at existing transaction deadline"
+        }
+      ],
+      "rerunChange": "ActiveProcessorCount=2 matches actual cgroup two CPU quota; no business timeout or source changes",
+      "secondFullAttempt": {
+        "fullTests": 475,
+        "failures": 1,
+        "errors": 1,
+        "skipped": 0,
+        "jvmCpuCap": 2,
+        "cases": [
+          {
+            "test": "StockHoldIntegrationTest.stockAndSessionAreCheckedBeforeNewDebit",
+            "observed": "fixture expected READY but received CLOSED"
+          },
+          {
+            "test": "StockMultiCursorExperimentTest.directSynchronousHoldIsExplicitlyUnsupportedEvenWithRealOrigin",
+            "observed": "fixture Not READY"
+          }
+        ]
+      },
+      "finalAttemptPolicy": "full package, at most one Surefire rerun per failed test; no source or timeout changes"
+    }
+  },
+  "productionProof": {
+    "actualV15JarToV16Upgrade": true,
+    "oldPublicTablesUnchangedAtUpgrade": 45,
+    "oldPublicRowsUnchangedAtUpgrade": 342,
+    "noResolutionBackfill": true,
+    "browserGroups": 12,
+    "phases": [
+      {
+        "phase": "prepare",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 8,
+        "checks": [
+          "real resolution commit/client ACK loss survives reload and freezes all writes; GET-only original UUID resolves without another POST",
+          "actual malformed ACK retains original return/snapshot body until complete PG evidence validates",
+          "real resolution audit CHECK rollback is atomic; exact original body retry commits one resolution/audit after fault removal",
+          "actual customer order advances PG source after preview; old snapshot review is fenced with no new resolution",
+          "real unresolved PREPARED intent blocks manual review and stays untouched",
+          "real HTTP enforces CSRF, expected staff, strict body, original UUID, immutable replay and bounded history",
+          "real viewer cannot write and another manager cannot read or adopt original actor review",
+          "actual production resolution evidence and identifiers fit mobile viewport"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "offline",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 1,
+        "checks": [
+          "Redis really stopped: fresh resolution commits PG-only and historical replay works; lost client ACK keeps original pending"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "flag-off",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 1,
+        "checks": [
+          "API restart/flag off with Redis down resolves original unknown via GET-only; historical replay works and fresh review is denied"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 2,
+        "checks": [
+          "same Redis/AOF restart preserves exact original resolution/audit with no recredit",
+          "real role downgrade/disabled account invalidates sessions; owner viewer can read history but cannot POST"
+        ],
+        "realPayments": false
+      }
+    ],
+    "coreVerification": {
+      "passed": 14,
+      "testOnlyRunner": true,
+      "checks": [
+        "lost: PG-only review preserves both complete Redis hashes; business rows preserved except explicit stale source mutation",
+        "lost: original BLOCKED remains immutable and exact resolution/audit count",
+        "malformed: PG-only review preserves both complete Redis hashes; business rows preserved except explicit stale source mutation",
+        "malformed: original BLOCKED remains immutable and exact resolution/audit count",
+        "rollback: PG-only review preserves both complete Redis hashes; business rows preserved except explicit stale source mutation",
+        "rollback: original BLOCKED remains immutable and exact resolution/audit count",
+        "stale: PG-only review preserves both complete Redis hashes; business rows preserved except explicit stale source mutation",
+        "stale: original BLOCKED remains immutable and exact resolution/audit count",
+        "offline: PG-only review preserves both complete Redis hashes; business rows preserved except explicit stale source mutation",
+        "offline: original BLOCKED remains immutable and exact resolution/audit count",
+        "active: PG-only review preserves both complete Redis hashes; business rows preserved except explicit stale source mutation",
+        "active: original BLOCKED remains immutable and exact resolution/audit count",
+        "after all unchanged-hash checks, actual HOLD spends one from existing baseline three; available two held one",
+        "subsequent HOLD preserves original FROZEN/COMMITTED ledger"
+      ]
+    },
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "return_original_source",
+      "return_original_commit_ack",
+      "return_snapshot_command",
+      "return_phase_audits",
+      "return_quantity_cause",
+      "staff_return_domain_binding",
+      "staff_return_applied_proof",
+      "staff_return_latest_audit",
+      "staff_return_consecutive_audits",
+      "staff_return_original_release",
+      "resolution_original_binding",
+      "resolution_original_release",
+      "resolution_snapshot_binding",
+      "resolution_publication_proof",
+      "resolution_exact_audit",
+      "resolution_not_original_return_ack"
+    ],
+    "operationalSignals": {
+      "unattributed_revisions": 0
+    },
+    "actualRedisStopSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "redisTcpClosedDuringOutage": true,
+    "baselineJarSha256": "9bc63c72a6021a538a2b76640538941f132a089a52e6fff98a7adbaad20b06fe",
+    "finalJarSha256": "623e3fd231ae905e55d318fe24fc10b0d7774e61a8c399ba6e8a855ac29a099b",
+    "realPayments": false,
+    "publicDeployment": false,
+    "tcpAckDropOrKill9": false
+  },
+  "cleanup": {
+    "ownTestAndRuntimeContainers": 5,
+    "ownVolumes": 5,
+    "ownNetworks": 2,
+    "verifiedNoOwnResourcesOrListeningPorts": true
+  },
+  "limits": [
+    "single isolated PG/Redis/MQ; no Cluster/HA or throughput proof",
+    "client response abort, not TCP DB commit ACK drop or kill-9",
+    "no public deployment or real payments",
+    "permanently fenced unknown resolution attempt has no explicit UI rebind yet"
+  ]
+}

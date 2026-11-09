@@ -1,0 +1,178 @@
+{
+  "milestone": "M4E2 original ticket request receipt lookup and permanent fence",
+  "date": "2026-10-11",
+  "startCommit": "687f94a7b47176964a16fe9e5ba69bf249966413",
+  "implementationCommit": "f4408f84565bb5bf94652b8039af510788c13e98",
+  "managedObservedRevision": 238,
+  "backendAndFrontendUnchangedAfterImplementationSave": true,
+  "build": {
+    "backendTests": 540,
+    "suites": 24,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "automaticRerunsOrFlaky": false,
+    "finalJarSha256": "baae5e9687624f607295644195407672031451a849efe3e9f49fa723207a8cc7",
+    "baselineV19JarSha256": "c327b0f607c7c54afc149d531df929f7c44a07f8cb6e99a1b298c74ac7cdf382",
+    "migrations": 20,
+    "V1toV19BytesUnchanged": true,
+    "testOnlyHelpersNotPackaged": true,
+    "frontendAssets": [
+      "index-DOGTeM__.css",
+      "index-DagLUOIr.js"
+    ]
+  },
+  "focused": {
+    "passed": 38,
+    "newRecoveryTests": 18,
+    "ticketRegressionTests": 20,
+    "earlierFailuresPreserved": [
+      "testCompile: ambiguous JUnit Order import; fixed explicit business Order import",
+      "context startup: own private namespace lacked required encore-demo prefix; fixed private configuration, production validation unchanged"
+    ],
+    "automaticReruns": false
+  },
+  "production": {
+    "actualV19JarToV20Upgrade": true,
+    "oldPublicTablesUnchangedAtUpgrade": 58,
+    "oldPublicRowsUnchangedAtUpgrade": 78,
+    "noFenceBackfill": true,
+    "groups": 11,
+    "phases": [
+      {
+        "phase": "seed",
+        "passed": 1,
+        "checks": [
+          "actual historical V19 JAR seeds paid orders, immutable ticket codes and one successful check-in through HTTP"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V19 JAR",
+        "realPayments": false
+      },
+      {
+        "phase": "prepare",
+        "passed": 3,
+        "checks": [
+          "production customer UNKNOWN lookup keeps original body and global write freeze; explicit fence commits then client ACK is lost without issuance",
+          "production staff UNKNOWN lookup retains original actor/body/ticket and freeze; stop ACK loss leaves original ticket ACTIVE and pending durable",
+          "production revoke stop clears pending only after exact fence proof; no revocation, refund or inventory change"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V19 JAR",
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "passed": 3,
+        "checks": [
+          "actual API stop/restart with both flags false and Redis TCP closed resolves original lost stop ACK through PG-only exact receipts; historical V19 applied receipts persist",
+          "production UI restores historical exact pending and validates APPLIED full bundle/check-in receipt with flags false; no second effect",
+          "production client rejects altered body fingerprint or expected ticket metadata and preserves pending; mobile freeze UI fits"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V19 JAR",
+        "realPayments": false
+      },
+      {
+        "phase": "finish",
+        "passed": 4,
+        "checks": [
+          "after explicitly resolving fences, new UI actions use fresh UUIDs and succeed with Redis down; original delayed UUIDs remain rejected and stock unchanged",
+          "six actual concurrent apply/stop HTTP calls for one original UUID choose one durable APPLIED or FENCED outcome, never both",
+          "actual owner/actor, VIEWER, expected identity, CSRF, strict body and fingerprint conflicts preserve proof and refuse takeover",
+          "historical bearer codes persist; all committed fences have one exact immutable audit and no original command"
+        ],
+        "raceState": "APPLIED",
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V19 JAR",
+        "realPayments": false
+      }
+    ],
+    "actualApiStopRestart": true,
+    "flagsOffReplayVerified": true,
+    "actualRedisStopAndTcpClosed": true,
+    "redisDownForResumeAndFinish": true,
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "unattributed_revisions",
+      "issuance_original_conversion",
+      "issuance_complete_units",
+      "issuance_exact_audit",
+      "issuance_original_command",
+      "admission_command_effect",
+      "terminal_ticket_audited",
+      "issuance_fence_excludes_commands",
+      "admission_fence_excludes_command",
+      "issuance_fence_exact_audit",
+      "admission_fence_exact_audit"
+    ],
+    "issuanceBatches": 3,
+    "issuedUnits": 4,
+    "checkedIn": 3,
+    "revoked": 1,
+    "baselineJarSha256": "c327b0f607c7c54afc149d531df929f7c44a07f8cb6e99a1b298c74ac7cdf382",
+    "finalJarSha256": "baae5e9687624f607295644195407672031451a849efe3e9f49fa723207a8cc7",
+    "realPayments": false,
+    "publicDeployment": false,
+    "kill9OrTcpCommitAckDrop": false
+  },
+  "readonlyChecks": {
+    "invariants": 20,
+    "operationalUnattributedSignal": 1,
+    "allZero": true
+  },
+  "firstRuntimeAttempt": {
+    "seedPassed": true,
+    "upgradePassed": true,
+    "prepareFailure": "Harness aborted initial ticket GET; collect-button locator timed out. Corrected interceptor to abort only POST.",
+    "businessCodeChanged": false,
+    "logsFixtureScreenshotsPreservedPrivate": true,
+    "disposedOwnFailedScopeAndUsedNewEmptyScope": true,
+    "automaticRetries": false
+  },
+  "cleanup": {
+    "ownScopes": [
+      {
+        "project": "ticket-recovery-full-e2",
+        "removed": {
+          "containers": 3,
+          "volumes": 3,
+          "networks": 1
+        },
+        "remaining": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      },
+      {
+        "project": "ticket-request-recovery-e2b",
+        "removed": {
+          "containers": 2,
+          "volumes": 2,
+          "networks": 1
+        },
+        "remaining": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      }
+    ],
+    "firstFailedScopeRemainingZero": true,
+    "ownApiAndPreviewPortsClosed": true,
+    "globalCleanupOrDaemonRestart": false
+  },
+  "limitations": [
+    "Mock payments only; no real charge/refund/public deployment",
+    "Client route abort after actual HTTP commit; not kill9 or TCP PostgreSQL commit-ACK injection",
+    "Exact current owner/actor required; corrupt pending/conflicting existing command/unknown code is not auto-cleared",
+    "No QR/device/time-window, multi-API/HA or load proof",
+    "Bearer code remains protected database readable; fixtures/cookies/screenshots private, fence stores no raw code"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "milestone": "M6A core",
+  "date": "2026-10-12",
+  "baseCommit": "10d37c14681a79f4067d5441bd4ea68beb2df06b",
+  "backend": {
+    "goal": "package",
+    "suites": 30,
+    "tests": 624,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "freshReports": true,
+    "automaticReruns": false
+  },
+  "frontend": {
+    "vueTsc": true,
+    "productionBuild": true,
+    "assets": [
+      "index-DUqxFJ2E.js",
+      "index-C2FRQd4L.css"
+    ]
+  },
+  "productionJarSha256": "ee63b7db8b068a80cd2dbf87acba918a26ca6bee4e56f2c082cc8c73e43bb111",
+  "publishedMigrationsUnchanged": "V1-V23",
+  "newMigration": 24,
+  "formalRuntimeVerified": false,
+  "preservedInitialFailure": {
+    "tests": 624,
+    "suites": 30,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "causes": [
+      "Test fixture topology was missing; raw passive probe correctly returned MISSING without declaring queues.",
+      "Test read message count immediately after unconfirmed publication; observed0 before running passive probe."
+    ],
+    "fixes": [
+      "Explicit own RabbitAdmin.initialize in test setup.",
+      "Wait real broker confirm and bounded3s visibility before checking readonly preservation."
+    ],
+    "businessDeadlinesChanged": false,
+    "ownedCleanupZero": true
+  },
+  "finalOwnedCleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    }
+  }
+}

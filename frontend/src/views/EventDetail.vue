@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRoute, RouterLink } from 'vue-router'
+import { api,date,money,status,type Detail } from '../api'
+const route=useRoute(),data=ref<Detail|null>(null),error=ref('')
+async function load(){error.value='';try{data.value=await api(`/public/events/${route.params.id}`)}catch(e){error.value=(e as Error).message}}
+onMounted(load)
+</script>
+<template><section class="content detail-page"><RouterLink to="/" class="back-link">← 所有活動</RouterLink><p v-if="error" class="notice error" role="alert">{{error}} <button @click="load">重新讀取</button></p><template v-if="data"><div class="event-title"><div class="eyebrow">ENCORE / LIVE EXPERIENCE</div><h1>{{data.event.title}}</h1><p>{{data.event.venue}}</p></div><p class="description">{{data.event.description}}</p><div class="notice">{{data.orderingEnabled?'可建立展示保票訂單，付款僅限免費模擬，沒有真收款；電子票券需模擬付款確認後另行領取。':'本階段提供活動與場次資訊，購票尚未開放。'}}查看活動不會保留票額。</div><h2>場次與票種</h2><article v-for="s in data.sessions" :key="s.id" class="session-card"><div class="section-heading"><div><h3>{{s.name}}</h3><p>{{date(s.startsAt)}} · 台北時間</p></div><span class="badge">{{status(s.salesStatus)}}</span></div><p class="muted">售票時間 {{date(s.salesStart)}} — {{date(s.salesEnd)}}</p><div v-for="t in s.tickets" :key="t.id" class="ticket-row"><div><strong>{{t.name}}</strong><small>剩餘 {{t.available.toLocaleString()}} / {{t.capacity.toLocaleString()}} 張 · 每人限購 {{t.maxPerCustomer}} 張</small></div><strong>{{money(t.priceTwd)}}</strong><RouterLink v-if="data.orderingEnabled&&s.salesStatus==='SELLING'&&t.available>0" class="button-link primary" :to="'/events/'+data.event.id+'/reserve/'+t.id">選擇張數 →</RouterLink><button v-else disabled>{{!data.orderingEnabled?'購票尚未開放':s.salesStatus==='SELLING'?'票額已保留完':'此場次尚未開放保票'}}</button></div></article></template></section></template>

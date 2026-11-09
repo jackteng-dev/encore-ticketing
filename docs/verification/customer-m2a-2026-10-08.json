@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "milestone": "M2A independent customer identity",
+  "sourceBaseline": "51da006608e5792db96fc99cb3576e86cd6944aa",
+  "postgresql": "17 isolated ticket-m2-20261008 / ticket_demo",
+  "maven": {
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "customerHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 17,
+    "checks": [
+      "anonymous customer access rejected",
+      "registration login logout require customer CSRF",
+      "staff CSRF cannot authorize customer write",
+      "unknown customer owner field rejected",
+      "bcrypt UTF-8 byte bound enforced",
+      "registration creates safe profile and authenticates",
+      "customer cookie HttpOnly Strict and scoped path",
+      "authenticated profile",
+      "customer cannot access staff identity or admin",
+      "duplicate handle registration rejected",
+      "known and unknown invalid login give same response",
+      "successful login rotates and revokes previous browser token",
+      "staff and customer coexist in one cookie jar",
+      "staff logout preserves customer session",
+      "customer logout preserves staff session",
+      "anonymous logout retry safely succeeds",
+      "private persistence fixture saved for separate JAR restart verification"
+    ]
+  },
+  "customerRestartHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 2,
+    "checks": [
+      "database customer session survives actual JAR restart",
+      "persisted session logout revokes original token"
+    ]
+  },
+  "customerBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 14,
+    "checks": [
+      "anonymous member page redirects to customer login",
+      "committed registration response loss directs login and clears password",
+      "password and registration body never persist in browser storage",
+      "same handle login resolves unknown registration result",
+      "customer display name escaped as text",
+      "session cookie cannot be read by page script",
+      "customer login survives page reload",
+      "customer cookie does not grant staff access",
+      "staff login preserves customer identity",
+      "committed logout response loss safely retries while anonymous",
+      "customer logout preserves staff authorization",
+      "staff logout preserves customer authorization",
+      "member page and navigation fit mobile width",
+      "customer registration form fits mobile width"
+    ]
+  },
+  "catalogRegressionHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 27,
+    "checks": [
+      "anonymous staff endpoint rejected",
+      "invalid credentials rejected",
+      "real session login and manager capability",
+      "write without csrf rejected",
+      "event create",
+      "same command replay same snapshot",
+      "command content conflict",
+      "unknown actor field rejected",
+      "draft hidden publicly",
+      "incomplete publish rejected",
+      "versioned event update",
+      "stale event rejected",
+      "session create",
+      "invalid sales interval rejected",
+      "ticket type create",
+      "invalid price rejected",
+      "session update",
+      "ticket update",
+      "publish",
+      "public detail real price and ordering disabled",
+      "public projection no staff secrets",
+      "published conditions immutable",
+      "bounded pagination",
+      "durable audit read",
+      "archive",
+      "archived hidden publicly",
+      "logout revokes session"
+    ],
+    "ownFixturesArchived": 1,
+    "realPayment": false
+  },
+  "catalogRegressionBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 16,
+    "checks": [
+      "anonymous admin redirects login",
+      "real staff login",
+      "committed write response lost freezes new writes",
+      "pending command survives page reload",
+      "exact UUID body retry returns same event",
+      "one event after acknowledgement loss",
+      "session acknowledgement loss and reload retry restore parent event",
+      "ticket create from form",
+      "GET failure after successful write does not resurrect pending",
+      "publish locks edit controls",
+      "public content safely escaped",
+      "ordering visibly disabled",
+      "mobile no horizontal overflow",
+      "archive from UI",
+      "logout from UI",
+      "archived event hidden publicly"
+    ],
+    "physicalDevice": false
+  },
+  "secureCookie": {
+    "secureConfigVerified": true,
+    "csrfCookieSecure": true,
+    "sessionCookieSecure": true,
+    "httpOnly": true,
+    "sameSite": "Strict",
+    "path": "/api/customer",
+    "actualHTTPS": false
+  },
+  "upgrade": {
+    "actualRetainedV1JarSeededBeforeMigration": true,
+    "publicProjectionIdenticalAfterV2": true,
+    "catalogAuditRecordsPreserved": 4,
+    "staffLoginStillValid": true,
+    "orderingEnabled": false,
+    "v1BytesUnchanged": true,
+    "schemaVersion": 2
+  },
+  "dbInvariantViolations": {
+    "customersWithMoreThanFiveSessions": 0,
+    "malformedSessionHashes": 0,
+    "nonBcryptPasswords": 0,
+    "orphanSessions": 0,
+    "invalidSessionDeadlines": 0,
+    "futureSessionVersions": 0
+  },
+  "backendJar": {
+    "sha256": "27fd446b044c3595aa5738377a1f146ede6e5a858ae03d241abb3baf197d7e68",
+    "bytes": 29505618
+  },
+  "migrationSha256": {
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "frontendBuild": "vue-tsc and Vite passed",
+  "frontendArtifacts": {
+    "index.html": "83fdd4abcf0d5b578bc1fa69ec9224bb55102e6a6c71942187f8e14b141037c9",
+    "assets/index-zIzjCdPY.css": "25f04397a5a3d834669644f5ad875336aade60fb815ab1efd983f2b3fe7194fd",
+    "assets/index-Ce1VfRYW.js": "efdc7426a332fc1dc838c263f464c95d3efce452043409232355dd9ffd079be8"
+  },
+  "orderingEnabled": false,
+  "realPayments": false,
+  "externalHTTPSVerified": false,
+  "cleanup": {
+    "ownAPIsAndPreviewStopped": true,
+    "ownPostgresContainerVolumeNetworkRemoved": true,
+    "closedPorts": [
+      25432,
+      19110,
+      19111,
+      15180
+    ],
+    "otherProjectResourcesUntouched": true
+  }
+}

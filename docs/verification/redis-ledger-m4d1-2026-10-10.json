@@ -1,0 +1,263 @@
+{
+  "milestone": "M4D1 standalone Redis ticket ledger",
+  "userDateAsiaTaipei": "2026-10-10",
+  "testedDateUtc": "2026-10-09",
+  "baselineMainCommit": "5ed7cf5700100daf7063f9b4210e7874298807f1",
+  "scope": "ticket-lua-foundation-20261010",
+  "backend": {
+    "command": "JDK21 Maven package, no skipped tests",
+    "totals": {
+      "tests": 183,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": [
+      {
+        "suite": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "jarSha256": "a5f3ea868f95a63c254bad8e6e70ba5a49f818bbf1d9c291ce1f18cca17340f1"
+  },
+  "frontend": {
+    "command": "npm run build (vue-tsc + Vite)",
+    "passed": true,
+    "sourceUnchangedThisRound": true,
+    "artifactsSha256": {
+      "assets/index-BN3ILrkG.css": "41f49b3e84629cbcb05b8f29805f7f54726950ae24fbabd96c4598f8f23db283",
+      "assets/index-BzoLYWM6.js": "5d3d8300b7653851bc5be94f07b74a5e7c2a0b40a9b7d7b333e14c2a0a442675",
+      "index.html": "f29808cb79339694f5404f71d00613d083b20d4f23e298b7a7abc78d6b377c36"
+    }
+  },
+  "publishedMigrations": {
+    "baselineSourceAndFinalJarBytesMatch": true,
+    "newMigrations": 0,
+    "sha256": {
+      "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+      "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+      "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+      "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+      "V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+      "V6__outbox_publication.sql": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36"
+    }
+  },
+  "luaSha256": "a003ed8b9159b6b098328ea2868f388627a923b4f6d25501d6d7ea1b6de32dfe",
+  "runtimeImages": [
+    {
+      "service": "postgres",
+      "image": "postgres:17-alpine",
+      "imageId": "sha256:79bd7c99e923138f136f8009d6bffa66e21e9d4fda5c0c561b00fc9c90cfe537",
+      "runningAtCapture": true
+    },
+    {
+      "service": "redis",
+      "image": "redis:7-alpine",
+      "imageId": "sha256:f84b0c4678011602b9b98c227a4dcd5468bf8b088b02fdd4165cb7758bad8058",
+      "runningAtCapture": true
+    },
+    {
+      "service": "rabbitmq",
+      "image": "rabbitmq:4.1-alpine@sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+      "imageId": "sha256:d60811676b7caa2286c241ce54c3db4eaf6ca947685a032d5224f41fba05a33f",
+      "runningAtCapture": true
+    }
+  ],
+  "finalJarLuaRuntimeSmoke": {
+    "prepare": {
+      "milestone": "M4D1 standalone ledger",
+      "phase": "prepare",
+      "passed": 2,
+      "checks": [
+        "final-JAR Lua stores one original HELD receipt and one pre-debit in real Redis",
+        "own non-expiring ledger has a local AOF fsync acknowledgement before graceful restart"
+      ],
+      "scriptSha256": "a003ed8b9159b6b098328ea2868f388627a923b4f6d25501d6d7ea1b6de32dfe",
+      "jarSha256": "a5f3ea868f95a63c254bad8e6e70ba5a49f818bbf1d9c291ce1f18cca17340f1",
+      "checkoutIntegration": false,
+      "pgReconciliation": false,
+      "realPayments": false
+    },
+    "actualRestart": {
+      "milestone": "M4D1 standalone ledger",
+      "phase": "verify-restart",
+      "passed": 6,
+      "checks": [
+        "after actual restart and original deadline, AOF retains the exact HELD receipt and no automatic credit",
+        "original expired UUID replay is a read of the original hold, never another pre-debit",
+        "frozen generation cannot reopen or rebuild over an unresolved hold",
+        "explicit synthetic release credits once; this is not automatic PG orphan reconciliation",
+        "new generation fences old commands and retains prior request tombstones",
+        "controlled logical key loss fails closed without reseeding or inventing available stock"
+      ],
+      "scriptSha256": "a003ed8b9159b6b098328ea2868f388627a923b4f6d25501d6d7ea1b6de32dfe",
+      "jarSha256": "a5f3ea868f95a63c254bad8e6e70ba5a49f818bbf1d9c291ce1f18cca17340f1",
+      "checkoutIntegration": false,
+      "pgReconciliation": false,
+      "realPayments": false
+    }
+  },
+  "actualRedisShutdown": {
+    "ownContainerStopped": true,
+    "loopback26379Closed": true,
+    "observedStoppedUtcEpochMs": 1791567760271,
+    "originalDeadlineUtcEpochMs": 1791567789463,
+    "stoppedBeforeOriginalDeadline": true,
+    "sameOwnVolumeWillBeReused": true
+  },
+  "actualRedisRestartTiming": {
+    "ownRedisStayedStoppedAcrossOriginalDeadline": true,
+    "restartingAfterUtcEpochMs": 1791567789663,
+    "originalDeadlineNotPatched": true
+  },
+  "finalJarJavaAdapterProbe": {
+    "outage": {
+      "unknownOutcomes": 2,
+      "actualOwnRedisStopped": true,
+      "finalJarJavaAdapter": true,
+      "noAutomaticCompensation": true
+    },
+    "restart": {
+      "heldReceiptPreserved": true,
+      "afterOriginalDeadline": true,
+      "originalUuidReplayNoExtraDebit": true,
+      "finalJarJavaAdapter": true
+    },
+    "method": "Private source-file Java probe using final JAR extracted classes/libraries, real own loopback Redis",
+    "probeSourceSha256": "24f35493507028f67ddcd50da158605d7e61d2df5df6f08bf5d2d0f024053292"
+  },
+  "finalReadOnlyInvariants": {
+    "purchase": {
+      "oneOutboxPerRequest": 0,
+      "outboxShape": 0,
+      "submitReceipt": 0,
+      "commandOwnership": 0,
+      "pendingAcceptanceLimit": 0,
+      "requestLifecycle": 0,
+      "reservationProjection": 0,
+      "terminalWithoutReservation": 0,
+      "reservedPlaceCommand": 0,
+      "commandNamespace": 0,
+      "expiryDeadline": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "payment": {
+      "inventoryBounds": 0,
+      "heldVsPending": 0,
+      "soldVsPaid": 0,
+      "heldVsLedgers": 0,
+      "soldVsLedger": 0,
+      "orderHoldRelease": 0,
+      "orderPaidConversion": 0,
+      "purchaseLimits": 0,
+      "pendingOrderLimit": 0,
+      "amountDeadlines": 0,
+      "orderLifecycle": 0,
+      "commandOwnership": 0,
+      "placeCommand": 0,
+      "paymentSnapshotCommand": 0,
+      "providerEventAllocation": 0,
+      "attemptState": 0,
+      "orderVersion": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "delivery": {
+      "onePublicationPerIntent": 0,
+      "publicationOwnership": 0,
+      "claimPair": 0,
+      "publishedNotLeased": 0,
+      "publishedAfterAttempt": 0,
+      "errorShape": 0,
+      "deliveryFaultConstraintsRemaining": 0
+    }
+  },
+  "intermediateIssues": [
+    "Initial test compilation lacked checked-exception declaration; corrected and full package rerun passed",
+    "First preliminary Redis restart occurred after deadline; retained privately and excluded from primary evidence, then repeated with confirmed pre-deadline stop and full stopped interval"
+  ],
+  "limitations": [
+    "not wired to checkout/worker, no new HTTP endpoint or activation flag",
+    "no PG durable generation, inventory mutation coordination or orphan reconciliation yet",
+    "one ticket hash; only single Redis and hash-slot computation tested, not Cluster",
+    "graceful own-container AOF recovery with local WAITAOF, not crash/failover/HA",
+    "receipt limit 4096 without history compaction",
+    "no full ledger sum audit; validates metadata/cardinality and touched receipt",
+    "no real payment, ticket issuance or load/latency claims"
+  ],
+  "cloudPolicy": {
+    "startRevision": "206",
+    "endRevision": "206",
+    "observationsCurrent": true,
+    "state": "enforced",
+    "mode": "unrestricted",
+    "proxyAndCaPreserved": true
+  },
+  "cleanup": {
+    "ownComposeResourceCounts": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "loopbackPortsClosed": {
+      "25432": true,
+      "26379": true,
+      "25672": true,
+      "19110": true,
+      "15180": true
+    },
+    "apiAndPreviewNotStartedThisRound": true,
+    "otherProjectsUntouched": true
+  }
+}

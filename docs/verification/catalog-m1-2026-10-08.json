@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "milestone": "M1 staff and event catalog",
+  "sourceBaseline": "c92c98981134c25b9a7e67a61a93fc981118d14b",
+  "postgresql": "17 isolated ticket_demo",
+  "maven": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "http": {
+    "transport": "real loopback HTTP",
+    "passed": 27,
+    "checks": [
+      "anonymous staff endpoint rejected",
+      "invalid credentials rejected",
+      "real session login and manager capability",
+      "write without csrf rejected",
+      "event create",
+      "same command replay same snapshot",
+      "command content conflict",
+      "unknown actor field rejected",
+      "draft hidden publicly",
+      "incomplete publish rejected",
+      "versioned event update",
+      "stale event rejected",
+      "session create",
+      "invalid sales interval rejected",
+      "ticket type create",
+      "invalid price rejected",
+      "session update",
+      "ticket update",
+      "publish",
+      "public detail real price and ordering disabled",
+      "public projection no staff secrets",
+      "published conditions immutable",
+      "bounded pagination",
+      "durable audit read",
+      "archive",
+      "archived hidden publicly",
+      "logout revokes session"
+    ],
+    "ownFixturesArchived": 1,
+    "realPayment": false
+  },
+  "browser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 16,
+    "checks": [
+      "anonymous admin redirects login",
+      "real staff login",
+      "committed write response lost freezes new writes",
+      "pending command survives page reload",
+      "exact UUID body retry returns same event",
+      "one event after acknowledgement loss",
+      "session acknowledgement loss and reload retry restore parent event",
+      "ticket create from form",
+      "GET failure after successful write does not resurrect pending",
+      "publish locks edit controls",
+      "public content safely escaped",
+      "ordering visibly disabled",
+      "mobile no horizontal overflow",
+      "archive from UI",
+      "logout from UI",
+      "archived event hidden publicly"
+    ],
+    "physicalDevice": false
+  },
+  "databaseInvariants": {
+    "invalidTicketConfig": 0,
+    "invalidInterval": 0,
+    "orphanSession": 0,
+    "orphanTicket": 0,
+    "auditResourceMismatch": 0,
+    "invalidPublishedEvent": 0
+  },
+  "vue": {
+    "typecheckAndProductionBuildPassed": true
+  },
+  "migrationHistoryCount": 1,
+  "jarMigrationMatchesSource": true,
+  "jar": {
+    "sha256": "0cfd7a0ab5619aefd17581f72752185b85f8043b54478f86c7e5465ec5d9a453",
+    "bytes": 29484503
+  },
+  "productionDist": {
+    "frontend/dist/index.html": "4ab79ff79c6a33819d5b69e02f87b898b7c15897fbcfb8c076aa9700856198b4",
+    "frontend/dist/assets/index-BewI-mmJ.js": "d4992fd3d9b7de46e03a47425b9ac4495057138b12d7200c534428dbc503bc92",
+    "frontend/dist/assets/index-zIzjCdPY.css": "25f04397a5a3d834669644f5ad875336aade60fb815ab1efd983f2b3fe7194fd"
+  },
+  "sourceSha256": {
+    "backend/pom.xml": "6a227d566992c3ab791b52ceb1315d5788da9d67f27bc88bbabd0373b5927e09",
+    "backend/src/main/java/dev/elpsy/ticket/TicketApplication.java": "c26a5a3c99472bf689fae4d61ebd41ad1aa8ea85049943d44ab85fd179970c0e",
+    "backend/src/main/java/dev/elpsy/ticket/catalog/CatalogController.java": "aa7c2cacfd28977c152e002e922970d984fe900472871fb3d29e963010222c16",
+    "backend/src/main/java/dev/elpsy/ticket/catalog/CatalogService.java": "036d7d082c0c4984ab2fe453eec43bff723c455b013b98cd56c65b1c605f76d7",
+    "backend/src/main/java/dev/elpsy/ticket/catalog/Models.java": "5b699b06b6ba4a1b85860ecaa76d9a575b8dc24da76913eb3a0fa7b93581bdb7",
+    "backend/src/main/java/dev/elpsy/ticket/common/ApiErrors.java": "9cf2733fe2f3ea673d042c106da097544ba9d814506b4a451cc0c259c356694d",
+    "backend/src/main/java/dev/elpsy/ticket/identity/AuthController.java": "71353af0513d24fc3c217fe679df71228b270e9b84b339ef344a87f2d0c772c6",
+    "backend/src/main/java/dev/elpsy/ticket/identity/DemoBootstrap.java": "2dc1688a37eed9b32b109319b53fc4b15e4476e8bac2f86c3e7b4d3fd94096e4",
+    "backend/src/main/java/dev/elpsy/ticket/identity/SecurityConfig.java": "214ee989e3a19953f406f45b351cfcbe97839070db3e493e5f2a4389fd967395",
+    "backend/src/main/java/dev/elpsy/ticket/identity/StaffSessionFilter.java": "57abe3c4ee3be47f14054b54e686ccef466422df399b6aad0db6e45a69758733",
+    "backend/src/main/resources/db/migration/V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+    "backend/src/test/java/dev/elpsy/ticket/CatalogIntegrationTest.java": "e25b7a7730c7bb9867cd477906352f28a3563e19e92e1fa0ae81224ace36bb08",
+    "frontend/package-lock.json": "0b4356a37332cb74a03bbdc1d0fd255d6850413ea0d8d625206deb3afc7cf4c3",
+    "frontend/src/App.vue": "179854d6309eb3c6eb4e2121b3dea0e853c41a5b1b2329ef4ab553cded9df2bd",
+    "frontend/src/api.ts": "a430399ae2f12c52f8ad372b0c07238b5477a27ebe1526948753a1f627446f38",
+    "frontend/src/commands.ts": "a896bac32904ae6fd1b2ec5ff06e8f35af0ce2ba8c25a344c82c2a254b177379",
+    "frontend/src/components/EventForm.vue": "9e86ca4579de6260e7203e31ec26f687dfd7eca2cfc900e7b0ab99ca89f46d47",
+    "frontend/src/components/SessionForm.vue": "35a9dd3cb1c40d5713640c5102ed834a38d5d0b2bcc68de19e40971fe73fa12f",
+    "frontend/src/components/TicketForm.vue": "1e94609a2a24e8eb1ce5ccdba6570a69e2183725d9a686c6c5ff4cbdb2a5ef09",
+    "frontend/src/main.ts": "04a5a769a09873b326fc912de8f22464e326cfa8349e8806b78768ffe6437a99",
+    "frontend/src/router.ts": "33e5222c7de7ddd286e7ba3c1a7a8e0fda8b7c85a291bc0a4f8c84e4c86864ca",
+    "frontend/src/style.css": "c83158aebd0fab6d7811b10786d1bb584f4d5ffec9f81cddb534516441267b93",
+    "frontend/src/views/Admin.vue": "a8feb63cdba06b8b38e3b0e88ce7b844c925f489268fe0b14837cccfc42f4305",
+    "frontend/src/views/EventDetail.vue": "68fc34264e0e6b1c1fad99a520247fed61f52cc012f55ae886ce917b1f75c168",
+    "frontend/src/views/Events.vue": "8cfe099fccfbf8527d33a32082046c592f6fc5d249447b80eb20a75788c6fdeb",
+    "frontend/src/views/Login.vue": "e1a81b2c863345029c6ec769e61c34867ffb748057e75cfed25c513809196bba"
+  },
+  "scope": "ticket-m1-20261008",
+  "cleanup": {
+    "ownApiAndPreviewStopped": true,
+    "ownPostgresContainerVolumeNetworkRemoved": true,
+    "portsClosed": [
+      25432,
+      19110,
+      15180
+    ],
+    "otherProjectsUntouched": true
+  },
+  "orderingEnabled": false,
+  "redisMqSeaweedConnected": false,
+  "loadTested": false,
+  "externalHttpsTested": false,
+  "formallyDeployed": false
+}

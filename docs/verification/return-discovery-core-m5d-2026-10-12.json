@@ -1,0 +1,59 @@
+{
+  "milestone": "M5D core",
+  "date": "2026-10-12",
+  "baseCommit": "47d87d0955faede538fc8f08764575efb8dbe741",
+  "backend": {
+    "goal": "package",
+    "suites": 29,
+    "tests": 609,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "automaticReruns": false,
+    "freshReports": true
+  },
+  "frontend": {
+    "vueTsc": true,
+    "productionBuild": true,
+    "sourceChanged": false
+  },
+  "productionJarSha256": "6009cccd9f84ff34e7c1f7f67e4d3af08ab0b9a7ba374f5bd5c40ff7250ea2f8",
+  "migration": {
+    "oldVersionsUnchanged": "V1-V22",
+    "newVersion": 23,
+    "sha256": "0487eb168a4597d7b68bf6345c4232814ce52efc1b2fb95539e380889c0515d0"
+  },
+  "focused": {
+    "suites": 3,
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "preservedFailures": [
+    {
+      "phase": "first focused",
+      "tests": 19,
+      "errors": 1,
+      "cause": "Test-only fixture namespace was outside the existing experiment prefix; corrected own test namespace, no production guard relaxed.",
+      "ownedResourcesAfterCleanup": 0
+    },
+    {
+      "phase": "first full package",
+      "tests": 609,
+      "suites": 29,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "cause": "Catalog migration-count assertion expected22 while actual new V23 migration correctly applied. Updated assertion to23; all reports/logs preserved before fresh isolated full package.",
+      "ownedResourcesAfterCleanup": 0
+    }
+  ],
+  "finalOwnedResources": {
+    "containers": 0,
+    "volumes": 0,
+    "networks": 0
+  },
+  "formalRuntimeVerified": false,
+  "scope": "Core PG authorization/source transaction/recovery fencing verified; runtime upgrade/outage proof pending. No new UI, containers, public TLS, load or HA claim."
+}

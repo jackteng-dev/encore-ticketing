@@ -1,0 +1,384 @@
+{
+  "date": "2026-10-09",
+  "timezone": "Asia/Taipei",
+  "testedAtUtcDate": "2026-10-08",
+  "milestone": "M4A durable purchase requests, transactional outbox intent and shared internal processing boundary",
+  "sourceBaseline": "ceb7bbc26e5f906384329ff12f73c9066705c3ae",
+  "postgresql": "17.11 isolated ticket-purchases-20261009 / ticket_demo",
+  "redis": "7.4.11 isolated standalone, real admission and actual outage checks",
+  "networkPolicy": {
+    "revision": "193",
+    "observationsCurrent": true,
+    "mode": "unrestricted",
+    "state": "enforced",
+    "proxyAndTLSRetained": true
+  },
+  "maven": {
+    "tests": 146,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": "25",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": "21",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": "27",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": "33",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  "frontendBuild": "vue-tsc + Vite production build passed; synchronous checkout retained",
+  "purchaseHTTP": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "normal",
+    "passed": 13,
+    "checks": [
+      "anonymous purchase history denied",
+      "acceptance requires customer CSRF",
+      "client owner injection rejected",
+      "altered quote does not create intent",
+      "202 and Location expose only safe PROCESSING state, not a reservation",
+      "acceptance changes neither PG availability nor order history",
+      "original UUID replay returns same receipt and deadline",
+      "changed body and synchronous bypass using pending UUID denied",
+      "other member cannot read cancel or list owned receipt",
+      "six actual concurrent HTTP retries return one durable purchase",
+      "cancel and original submit replay never revive intent",
+      "purchase history pagination bounded",
+      "actual DB deadline and running sweeper expire intent without a hold"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "purchaseRestartHTTP": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "verify-restart",
+    "passed": 4,
+    "checks": [
+      "real restart expiry sweeper terminates durable acceptance after its original deadline",
+      "feature-off original UUID replays expired request without recreating outbox or hold",
+      "persistent customer session survives restart and expired acceptance creates no order",
+      "feature-off refuses fresh acceptance while existing queries and replay still work"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "restartPreparation": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "prepare-restart",
+    "passed": 1,
+    "checks": [
+      "original acceptance and authenticated recovery fixture saved privately before operator-controlled fault"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "actualApiStopRestart": {
+    "actualApiStoppedBeforeOriginalDeadline": true,
+    "apiPortClosed": true,
+    "stoppedAtUtcEpoch": 1791489644.3628008,
+    "originalDeadlineUtcEpoch": 1791489653.707729,
+    "restartingAfterOriginalDeadline": true,
+    "restartingAtUtcEpoch": 1791489653.969697
+  },
+  "featureOffHTTP": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "feature-off",
+    "passed": 1,
+    "checks": [
+      "default disabled purchase feature does not accept new requests"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "purchaseAdmissionHTTP": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "admission",
+    "passed": 3,
+    "checks": [
+      "enabled admission rejects fresh request without matching ticket qualification",
+      "qualified acceptance persists PROCESSING without taking PG stock",
+      "terminal accepted request replays without another qualification or order"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "redisOutageHTTP": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "while-redis-down",
+    "passed": 5,
+    "checks": [
+      "owned durable request remains readable while actual Redis is stopped",
+      "actual Redis outage rejects fresh acceptance without fail-open",
+      "known original acceptance UUID replays without Redis",
+      "request cancellation or expiry remains safe while Redis is stopped",
+      "outage neither creates an order nor needs a Redis stock compensation"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "redisOutagePreparation": {
+    "transport": "production JAR loopback HTTP + real PostgreSQL",
+    "phase": "prepare-redis",
+    "passed": 1,
+    "checks": [
+      "original acceptance and authenticated recovery fixture saved privately before operator-controlled fault"
+    ],
+    "rabbitMQ": false,
+    "realPayments": false
+  },
+  "actualRedisStop": {
+    "ownRedisStopped": true,
+    "portClosed": true,
+    "stoppedAtUtcEpoch": 1791489708.3509932
+  },
+  "upgradeFromRetainedV4": {
+    "baselineJarSha256": "87f2738df0f6848116bc6d5b21e89792a2d05bd078a543ddae3e9bc86e891053",
+    "catalogProjection": {
+      "legacyCatalogProjectionPreserved": true,
+      "availableFieldInitializedToCapacity": false,
+      "availabilityPreserved": true,
+      "catalogAuditRecordsPreserved": 4,
+      "staffLoginStillValid": true,
+      "orderingEnabled": true,
+      "waitingRoomEnabled": false
+    },
+    "pendingAndPaidOrdersSeed": {
+      "transport": "production JAR loopback HTTP + real PostgreSQL",
+      "phase": "seed-upgrade",
+      "passed": 1,
+      "checks": [
+        "actual retained V4 JAR created one pending and one paid order before V5"
+      ],
+      "rabbitMQ": false,
+      "realPayments": false
+    },
+    "pendingAndPaidOrdersAfterV5": {
+      "transport": "production JAR loopback HTTP + real PostgreSQL",
+      "phase": "verify-upgrade",
+      "passed": 1,
+      "checks": [
+        "actual V4 pending and paid orders and public stock projection survive V5 upgrade unchanged"
+      ],
+      "rabbitMQ": false,
+      "realPayments": false
+    },
+    "schemaVersion": 5,
+    "publishedV1V4BytesUnchanged": true
+  },
+  "ordersHTTP": {
+    "transport": "real loopback JAR HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "anonymous orders denied",
+      "reservation requires customer CSRF",
+      "owner spoof field denied",
+      "server quote rejects client total",
+      "invalid quantity rejected",
+      "real hold and immutable priced order snapshot",
+      "same original command replays once",
+      "same request changed body rejected",
+      "public remaining ticket availability reflects hold",
+      "other customer cannot read or cancel order",
+      "limit includes holds across orders",
+      "request ID cannot cross place and cancel actions",
+      "cancel releases held ticket",
+      "cancel and place replay do not revive order",
+      "own history survives catalog archive",
+      "last ticket over actual concurrent HTTP has one winner",
+      "real sales deadline scheduler expires and releases exactly once",
+      "own order pagination is bounded"
+    ],
+    "realPayments": false
+  },
+  "paymentsHTTP": {
+    "transport": "production JAR loopback HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "mock payment requires customer CSRF",
+      "other customer cannot initiate payment on owned order",
+      "client cannot inject provider event field",
+      "server rejects altered payment quote amount",
+      "initiation persists one unresolved attempt without selling",
+      "original initiation UUID replays same payment",
+      "same UUID changed payment body conflicts",
+      "new UUID cannot create another attempt",
+      "other customer cannot reconcile payment",
+      "successful reconcile converts order to paid",
+      "same and different command replay one provider event without reselling",
+      "paid order refuses ordinary cancellation",
+      "paid quantity remains in per-customer quota",
+      "paid quantity remains unavailable",
+      "declined mock does not sell and allows cancellation",
+      "cancelled late success becomes review without reclaiming inventory",
+      "real deadline expiry then delayed success stays expired and reviewed",
+      "concurrent real HTTP reconciliation applies one provider event"
+    ],
+    "realPayments": false
+  },
+  "ordersBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 15,
+    "checks": [
+      "anonymous checkout registers and returns to original selection",
+      "committed hold response loss freezes new reservations",
+      "original UUID body survives page reload",
+      "401 retry retains unknown committed command",
+      "other customer cannot take over pending command or see original order",
+      "original owner retries exact UUID body and still has one order",
+      "order snapshot safely renders HTML-looking title",
+      "lost cancellation ACK reloads and replays without double release",
+      "older delayed GET cannot overwrite newer cancellation receipt",
+      "ACK success followed by GET failure keeps receipt and clears pending",
+      "new reservation after prior release and successful cancellation",
+      "acknowledged receipt from previous customer never leaks after account switch",
+      "mobile checkout has no horizontal overflow",
+      "actual deadline scheduler updates expired UI and restores ticket availability",
+      "mobile order history has no horizontal overflow"
+    ],
+    "realPayments": false
+  },
+  "paymentsBrowser": {
+    "transport": "Chromium against production JAR + dist",
+    "passed": 15,
+    "checks": [
+      "payment UI clearly states free simulation without card data or charges",
+      "committed payment initiation response loss freezes all new writes",
+      "original payment UUID and body survive reload",
+      "other customer cannot retry pending payment or see original order",
+      "401 payment retry retains original ambiguous command",
+      "original owner replays one attempt instead of starting another payment",
+      "committed successful reconciliation response loss retains original command",
+      "exact reconcile replay survives reload and older GET cannot overwrite paid receipt",
+      "confirmed paid order remains sold once and refuses ordinary cancellation",
+      "declined mock UI preserves hold until explicit cancellation without a second payment",
+      "cancelled payment late success shows review and does not revive held inventory",
+      "successful payment ACK followed by GET failure retains paid receipt and clears pending",
+      "malformed committed payment ACK retains original command and resolves without another attempt",
+      "mobile paid and reviewed payment history has no horizontal overflow",
+      "confirmed payment receipt never leaks after switching customer"
+    ],
+    "realPayments": false
+  },
+  "purchaseInvariants": {
+    "oneOutboxPerRequest": 0,
+    "outboxShape": 0,
+    "submitReceipt": 0,
+    "commandOwnership": 0,
+    "pendingAcceptanceLimit": 0,
+    "requestLifecycle": 0,
+    "reservationProjection": 0,
+    "terminalWithoutReservation": 0,
+    "reservedPlaceCommand": 0,
+    "commandNamespace": 0,
+    "expiryDeadline": 0,
+    "faultConstraintsRemaining": 0
+  },
+  "paymentInvariants": {
+    "inventoryBounds": 0,
+    "heldVsPending": 0,
+    "soldVsPaid": 0,
+    "heldVsLedgers": 0,
+    "soldVsLedger": 0,
+    "orderHoldRelease": 0,
+    "orderPaidConversion": 0,
+    "purchaseLimits": 0,
+    "pendingOrderLimit": 0,
+    "amountDeadlines": 0,
+    "orderLifecycle": 0,
+    "commandOwnership": 0,
+    "placeCommand": 0,
+    "paymentSnapshotCommand": 0,
+    "providerEventAllocation": 0,
+    "attemptState": 0,
+    "orderVersion": 0,
+    "faultConstraintsRemaining": 0
+  },
+  "migrationSha256": {
+    "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "backendJarSha256": "809aa1406175a8101a030dabefbf2fe7c140bd483798d0759f14273f8f0d7e6c",
+  "frontendArtifacts": {
+    "assets/index-CKdD0CNy.css": "ce5f9b891967bc0acee573dd31cbbf24f92b63b5a78d75ce4d03198434f7b0ef",
+    "assets/index-DDkoicxB.js": "c8b0a69b0ae54cba8d51fda3d3ffae609bede41a42468d1059642cc6ced73bfd",
+    "index.html": "857acc551deadbaeab660cd3c919ee988261c4fa5e715c7a7515ff6f60b5fa4d"
+  },
+  "verificationNotes": [
+    "Final 33 purchase integration checks use real PG/Redis and call the internal transactional process boundary, not RabbitMQ.",
+    "Tests verify rollback after outbox, ledger and final request transition faults; no failed delivery is marked accepted.",
+    "Actual FK lock wait across authentication expiry rolls back acceptance. Actual ticket lock wait across request deadline yields EXPIRED without holding stock.",
+    "Initial compilation overload corrected and old catalog migration count updated to five. Final full package passed all 146 checks.",
+    "HTTP smoke customer handle shortened to respect the existing 40-character account limit before retained-V4 order seeding.",
+    "Production HTTP profile uses a ten-second acceptance deadline and one-second expiry sweep; default remains sixty seconds/thirty-second sweep.",
+    "Before V5 was committed/published, terminal closed_at non-null checks were strengthened. Recreated only own empty PG scope, reseeded retained V4, reran full 146 tests and all recorded HTTP/browser/upgrade/restart/outage checks against final JAR; no Flyway repair/clean.",
+    "A cold purchase-test Redis client yielded fail-closed 503 once. Added bounded real client PONG readiness before assertions; unchanged 500ms production timeout and admission assertions.",
+    "Fresh container startup initially preceded PG readiness; restarted own baseline API after actual healthy containers and awaited public API200 before successful final V4 seeding."
+  ],
+  "purchaseEnabledByDefault": false,
+  "runtimePurchaseConsumer": false,
+  "publisher": false,
+  "rabbitMQ": false,
+  "redisTicketPredebit": false,
+  "asyncCheckoutUI": false,
+  "cluster": false,
+  "throughputBenchmark": false,
+  "realPayments": false,
+  "externalHTTPSVerified": false,
+  "cleanup": {
+    "scope": "ticket-purchases-20261009",
+    "portsClosed": {
+      "25432": true,
+      "26379": true,
+      "19110": true,
+      "15180": true
+    },
+    "ownResourcesRemaining": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    }
+  },
+  "otherProjectsUntouched": true
+}

@@ -1,0 +1,455 @@
+{
+  "milestone": "M4D2C4",
+  "actualUtcDate": "2026-10-10",
+  "handoffTaipeiDate": "2026-10-11",
+  "baseMainCommit": "d4c8e5f3b024570568f5864a89541e792e25094e",
+  "onlyRepository": "ticket-platform",
+  "runtimePolicyRevision": 223,
+  "policyEnforced": true,
+  "backend": {
+    "fullPackagePassed": true,
+    "tests": 431,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "suite": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockCheckoutIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockCommitCursorExperimentTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockHoldIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockMaintenanceIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockMultiCursorExperimentTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockOriginIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockPurchaseIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockRecoveryIntegrationTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockReturnIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockReviewIntegrationTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "forkCount": 1,
+    "reuseForks": false,
+    "mavenHeapMb": 256,
+    "suiteHeapMb": 384,
+    "garbageCollector": "SerialGC"
+  },
+  "frontend": {
+    "vueTscAndProductionBuildSuccess": true,
+    "currentBrowserOrHttpRegressionNotRerun": true
+  },
+  "artifacts": {
+    "baselineV13JarSha256": "02e009972af2fd808eb6458e238ad946b28b670c7d91a5f3e8a69f12bbaea6c1",
+    "finalJarSha256": "036f4e7faa8b875059cf8a9e358bcda38dd230cef7a04d29e067ab92283ce025",
+    "originalProductionClassesAndResourcesByteIdentical": 131,
+    "newProductionClassesAndResources": [
+      "BOOT-INF/classes/db/migration/V14__stock_return_handoffs.sql",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService$Command.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService$HistoricalReplay.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService$Outcome.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService.class"
+    ],
+    "allDependencyJarsByteIdentical": 68,
+    "testCodeAndResourcesNotPackaged": true,
+    "v1ThroughV13SourceAndJarBytesUnchanged": true,
+    "migrations": [
+      {
+        "file": "V10__stock_recovery_jobs.sql",
+        "sha256": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad"
+      },
+      {
+        "file": "V11__stock_maintenance.sql",
+        "sha256": "02ad252d3200bae2b6f5f82f958f132e78f2e0047f2e471c87f0ec306648acef"
+      },
+      {
+        "file": "V12__stock_review_operations.sql",
+        "sha256": "5324eadd7dbc3b391e558b806f3b487b07777bd38b69a8b068253bafdf8d122a"
+      },
+      {
+        "file": "V13__stock_revision_origins.sql",
+        "sha256": "1b61438090357f3a63689a6cf7ce653fdcb4188b19e7ce8e6acf4c8a14ecf8fa"
+      },
+      {
+        "file": "V1__staff_and_event_catalog.sql",
+        "sha256": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+      },
+      {
+        "file": "V2__customer_identity.sql",
+        "sha256": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b"
+      },
+      {
+        "file": "V3__reservation_orders.sql",
+        "sha256": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc"
+      },
+      {
+        "file": "V4__mock_payments.sql",
+        "sha256": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8"
+      },
+      {
+        "file": "V5__purchase_requests_outbox.sql",
+        "sha256": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361"
+      },
+      {
+        "file": "V6__outbox_publication.sql",
+        "sha256": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36"
+      },
+      {
+        "file": "V7__stock_projection.sql",
+        "sha256": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509"
+      },
+      {
+        "file": "V8__stock_hold_intents.sql",
+        "sha256": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc"
+      },
+      {
+        "file": "V9__stock_hold_purchase_decisions.sql",
+        "sha256": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+      },
+      {
+        "file": "V14__stock_return_handoffs.sql",
+        "sha256": "791eb2b135af748c0915080106f10f3b5c9d8ac12e35750c9db1d4c3d95d69b5"
+      }
+    ],
+    "frontendArtifactsByteIdenticalToC3": [
+      {
+        "file": "dist/assets/index-DJFr8V22.js",
+        "sha256": "cc3c80053d3473013a5e0ed3e18a859d51b324b3a03051082ccc56aabbb4f9b4"
+      },
+      {
+        "file": "dist/assets/index-DMryCJ9H.css",
+        "sha256": "c645d7a2f3a76fc0f66650409b3284988dee30bb9642c86c3fae182b3e8e8e98"
+      },
+      {
+        "file": "dist/index.html",
+        "sha256": "b1852480f96db35dc639533e7dae408fb137597f3e5775e380de4ec1d084193a"
+      }
+    ]
+  },
+  "runtimeExperiment": {
+    "passed": 25,
+    "phases": [
+      {
+        "phase": "migrate",
+        "checks": [
+          "actual V13-to-V14 migration adds three empty return tables without backfill",
+          "original PG stock orders events journal V13 origins and COMMIT evidence unchanged",
+          "whole original FROZEN ledger and raw COMMITTED receipt unchanged",
+          "delayed old OPEN remains rejected even after new epoch publication"
+        ],
+        "productionServiceExercised": true,
+        "passed": 4,
+        "sourceSchemaVersion": 14
+      },
+      {
+        "productionServiceExercised": true,
+        "passed": 7,
+        "sourceSchemaVersion": 14,
+        "phase": "prepare",
+        "checks": [
+          "same original return UUID binds source RELEASE and fresh generation 2 full available 4",
+          "new Redis epoch opened before real PG APPLIED audit rollback",
+          "PG CLOSED and original unacknowledged command prevent new accepted holds",
+          "original fresh Redis key retained OPEN with full snapshot and no claims",
+          "original PG stock orders events journal V13 origins and COMMIT evidence unchanged",
+          "whole original FROZEN ledger and raw COMMITTED receipt unchanged",
+          "delayed old OPEN remains rejected even after new epoch publication"
+        ]
+      },
+      {
+        "phase": "offline",
+        "checks": [
+          "same original return UUID binds source RELEASE and fresh generation 2 full available 4",
+          "actual Redis outage returns PENDING REDIS_UNKNOWN without compensating credit",
+          "original PG-only return body and REGISTERED audit survive process restart and outage",
+          "original PG stock orders events journal V13 origins and COMMIT evidence unchanged"
+        ],
+        "productionServiceExercised": true,
+        "passed": 4,
+        "sourceSchemaVersion": 14
+      },
+      {
+        "sourceSchemaVersion": 14,
+        "passed": 10,
+        "productionServiceExercised": true,
+        "checks": [
+          "same original return UUID binds source RELEASE and fresh generation 2 full available 4",
+          "same AOF restart completes original new-epoch READY ack and audit",
+          "new generation snapshot available 4 matches formal PG stock without INCR",
+          "verified original customer successfully pre-debits new generation after handoff",
+          "new epoch available 3 held 1 baseline 4 conserves spendable stock",
+          "six old return retries replay PG acknowledgement without reinitializing used epoch",
+          "one original return ack and exactly REGISTERED APPLIED audits",
+          "original PG stock orders events journal V13 origins and COMMIT evidence unchanged",
+          "whole original FROZEN ledger and raw COMMITTED receipt unchanged",
+          "delayed old OPEN remains rejected even after new epoch publication"
+        ],
+        "phase": "verify"
+      }
+    ],
+    "actualV13JarToV14Migration": true,
+    "oldPublicTablesExcludeFlywayHistory": true,
+    "oldPublicTablesUnchanged": 39,
+    "oldPublicRowsUnchanged": 41,
+    "oldLedgerRawValuesUnchangedAtMigration": true,
+    "returnTablesEmptyAfterUpgradeNoBackfill": true,
+    "productionStockReturnServiceExercised": true,
+    "newGenerationActualCustomerHoldSucceeded": true,
+    "actualRedisStopAndSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "ownRedisTcpClosedDuringOutage": true,
+    "productionJarsExcludeTestFixturesRunnersAndExperiments": true,
+    "baselineJarSha256": "02e009972af2fd808eb6458e238ad946b28b670c7d91a5f3e8a69f12bbaea6c1",
+    "finalJarSha256": "036f4e7faa8b875059cf8a9e358bcda38dd230cef7a04d29e067ab92283ce025",
+    "tcpSuccessfulAckDropOrKill9Injected": false,
+    "automaticConsumerOrCrossHostHaClaim": false
+  },
+  "pg": {
+    "readOnly": true,
+    "checks": {
+      "missing_new_revision_context": 0,
+      "context_origin_audit_coverage": 0,
+      "new_context_image": 0,
+      "previous_context_image": 0,
+      "no_historical_backfill": 0,
+      "order_event_exact_images": 0,
+      "payment_event_exact_images": 0,
+      "catalog_original_result": 0,
+      "accepted_original_commit": 0,
+      "boundary_not_ahead_of_source": 0,
+      "return_original_source": 0,
+      "return_original_commit_ack": 0,
+      "return_snapshot_command": 0,
+      "return_phase_audits": 0,
+      "return_quantity_cause": 0
+    },
+    "allZero": true,
+    "operationalSignalsInUpgradeRuntimeScope": {
+      "unattributed_revisions": 0
+    }
+  },
+  "newTestNames": [
+    "returnAlreadyIncludedInLaterGenerationIsNotCreditedAgain",
+    "newerRevisionBetweenPhasesFencesOriginalSnapshot",
+    "originalCommitWithoutCommittedAckCannotAuthorizeReturn",
+    "keyMissingAckCannotAuthorizeReturn",
+    "outerTransactionCannotMakeEitherIndependentPhaseAppearCommitted",
+    "changedBodyOrNewUuidCannotAdoptOriginalReturn",
+    "fullSnapshotKeepsOtherSoldStockInsteadOfAddingReturnQuantityToCapacity",
+    "commandAckAndPhaseAuditAreImmutable",
+    "reusedOrdinaryRebuildUuidCannotBecomeReturnCommand",
+    "historicalAckDoesNotRecreateLostKeyOrCertifyCurrentReady",
+    "unresolvedActiveOrProcessingIntentBlocksHandoff",
+    "wrongTypeTtlAndFrozenNewKeyAreNotOverwritten",
+    "ackAndCommandNeedExactOriginalDomainEvidence",
+    "cancelledCommitHandoffsFullPgSnapshotToNewSpendableEpoch",
+    "oldCommitReturnedAfterIntermediateRebuildUsesReleaseGeneration",
+    "newerGenerationFencesOriginalUncompletedHandoff",
+    "expiredCommitUsesSameSeparateReturnOrigin",
+    "synchronousReturnCannotPretendToBeAcceptedCommit",
+    "registeredAuditFailureRollsBackFreshGenerationAndRebuildTogether",
+    "sixConcurrentCompletionsCommitOneAckAndHistoricalReplays",
+    "sixConcurrentOriginalBeginsAllocateOnlyOneCommandGenerationAndAudit",
+    "readyAuditRollbackAfterRedisOpenPreservesClosedPgAndOriginalReplay",
+    "newerRevisionBeforeBeginDoesNotAllocateOrChangeOriginalEvent",
+    "pendingOrPaidOrderDoesNotSupplyReleaseOrigin"
+  ],
+  "attempts": {
+    "initialFocused": {
+      "tests": 22,
+      "failures": 0,
+      "errors": 2,
+      "reason": "Two fixture sequences violated existing dirty-gate or accepted-intent guards; corrected test setup, not production guards."
+    },
+    "focusedAfterCorrection": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "firstFullPackage": {
+      "tests": 431,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "failedTest": "StockHoldIntegrationTest.stockAndSessionAreCheckedBeforeNewDebit",
+      "observed": "Expected READY but gate remained CLOSED during fixture preparation; existing service source unchanged. Resource pressure observed, root cause not proven."
+    },
+    "fullPackageRetry": {
+      "tests": 431,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "changes": "Reduced own Maven/fork heap and used SerialGC; own empty upgrade containers stopped during retry. No timeout increase or test skip."
+    },
+    "standaloneFirstAttempt": {
+      "actualV14MigrationExecuted": true,
+      "completedProof": false,
+      "failure": "Strict private fixture deserialization rejected derived Principal.getName name property. Fixed producer to persist only the verified record identity fields; no global unknown-property bypass. Own failed upgrade scope disposed, logs retained."
+    },
+    "finalFullPackageAfterFixtureCorrection": {
+      "tests": 431,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "limits": {
+    "productionInternalReturnService": true,
+    "newGenerationCanAcceptExistingStockHold": true,
+    "originalFrozenLedgerAndCommittedReceiptUnchanged": true,
+    "automaticIncrementalConsumer": false,
+    "newReturnHttpApiOrStaffUi": false,
+    "activeIntentHandoffSupported": false,
+    "pendingReplacementPolicyImplemented": false,
+    "defaultCheckoutFlagsUnchanged": true,
+    "historicalC2HttpBrowserAndV12UpgradeNotRerun": true,
+    "newProductionMigrationVersion": 14,
+    "existingProductionClassesAndTimeoutsUnchanged": true,
+    "exactContextOrTokenUsageInterfaceAvailable": false
+  },
+  "cleanup": {
+    "scopes": [
+      {
+        "ownScope": "full-test",
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0,
+        "ownPortsClosed": true
+      },
+      {
+        "ownScope": "upgrade",
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0,
+        "ownPortsClosed": true
+      },
+      {
+        "ownScope": "failed-upgrade",
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0,
+        "ownPortsClosed": true
+      }
+    ],
+    "baselineAndFourReturnPhaseProcessesExited": true
+  }
+}

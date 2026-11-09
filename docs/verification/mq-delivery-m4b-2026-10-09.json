@@ -1,0 +1,605 @@
+{
+  "date": "2026-10-09",
+  "timezone": "Asia/Taipei",
+  "testedAtUtcDate": "2026-10-09",
+  "milestone": "M4B leased outbox publisher and RabbitMQ commit-before-ACK worker",
+  "sourceBaseline": "4d83bcf06e3118aa54c1b08cb8d6de281ca144b2",
+  "scope": "ticket-delivery-20261009",
+  "postgresql": "17.11 isolated ticket_demo",
+  "redis": "7.4.11 isolated standalone",
+  "rabbitmq": {
+    "version": "4.1.8",
+    "imageId": "sha256:d60811676b7caa2286c241ce54c3db4eaf6ca947685a032d5224f41fba05a33f",
+    "pinnedManifestDigest": "sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee",
+    "actualTestedContainerUsesPinnedImage": true
+  },
+  "networkPolicy": {
+    "revision": "202",
+    "observationsCurrent": true,
+    "mode": "unrestricted",
+    "state": "enforced",
+    "proxyAndTLSRetained": true
+  },
+  "maven": {
+    "tests": 163,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "frontendBuild": "vue-tsc + Vite production build passed; synchronous checkout retained",
+  "upgradeFromRetainedV5": {
+    "v5RequestAndImmutableIntentProjectionPreserved": true,
+    "existingIntentsBackfilled": 1,
+    "migrations": 6,
+    "baselineJarSha256": "809aa1406175a8101a030dabefbf2fe7c140bd483798d0759f14273f8f0d7e6c",
+    "catalogProjection": {
+      "legacyCatalogProjectionPreserved": true,
+      "availableFieldInitializedToCapacity": false,
+      "availabilityPreserved": true,
+      "catalogAuditRecordsPreserved": 4,
+      "staffLoginStillValid": true,
+      "orderingEnabled": true,
+      "waitingRoomEnabled": false
+    },
+    "pendingPaidOrderAndPublicProjectionPreserved": true,
+    "publishedV1V5SourceAndFinalJarBytesUnchanged": {
+      "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+      "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+      "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+      "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+      "V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361"
+    }
+  },
+  "faultBoundaryMethod": {
+    "lostPublicationReceipt": "Real broker confirmed publication; test intentionally omitted PG receipt update, then waited real 10-second lease expiration; original event ID redelivered and stale token refused.",
+    "commitBeforeLostAck": "Same production consumer committed through Spring transaction proxy; deliberately invalid real delivery tag closed broker channel at ACK boundary; real broker redelivery reserved once.",
+    "retryAndDeadLetter": "Actual PG constraint failures, rollback of order/held/ledger, confirmed persistent retries through quorum TTL/DLX, finite dead-letter, real missing retry exchange retaining unacknowledged original.",
+    "brokerNack": "Real capacity-limited quorum queue returned basic.nack; separated from synthetic channel-close negative confirm.",
+    "integrationTestConsumerMode": "Direct invocation of production listener with real AMQP channels; scheduled publisher/listener disabled to isolate fixtures. Separate production JAR proof below runs scheduled publisher and real listener container."
+  },
+  "queuedPrepareHTTP": {
+    "transport": "production JAR HTTP + real PG/RabbitMQ, operator-controlled services",
+    "phase": "prepare",
+    "passed": 3,
+    "checks": [
+      "real production API accepts 202 with owned durable receipt before worker processing",
+      "accepted backlog has no stock hold or payment deadline",
+      "six actual HTTP retries preserve original request UUID and one purchase receipt"
+    ],
+    "realPayments": false
+  },
+  "cancelledPrepareHTTP": {
+    "transport": "production JAR HTTP + real PG/RabbitMQ, operator-controlled services",
+    "phase": "prepare-cancelled",
+    "passed": 4,
+    "checks": [
+      "real production API accepts 202 with owned durable receipt before worker processing",
+      "accepted backlog has no stock hold or payment deadline",
+      "six actual HTTP retries preserve original request UUID and one purchase receipt",
+      "owned cancellation commits while durable message is waiting for a worker"
+    ],
+    "realPayments": false
+  },
+  "actualApiAndBrokerRestart": {
+    "apiAndBrokerActuallyStopped": true,
+    "apiPortClosed": true,
+    "mqPortClosed": true,
+    "stoppedAtUtcEpoch": 1791546101.2497363,
+    "originalDeadlineUtcEpoch": 1791546177.527449,
+    "queuesBeforeStop": [
+      {
+        "name": "encore-m4b-20261009.retry.q",
+        "messages_ready": 0,
+        "messages_unacknowledged": 0,
+        "type": "quorum",
+        "arguments": [
+          [
+            "x-overflow",
+            "longstr",
+            "reject-publish"
+          ],
+          [
+            "x-dead-letter-exchange",
+            "longstr",
+            "encore-m4b-20261009.purchase"
+          ],
+          [
+            "x-message-ttl",
+            "signedint",
+            5000
+          ],
+          [
+            "x-max-length",
+            "long",
+            10000
+          ],
+          [
+            "x-dead-letter-strategy",
+            "longstr",
+            "at-least-once"
+          ],
+          [
+            "x-dead-letter-routing-key",
+            "longstr",
+            "purchase"
+          ],
+          [
+            "x-queue-type",
+            "longstr",
+            "quorum"
+          ]
+        ]
+      },
+      {
+        "name": "encore-m4b-20261009.purchase.q",
+        "messages_ready": 3,
+        "messages_unacknowledged": 0,
+        "type": "quorum",
+        "arguments": [
+          [
+            "x-overflow",
+            "longstr",
+            "reject-publish"
+          ],
+          [
+            "x-dead-letter-exchange",
+            "longstr",
+            "encore-m4b-20261009.dead"
+          ],
+          [
+            "x-max-length",
+            "long",
+            10000
+          ],
+          [
+            "x-dead-letter-strategy",
+            "longstr",
+            "at-least-once"
+          ],
+          [
+            "x-dead-letter-routing-key",
+            "longstr",
+            "purchase"
+          ],
+          [
+            "x-queue-type",
+            "longstr",
+            "quorum"
+          ]
+        ]
+      },
+      {
+        "name": "encore-m4b-20261009.dead.q",
+        "messages_ready": 0,
+        "messages_unacknowledged": 0,
+        "type": "quorum",
+        "arguments": [
+          [
+            "x-overflow",
+            "longstr",
+            "reject-publish"
+          ],
+          [
+            "x-queue-type",
+            "longstr",
+            "quorum"
+          ],
+          [
+            "x-max-length",
+            "long",
+            10000
+          ]
+        ]
+      }
+    ],
+    "queuesAfterActualBrokerRestart": [
+      {
+        "name": "encore-m4b-20261009.retry.q",
+        "messages_ready": 0,
+        "messages_unacknowledged": 0,
+        "type": "quorum",
+        "arguments": [
+          [
+            "x-overflow",
+            "longstr",
+            "reject-publish"
+          ],
+          [
+            "x-dead-letter-exchange",
+            "longstr",
+            "encore-m4b-20261009.purchase"
+          ],
+          [
+            "x-message-ttl",
+            "signedint",
+            5000
+          ],
+          [
+            "x-max-length",
+            "long",
+            10000
+          ],
+          [
+            "x-dead-letter-strategy",
+            "longstr",
+            "at-least-once"
+          ],
+          [
+            "x-dead-letter-routing-key",
+            "longstr",
+            "purchase"
+          ],
+          [
+            "x-queue-type",
+            "longstr",
+            "quorum"
+          ]
+        ]
+      },
+      {
+        "name": "encore-m4b-20261009.purchase.q",
+        "messages_ready": 3,
+        "messages_unacknowledged": 0,
+        "type": "quorum",
+        "arguments": [
+          [
+            "x-overflow",
+            "longstr",
+            "reject-publish"
+          ],
+          [
+            "x-dead-letter-exchange",
+            "longstr",
+            "encore-m4b-20261009.dead"
+          ],
+          [
+            "x-max-length",
+            "long",
+            10000
+          ],
+          [
+            "x-dead-letter-strategy",
+            "longstr",
+            "at-least-once"
+          ],
+          [
+            "x-dead-letter-routing-key",
+            "longstr",
+            "purchase"
+          ],
+          [
+            "x-queue-type",
+            "longstr",
+            "quorum"
+          ]
+        ]
+      },
+      {
+        "name": "encore-m4b-20261009.dead.q",
+        "messages_ready": 0,
+        "messages_unacknowledged": 0,
+        "type": "quorum",
+        "arguments": [
+          [
+            "x-overflow",
+            "longstr",
+            "reject-publish"
+          ],
+          [
+            "x-queue-type",
+            "longstr",
+            "quorum"
+          ],
+          [
+            "x-max-length",
+            "long",
+            10000
+          ]
+        ]
+      }
+    ],
+    "durableBacklogPreserved": true,
+    "restartedAtUtcEpoch": 1791546106.9578054,
+    "restartedBeforeOriginalDeadline": true
+  },
+  "queuedRecoveryHTTP": {
+    "transport": "production JAR HTTP + real PG/RabbitMQ, operator-controlled services",
+    "phase": "verify-reserved",
+    "passed": 5,
+    "checks": [
+      "persistent customer session can read original receipt after operator-controlled service recovery",
+      "original HTTP UUID/body replays terminal result without creating another intent",
+      "actual worker creates one PG order and starts payment deadline at committed reservation time",
+      "purchase receipt cancellation cannot release an existing order implicitly",
+      "another customer cannot read recovered purchase receipt"
+    ],
+    "realPayments": false
+  },
+  "cancelledRecoveryHTTP": {
+    "transport": "production JAR HTTP + real PG/RabbitMQ, operator-controlled services",
+    "phase": "verify-cancelled",
+    "passed": 4,
+    "checks": [
+      "persistent customer session can read original receipt after operator-controlled service recovery",
+      "original HTTP UUID/body replays terminal result without creating another intent",
+      "cancelled or expired durable backlog creates no order and leaves authoritative stock unchanged",
+      "another customer cannot read recovered purchase receipt"
+    ],
+    "realPayments": false
+  },
+  "actualMqOutage": {
+    "actualBrokerStopped": true,
+    "mqPortClosed": true,
+    "apiRemainsRunning": true,
+    "consumerStoppedBeforeFreshAcceptance": true,
+    "stoppedAtUtcEpoch": 1791546206.8122942,
+    "originalDeadlineUtcEpoch": 1791546217.800203,
+    "restartingAtUtcEpoch": 1791546258.0391936,
+    "restartingAfterOriginalDeadline": true,
+    "publicationWhileBrokerActuallyStopped": {
+      "attempts": 1,
+      "published": false,
+      "lastError": "UNKNOWN"
+    }
+  },
+  "outageAcceptanceHTTP": {
+    "transport": "production JAR HTTP + real PG/RabbitMQ, operator-controlled services",
+    "phase": "prepare",
+    "passed": 3,
+    "checks": [
+      "real production API accepts 202 with owned durable receipt before worker processing",
+      "accepted backlog has no stock hold or payment deadline",
+      "six actual HTTP retries preserve original request UUID and one purchase receipt"
+    ],
+    "realPayments": false
+  },
+  "outageRecoveryHTTP": {
+    "transport": "production JAR HTTP + real PG/RabbitMQ, operator-controlled services",
+    "phase": "verify-expired",
+    "passed": 5,
+    "checks": [
+      "persistent customer session can read original receipt after operator-controlled service recovery",
+      "original HTTP UUID/body replays terminal result without creating another intent",
+      "cancelled or expired durable backlog creates no order and leaves authoritative stock unchanged",
+      "actual recovery is after original DB deadline; no fixture deadline was patched",
+      "another customer cannot read recovered purchase receipt"
+    ],
+    "realPayments": false
+  },
+  "outagePublicationAfterRecovery": {
+    "attempts": 7,
+    "published": true,
+    "lastError": null
+  },
+  "runtimeProfiles": {
+    "publisherApiConsumerDisabled": true,
+    "workerMainWebApplicationType": "none",
+    "firstRecoveryNewAcceptanceDisabled": true,
+    "actualWorkerStopAndRestart": true,
+    "originalRequestDeadlinesNeverPatchedInProductionSmoke": true,
+    "acceptanceDeadlineSeconds": [
+      120,
+      10
+    ],
+    "expiryDisabledDuringMqWorkerProof": true,
+    "regressionExpiryDelayMs": 1000
+  },
+  "ordersHTTP": {
+    "transport": "real loopback JAR HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "anonymous orders denied",
+      "reservation requires customer CSRF",
+      "owner spoof field denied",
+      "server quote rejects client total",
+      "invalid quantity rejected",
+      "real hold and immutable priced order snapshot",
+      "same original command replays once",
+      "same request changed body rejected",
+      "public remaining ticket availability reflects hold",
+      "other customer cannot read or cancel order",
+      "limit includes holds across orders",
+      "request ID cannot cross place and cancel actions",
+      "cancel releases held ticket",
+      "cancel and place replay do not revive order",
+      "own history survives catalog archive",
+      "last ticket over actual concurrent HTTP has one winner",
+      "real sales deadline scheduler expires and releases exactly once",
+      "own order pagination is bounded"
+    ],
+    "realPayments": false
+  },
+  "paymentsHTTP": {
+    "transport": "production JAR loopback HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "mock payment requires customer CSRF",
+      "other customer cannot initiate payment on owned order",
+      "client cannot inject provider event field",
+      "server rejects altered payment quote amount",
+      "initiation persists one unresolved attempt without selling",
+      "original initiation UUID replays same payment",
+      "same UUID changed payment body conflicts",
+      "new UUID cannot create another attempt",
+      "other customer cannot reconcile payment",
+      "successful reconcile converts order to paid",
+      "same and different command replay one provider event without reselling",
+      "paid order refuses ordinary cancellation",
+      "paid quantity remains in per-customer quota",
+      "paid quantity remains unavailable",
+      "declined mock does not sell and allows cancellation",
+      "cancelled late success becomes review without reclaiming inventory",
+      "real deadline expiry then delayed success stays expired and reviewed",
+      "concurrent real HTTP reconciliation applies one provider event"
+    ],
+    "realPayments": false
+  },
+  "ordersBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 15,
+    "checks": [
+      "anonymous checkout registers and returns to original selection",
+      "committed hold response loss freezes new reservations",
+      "original UUID body survives page reload",
+      "401 retry retains unknown committed command",
+      "other customer cannot take over pending command or see original order",
+      "original owner retries exact UUID body and still has one order",
+      "order snapshot safely renders HTML-looking title",
+      "lost cancellation ACK reloads and replays without double release",
+      "older delayed GET cannot overwrite newer cancellation receipt",
+      "ACK success followed by GET failure keeps receipt and clears pending",
+      "new reservation after prior release and successful cancellation",
+      "acknowledged receipt from previous customer never leaks after account switch",
+      "mobile checkout has no horizontal overflow",
+      "actual deadline scheduler updates expired UI and restores ticket availability",
+      "mobile order history has no horizontal overflow"
+    ],
+    "realPayments": false
+  },
+  "paymentsBrowser": {
+    "transport": "Chromium against production JAR + dist",
+    "passed": 15,
+    "checks": [
+      "payment UI clearly states free simulation without card data or charges",
+      "committed payment initiation response loss freezes all new writes",
+      "original payment UUID and body survive reload",
+      "other customer cannot retry pending payment or see original order",
+      "401 payment retry retains original ambiguous command",
+      "original owner replays one attempt instead of starting another payment",
+      "committed successful reconciliation response loss retains original command",
+      "exact reconcile replay survives reload and older GET cannot overwrite paid receipt",
+      "confirmed paid order remains sold once and refuses ordinary cancellation",
+      "declined mock UI preserves hold until explicit cancellation without a second payment",
+      "cancelled payment late success shows review and does not revive held inventory",
+      "successful payment ACK followed by GET failure retains paid receipt and clears pending",
+      "malformed committed payment ACK retains original command and resolves without another attempt",
+      "mobile paid and reviewed payment history has no horizontal overflow",
+      "confirmed payment receipt never leaks after switching customer"
+    ],
+    "realPayments": false
+  },
+  "purchaseInvariants": {
+    "oneOutboxPerRequest": 0,
+    "outboxShape": 0,
+    "submitReceipt": 0,
+    "commandOwnership": 0,
+    "pendingAcceptanceLimit": 0,
+    "requestLifecycle": 0,
+    "reservationProjection": 0,
+    "terminalWithoutReservation": 0,
+    "reservedPlaceCommand": 0,
+    "commandNamespace": 0,
+    "expiryDeadline": 0,
+    "faultConstraintsRemaining": 0
+  },
+  "paymentInvariants": {
+    "inventoryBounds": 0,
+    "heldVsPending": 0,
+    "soldVsPaid": 0,
+    "heldVsLedgers": 0,
+    "soldVsLedger": 0,
+    "orderHoldRelease": 0,
+    "orderPaidConversion": 0,
+    "purchaseLimits": 0,
+    "pendingOrderLimit": 0,
+    "amountDeadlines": 0,
+    "orderLifecycle": 0,
+    "commandOwnership": 0,
+    "placeCommand": 0,
+    "paymentSnapshotCommand": 0,
+    "providerEventAllocation": 0,
+    "attemptState": 0,
+    "orderVersion": 0,
+    "faultConstraintsRemaining": 0
+  },
+  "deliveryInvariants": {
+    "onePublicationPerIntent": 0,
+    "publicationOwnership": 0,
+    "claimPair": 0,
+    "publishedNotLeased": 0,
+    "publishedAfterAttempt": 0,
+    "errorShape": 0,
+    "deliveryFaultConstraintsRemaining": 0
+  },
+  "cleanup": {
+    "containersRemaining": 0,
+    "volumesRemaining": 0,
+    "networksRemaining": 0,
+    "closedPorts": [
+      25432,
+      26379,
+      25672,
+      19110,
+      15180
+    ],
+    "onlyOwnScopeCleaned": true
+  },
+  "backendJarSha256": "0779ce7eda08d73978944958d5128a7650bfc56bfdf9ac4644690479b4374bde",
+  "frontendArtifacts": {
+    "assets/index-CKdD0CNy.css": "ce5f9b891967bc0acee573dd31cbbf24f92b63b5a78d75ce4d03198434f7b0ef",
+    "assets/index-DDkoicxB.js": "c8b0a69b0ae54cba8d51fda3d3ffae609bede41a42468d1059642cc6ced73bfd",
+    "index.html": "857acc551deadbaeab660cd3c919ee988261c4fa5e715c7a7515ff6f60b5fa4d"
+  },
+  "notImplemented": [
+    "async checkout UI",
+    "Redis stock predebit/generation/orphan reconciliation",
+    "tickets and scanning",
+    "multi-node MQ or Redis Cluster",
+    "throughput/latency guarantees",
+    "real payment or notification",
+    "public HTTPS or local final deployment"
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "milestone": "M6A",
+  "browser": [
+    {
+      "phase": "prepare",
+      "passed": 6,
+      "checks": [
+        "two actual API heartbeat observations and configured consumer capability do not claim a live worker; passive missing queues remain missing and PG business rows unchanged",
+        "real accepted customer purchase and committed seed events expose PG PROCESSING/unpublished backlog without monitoring completing or publishing them",
+        "production readonly monitoring preserves an existing cross-page staff pending and never sends a business POST",
+        "real authenticated VIEWER can read monitoring; anonymous and writes are refused without exposing credentials or identities",
+        "production monitoring fits 393px mobile",
+        "incomplete real snapshot is rejected and earlier data clearly marked unverified"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "advance",
+      "passed": 1,
+      "checks": [
+        "real regular order advances released source before automatic return, producing a genuine domain fence rather than a fake REVIEW row"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "healthy",
+      "passed": 1,
+      "checks": [
+        "actual two workers/consumers plus original source BLOCKED return REVIEW, DIRTY gate, finite budget and untouched durable outbox are visible read-only"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "worker-stale",
+      "passed": 1,
+      "checks": [
+        "real worker SIGKILL expires PG-clock heartbeat and broker consumers fall to one; enabled API capabilities do not mask the stopped worker"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "worker-restored",
+      "passed": 1,
+      "checks": [
+        "restarted real worker reports a new boot identity, original stale observation remains, business REVIEW/UUID/budget/backlog are unchanged"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "dependencies-off",
+      "passed": 1,
+      "checks": [
+        "real Redis/MQ TCP stops yield UNAVAILABLE and unknown queue counts rather than healthy zeros; recent heartbeats remain separate observations"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "dependencies-restored",
+      "passed": 1,
+      "checks": [
+        "same-AOF and real broker restart restore probes/consumers without changing original jobs; even successful UI snapshot becomes stale without refresh"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "pg-fault",
+      "passed": 2,
+      "checks": [
+        "actual PG stop gives readiness503 and authenticated snapshot503; loaded production UI marks earlier observation unverified",
+        "real PG restart resumes existing heartbeat identities and verified UI reads; original source/job budgets and backlog remain unchanged"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    },
+    {
+      "phase": "monitor-off",
+      "passed": 1,
+      "checks": [
+        "actual API restart with monitoring disabled avoids dependency/empty-backlog inference while preserving business data"
+      ],
+      "transport": "Chromium production dist/verified JAR/own PG Redis RabbitMQ",
+      "realPayments": false
+    }
+  ],
+  "passed": 15,
+  "extraChecks": [
+    "actual V23 to V24 leaves all old public rows unchanged; only operational heartbeat rows added"
+  ],
+  "oldPublicTablesUnchanged": 72,
+  "actualApis": 2,
+  "actualWorkers": 2,
+  "workerContainers": false,
+  "actualWorkerSigkill": true,
+  "actualRedisMqTcpStop": true,
+  "sameAofRestart": true,
+  "actualPgStopRestart": true,
+  "productionArtifactSha256": {
+    "backend/target/ticket-platform-0.1.0.jar": "ee63b7db8b068a80cd2dbf87acba918a26ca6bee4e56f2c082cc8c73e43bb111",
+    "backend/target/test-classes/dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class": "1a0d8d4f698fabf46bc85539291e5e6854cdf357e47abccd46a25849a7abe8fe",
+    "scripts/run_monitoring_runtime.py": "fe6d946d7f4749915407bd143542341671f682c860991384c44ebb4b6ff2774a",
+    "scripts/smoke_monitoring_browser.cjs": "3bf14d34a68eef8f3dec0dc8c93d7faadcdcfa7a23aa44cb1cdd341e4fab2bfe",
+    "frontend/dist/assets/index-C2FRQd4L.css": "3725ca6308268bf2e9887335232910c76dbffb7b76b0bfa2e925aa1479631eee",
+    "frontend/dist/assets/index-DUqxFJ2E.js": "7e6f82ec064bf5a5686e688cdf2476c4a7c5bb6a3314af5a167afaf288cefe0f",
+    "frontend/dist/index.html": "545f7cc3aa38764aba04a572b939e8d58689adb2cfa7c470e88dcfbef77fc03a",
+    "backend/src/main/resources/db/migration/V10__stock_recovery_jobs.sql": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad",
+    "backend/src/main/resources/db/migration/V11__stock_maintenance.sql": "02ad252d3200bae2b6f5f82f958f132e78f2e0047f2e471c87f0ec306648acef",
+    "backend/src/main/resources/db/migration/V12__stock_review_operations.sql": "5324eadd7dbc3b391e558b806f3b487b07777bd38b69a8b068253bafdf8d122a",
+    "backend/src/main/resources/db/migration/V13__stock_revision_origins.sql": "1b61438090357f3a63689a6cf7ce653fdcb4188b19e7ce8e6acf4c8a14ecf8fa",
+    "backend/src/main/resources/db/migration/V14__stock_return_handoffs.sql": "791eb2b135af748c0915080106f10f3b5c9d8ac12e35750c9db1d4c3d95d69b5",
+    "backend/src/main/resources/db/migration/V15__staff_stock_returns.sql": "bd106628441355da041f90290a1d7ec96a6653a3092844d7dd6d69ddb6622458",
+    "backend/src/main/resources/db/migration/V16__stock_return_resolutions.sql": "14f72e3e94b7ad6647bb0e350bc3ce9d48d9e81ea0a363c2dded960712da531a",
+    "backend/src/main/resources/db/migration/V17__stock_return_resolution_recovery.sql": "a75abe7896a356dc92bf89a1b1b7be695dae70b89e1c07a979d24a83b2937ed2",
+    "backend/src/main/resources/db/migration/V18__stock_return_recovery.sql": "e29c8754f6a7be385fad323edadb77363e06e9979c6ef2491fc8264caec8d88d",
+    "backend/src/main/resources/db/migration/V19__tickets.sql": "d9e3aaf6b316231583e4837c5f9aa0b562dbcdae8c429ba388d76104e5eec30e",
+    "backend/src/main/resources/db/migration/V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+    "backend/src/main/resources/db/migration/V20__ticket_request_recovery.sql": "e1bc6592116d2bfc184b4a2d657bb723371b32ac26aefe386a4f1a994491ef55",
+    "backend/src/main/resources/db/migration/V21__admission_windows.sql": "7c6d5d9ce4a82003e933c4b92a9d3e9e410df60a38c416860a9583f2cd76f031",
+    "backend/src/main/resources/db/migration/V22__shared_staff_sessions.sql": "28bc6496c4bb09de4d3bac23eee0aa3e661f230c9fd54f37b35afce52b8d7729",
+    "backend/src/main/resources/db/migration/V23__stock_return_discovery.sql": "0487eb168a4597d7b68bf6345c4232814ce52efc1b2fb95539e380889c0515d0",
+    "backend/src/main/resources/db/migration/V24__runtime_monitoring.sql": "edd81d0f0da85e44bac9038c6e70ea536930101a9a460d4a7e9d9c846c9503c1",
+    "backend/src/main/resources/db/migration/V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "backend/src/main/resources/db/migration/V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "backend/src/main/resources/db/migration/V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "backend/src/main/resources/db/migration/V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+    "backend/src/main/resources/db/migration/V6__outbox_publication.sql": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36",
+    "backend/src/main/resources/db/migration/V7__stock_projection.sql": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509",
+    "backend/src/main/resources/db/migration/V8__stock_hold_intents.sql": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc",
+    "backend/src/main/resources/db/migration/V9__stock_hold_purchase_decisions.sql": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+  },
+  "publicTls": false,
+  "loadBenchmark": false,
+  "crossHostHa": false,
+  "date": "2026-10-12",
+  "implementationCommit": "5aba90d",
+  "backend": {
+    "goal": "package",
+    "suites": 30,
+    "tests": 624,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "freshReports": true,
+    "automaticReruns": false
+  },
+  "frontend": {
+    "vueTsc": true,
+    "productionBuild": true,
+    "assets": [
+      "index-DUqxFJ2E.js",
+      "index-C2FRQd4L.css"
+    ]
+  },
+  "publishedMigrationsUnchanged": "V1-V23",
+  "newMigration": 24,
+  "finalCleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "allOwnedProcessesStopped": true
+  },
+  "formalRuntimeRuns": 3,
+  "automaticReruns": false,
+  "preservedInitialTestFailure": {
+    "tests": 624,
+    "suites": 30,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "causes": [
+      "Test fixture topology was missing; raw passive probe correctly returned MISSING without declaring queues.",
+      "Test read message count immediately after unconfirmed publication; observed0 before running passive probe."
+    ],
+    "fixes": [
+      "Explicit own RabbitAdmin.initialize in test setup.",
+      "Wait real broker confirm and bounded3s visibility before checking readonly preservation."
+    ],
+    "businessDeadlinesChanged": false,
+    "ownedCleanupZero": true
+  },
+  "preservedRuntimeFailures": [
+    {
+      "run": 1,
+      "cause": "Browser helper expected200 for a correctly202 Accepted purchase; changed to exact202, not a status range.",
+      "failureBeforeWorkerFaults": true,
+      "ownedCleanupZero": true
+    },
+    {
+      "run": 2,
+      "passedBeforeFailure": 12,
+      "cause": "Readonly SQL wrapper omitted statement terminator before COMMIT; failed PG-fault precondition before stopping PG. Corrected wrapper, no business SQL or deadlines changed.",
+      "ownedCleanupZero": true
+    }
+  ],
+  "seedV22Sha256": "f5d9cc294c114ffd19c107c86985c64a061a66e6b227cd55d399aa146729e7a0",
+  "baselineV23Sha256": "f5010bf77fd9797de2c7ea9994f15fc0fda56e44226ef9f5ce3fc8eeadada852",
+  "transport": "Actual verified JAR/two API and two nonweb worker host JVMs; real PG Redis RabbitMQ data containers; production dist via loopback Vite preview and Chromium",
+  "limitations": [
+    "Monitoring observations do not prove per-scheduler progress or throughput/SLA/HA.",
+    "Broker ready counts exclude delivered unACKed messages; independent dependency samples are not atomic.",
+    "Publisher explicitly disabled in worker fixtures to preserve actual outbox/PROCESSING backlog; API capability flag remains true.",
+    "PG public readiness request carries real staff cookie;503 can originate from PG-backed authentication, not a claimed isolated controller-only fault.",
+    "API monitoring-off restart validates only that API; other roles monitoring configuration remains enabled.",
+    "No new fleet-container, public TLS, Redis Cluster, Prometheus/Grafana/alert or k6 claim."
+  ]
+}

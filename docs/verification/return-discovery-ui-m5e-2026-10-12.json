@@ -1,0 +1,172 @@
+{
+  "milestone": "M5E",
+  "browser": [
+    {
+      "phase": "prepare",
+      "passed": 7,
+      "checks": [
+        "actual enrollment commits once but malformed body retains original pending and global freeze; reload recovers authoritative exact body using GET only",
+        "lost committed POST response survives navigation/reload; malformed proof cannot clear pending; exact original UUID recovers without another POST",
+        "stop requires explicit confirmation; cancel writes nothing; actual stop ACK loss is recovered by original stop-command proof and cannot re-enable budget",
+        "ACK followed by GET failure keeps confirmed command cleared; refresh reads the same policy without duplicate authorization",
+        "real new routes enforce authentication, CSRF, expected staff, body spoof rejection, owner privacy and input/page bounds",
+        "same owner downgraded to VIEWER can read policy and exact stop proof; UI hides writes and backend refuses them",
+        "production automatic-return management fits 393px mobile without horizontal overflow"
+      ],
+      "transport": "Chromium/production dist and actual JAR API/owned PostgreSQL Redis",
+      "realPayments": false
+    },
+    {
+      "phase": "offline",
+      "passed": 1,
+      "checks": [
+        "real Redis outage: one future source is EXHAUSTED but original job WAITING/CLOSED is explicitly unfinished; readonly work view creates no pending"
+      ],
+      "transport": "Chromium/production dist and actual JAR API/owned PostgreSQL Redis",
+      "realPayments": false
+    },
+    {
+      "phase": "drain",
+      "passed": 2,
+      "checks": [
+        "same-AOF recovery: UI verifies original APPLIED plus DONE and preserved UUID/finite attempts; historical/stopped scopes produce no work",
+        "restored stale-version original stop uses real SUPERSEDED proof, clears freeze without writes and never claims that stop succeeded"
+      ],
+      "transport": "Chromium/production dist and actual JAR API/owned PostgreSQL Redis",
+      "realPayments": false
+    },
+    {
+      "phase": "flag-off",
+      "passed": 1,
+      "checks": [
+        "actual API flag-off restart disables new UI authorization; real permanent stop still succeeds while completed original work remains DONE"
+      ],
+      "transport": "Chromium/production dist and actual JAR API/owned PostgreSQL Redis",
+      "realPayments": false
+    }
+  ],
+  "passed": 11,
+  "readonlyInvariants": {
+    "return_original_source": 0,
+    "return_original_commit_ack": 0,
+    "return_snapshot_command": 0,
+    "return_phase_audits": 0,
+    "return_quantity_cause": 0,
+    "return_job_original_body": 0,
+    "return_job_done_acknowledged": 0,
+    "return_job_claim_budget": 0,
+    "return_job_exact_latest_audit": 0,
+    "return_job_audit_sequence": 0,
+    "return_job_live_claim_identity": 0,
+    "missing_new_revision_context": 0,
+    "context_origin_audit_coverage": 0,
+    "new_context_image": 0,
+    "previous_context_image": 0,
+    "no_historical_backfill": 0,
+    "order_event_exact_images": 0,
+    "payment_event_exact_images": 0,
+    "catalog_original_result": 0,
+    "accepted_original_commit": 0,
+    "boundary_not_ahead_of_source": 0,
+    "unattributed_revisions": 0,
+    "discovery_source_future_boundary": 0,
+    "discovery_source_original_release": 0,
+    "discovery_source_original_job": 0,
+    "discovery_existing_return_proof": 0,
+    "discovery_finite_source_budget": 0,
+    "discovery_exact_latest_audit": 0,
+    "discovery_audit_sequence": 0,
+    "discovery_stop_original_command": 0,
+    "discovery_stop_original_audit": 0
+  },
+  "productionArtifactSha256": {
+    "backend/target/ticket-platform-0.1.0.jar": "f5010bf77fd9797de2c7ea9994f15fc0fda56e44226ef9f5ce3fc8eeadada852",
+    "backend/target/test-classes/dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class": "1a0d8d4f698fabf46bc85539291e5e6854cdf357e47abccd46a25849a7abe8fe",
+    "scripts/run_return_discovery_ui_runtime.py": "ad576a6e2fb37505496f308cc01a1133fbe764097a391ff51dc769d741f6a865",
+    "scripts/smoke_return_discovery_ui_browser.cjs": "a3e5a83914ce4e8c740f484a536c83b3684453b79ed786efb5cea50a12b1de1d",
+    "frontend/dist/assets/index-C2FRQd4L.css": "3725ca6308268bf2e9887335232910c76dbffb7b76b0bfa2e925aa1479631eee",
+    "frontend/dist/assets/index-CzxAo4o6.js": "eb1272d9c8530e8176217d216e966f75a6297210e7ba8653372987266c46b8fa",
+    "frontend/dist/index.html": "192e886858cb0226b41cba6c08a23625d90bdca7cc9dac7f16daa9c2f4711566",
+    "backend/src/main/resources/db/migration/V10__stock_recovery_jobs.sql": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad",
+    "backend/src/main/resources/db/migration/V11__stock_maintenance.sql": "02ad252d3200bae2b6f5f82f958f132e78f2e0047f2e471c87f0ec306648acef",
+    "backend/src/main/resources/db/migration/V12__stock_review_operations.sql": "5324eadd7dbc3b391e558b806f3b487b07777bd38b69a8b068253bafdf8d122a",
+    "backend/src/main/resources/db/migration/V13__stock_revision_origins.sql": "1b61438090357f3a63689a6cf7ce653fdcb4188b19e7ce8e6acf4c8a14ecf8fa",
+    "backend/src/main/resources/db/migration/V14__stock_return_handoffs.sql": "791eb2b135af748c0915080106f10f3b5c9d8ac12e35750c9db1d4c3d95d69b5",
+    "backend/src/main/resources/db/migration/V15__staff_stock_returns.sql": "bd106628441355da041f90290a1d7ec96a6653a3092844d7dd6d69ddb6622458",
+    "backend/src/main/resources/db/migration/V16__stock_return_resolutions.sql": "14f72e3e94b7ad6647bb0e350bc3ce9d48d9e81ea0a363c2dded960712da531a",
+    "backend/src/main/resources/db/migration/V17__stock_return_resolution_recovery.sql": "a75abe7896a356dc92bf89a1b1b7be695dae70b89e1c07a979d24a83b2937ed2",
+    "backend/src/main/resources/db/migration/V18__stock_return_recovery.sql": "e29c8754f6a7be385fad323edadb77363e06e9979c6ef2491fc8264caec8d88d",
+    "backend/src/main/resources/db/migration/V19__tickets.sql": "d9e3aaf6b316231583e4837c5f9aa0b562dbcdae8c429ba388d76104e5eec30e",
+    "backend/src/main/resources/db/migration/V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+    "backend/src/main/resources/db/migration/V20__ticket_request_recovery.sql": "e1bc6592116d2bfc184b4a2d657bb723371b32ac26aefe386a4f1a994491ef55",
+    "backend/src/main/resources/db/migration/V21__admission_windows.sql": "7c6d5d9ce4a82003e933c4b92a9d3e9e410df60a38c416860a9583f2cd76f031",
+    "backend/src/main/resources/db/migration/V22__shared_staff_sessions.sql": "28bc6496c4bb09de4d3bac23eee0aa3e661f230c9fd54f37b35afce52b8d7729",
+    "backend/src/main/resources/db/migration/V23__stock_return_discovery.sql": "0487eb168a4597d7b68bf6345c4232814ce52efc1b2fb95539e380889c0515d0",
+    "backend/src/main/resources/db/migration/V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "backend/src/main/resources/db/migration/V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "backend/src/main/resources/db/migration/V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "backend/src/main/resources/db/migration/V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+    "backend/src/main/resources/db/migration/V6__outbox_publication.sql": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36",
+    "backend/src/main/resources/db/migration/V7__stock_projection.sql": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509",
+    "backend/src/main/resources/db/migration/V8__stock_hold_intents.sql": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc",
+    "backend/src/main/resources/db/migration/V9__stock_hold_purchase_decisions.sql": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+  },
+  "actualRedisTcpStop": true,
+  "sameAofRestart": true,
+  "actualWorkers": 2,
+  "workerContainers": false,
+  "apiFlagOffRestart": true,
+  "publicTls": false,
+  "loadBenchmark": false,
+  "crossHostHa": false,
+  "publicPredebitCheckout": false,
+  "date": "2026-10-12",
+  "baseCommit": "faf0d7d027de01fa234f4546303222834ac08c62",
+  "backend": {
+    "goal": "package",
+    "suites": 29,
+    "tests": 614,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "freshReports": true,
+    "automaticReruns": false,
+    "skippedTests": false
+  },
+  "frontend": {
+    "vueTsc": true,
+    "productionBuild": true,
+    "mobileWidth": 393,
+    "horizontalOverflow": false,
+    "assets": [
+      "index-CzxAo4o6.js",
+      "index-C2FRQd4L.css"
+    ]
+  },
+  "productionJarExcludesTestProbes": true,
+  "publishedMigrationsUnchanged": "V1-V23",
+  "actualWorkersStartedWithoutHttp": true,
+  "limitations": [
+    "Actual production UI provided by loopback Vite preview, not public TLS or production Nginx verification.",
+    "Two real host worker JVMs; not new worker-container, load/HA or Redis Cluster proof.",
+    "Stale-version saved pending is a restored fixture, not a claimed real HTTP write race.",
+    "No continuous-throughput or commercial payment claim; fixed finite one policy per ticket."
+  ],
+  "finalCleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "allOwnedProcessesStopped": true
+  },
+  "formalRuntimeFailures": 0,
+  "automaticRuntimeReruns": false,
+  "formalRuntimeRuns": 2,
+  "initialRuntime": {
+    "passed": 11,
+    "failures": 0,
+    "ownedCleanupZero": true
+  },
+  "reasonForFinalRuntime": "Added frontend read-error write guard and explicit browser assertion, then rebuilt dist and verified a second new empty scope; backend source and verified JAR unchanged."
+}

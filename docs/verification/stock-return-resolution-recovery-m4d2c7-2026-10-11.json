@@ -1,0 +1,185 @@
+{
+  "milestone": "M4D2C7",
+  "dateUtc": "2026-10-11",
+  "startRemoteMain": "16cb864dff17bf4d92b6a3fbda7c2fc12d4a4b0b",
+  "implementationCommit": "54cfc81ef56ae829b9c91b8f59dad04318e53734",
+  "networkObservedRevision": 233,
+  "package": {
+    "suites": 21,
+    "tests": 488,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "jarSha256": "5e3d2ee11bd5d65a4521d3181b23d1c8170edd60f6cdb15d9ee6763d58a19ed7"
+  },
+  "focusedTests": {
+    "tests": 36,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "frontendBuild": {
+    "success": true,
+    "typecheck": true,
+    "javascript": "index-BYHEfybG.js",
+    "css": "index-CiqbVC47.css"
+  },
+  "publishedV1ToV16SourceAndTwoJarBytesUnchanged": true,
+  "productionChangedEntries": [
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionController.class",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Actor.class",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Preview.class",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService.class"
+  ],
+  "productionAddedEntries": [
+    "BOOT-INF/classes/db/migration/V17__stock_return_resolution_recovery.sql",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Fence.class",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Rebind.class",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$Recovery.class",
+    "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnResolutionService$RecoveryAudit.class"
+  ],
+  "productionRemovedEntries": [],
+  "dependencyJarBytesUnchanged": true,
+  "testOnlyHelpersExcluded": true,
+  "runtime": {
+    "actualV16JarToV17Upgrade": true,
+    "oldPublicTablesUnchangedAtUpgrade": 47,
+    "oldPublicRowsUnchangedAtUpgrade": 344,
+    "noRecoveryBackfill": true,
+    "browserGroups": 11,
+    "phases": [
+      {
+        "phase": "prepare",
+        "transport": "Chromium/final JAR/dist and owned PG/Redis",
+        "passed": 7,
+        "checks": [
+          "historical V16 committed resolution survives real V17 upgrade; reconcile returns original receipt without false fence",
+          "generation advance fences unknown original body; real reconciliation commit/client ACK loss reloads GET-only and delayed old submit is rejected",
+          "explicit same-return UUID rebind atomically records one new resolution/audit; actual ACK loss GET-only validates previous binding and old fence remains readable",
+          "malformed actual fence ACK preserves pending until complete immutable PG proof validates",
+          "actual recovery audit CHECK fault rolls back proof and keeps global pending; exact retry after fault removal commits one fence",
+          "production pending/fence/rebind evidence fits mobile viewport",
+          "new HTTP routes enforce original manager, expected staff, CSRF, strict JSON and bounded audit"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "offline",
+        "transport": "Chromium/final JAR/dist and owned PG/Redis",
+        "passed": 1,
+        "checks": [
+          "Redis TCP really down: fresh fence commits PG-only with actual ACK loss and pending remains"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "flag-off",
+        "transport": "Chromium/final JAR/dist and owned PG/Redis",
+        "passed": 1,
+        "checks": [
+          "flag off plus Redis down: GET-only unknown recovery and exact fence replay work; unresolved active intent remains, new rebind denied"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "transport": "Chromium/final JAR/dist and owned PG/Redis",
+        "passed": 2,
+        "checks": [
+          "same Redis/AOF restart: six original g1/g2 full HASH pairs unchanged; all six 14-component PG sources unchanged; five fences/one rebind/two resolutions and original BLOCKED histories preserved",
+          "role change invalidates old session; original owner viewer reads permanent proof but cannot reconcile"
+        ],
+        "realPayments": false
+      }
+    ],
+    "coreVerification": {
+      "sixOriginalLedgerPairsUnchanged": true,
+      "newG3UnchangedByRecovery": true,
+      "sixOriginalPgDomainFingerprintsUnchanged": true,
+      "originalBlockedHistoriesPreserved": true,
+      "fences": 5,
+      "rebinds": 1,
+      "resolutions": 2,
+      "recoveryAudits": 6
+    },
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "return_original_source",
+      "return_original_commit_ack",
+      "return_snapshot_command",
+      "return_phase_audits",
+      "return_quantity_cause",
+      "staff_return_domain_binding",
+      "staff_return_applied_proof",
+      "staff_return_latest_audit",
+      "staff_return_consecutive_audits",
+      "staff_return_original_release",
+      "resolution_original_binding",
+      "resolution_original_release",
+      "resolution_snapshot_binding",
+      "resolution_publication_proof",
+      "resolution_exact_audit",
+      "resolution_not_original_return_ack",
+      "recovery_fence_original",
+      "recovery_fence_not_applied",
+      "recovery_exact_fence_audit",
+      "recovery_exact_rebind_audit",
+      "recovery_rebind_completed",
+      "recovery_no_orphan_audit"
+    ],
+    "operationalSignals": {
+      "unattributed_revisions": 0
+    },
+    "actualRedisStopSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "redisTcpClosedDuringOutage": true,
+    "baselineJarSha256": "623e3fd231ae905e55d318fe24fc10b0d7774e61a8c399ba6e8a855ac29a099b",
+    "finalJarSha256": "5e3d2ee11bd5d65a4521d3181b23d1c8170edd60f6cdb15d9ee6763d58a19ed7",
+    "realPayments": false,
+    "publicDeployment": false,
+    "tcpAckDropOrKill9": false
+  },
+  "initialHarnessFailure": {
+    "stage": "prepare after explicit maintenance",
+    "cause": "Incorrect assertion that new-generation publication would freeze old Redis key; actual core updates PG generation gate and preserves old Redis HASH",
+    "correction": "Compare all original HASH fields unchanged; capture separately the explicitly published new g3",
+    "productionCodeChanged": false,
+    "failedEvidencePreserved": true,
+    "secondRunUsedNewEmptyScope": true
+  },
+  "privateEvidenceLocation": "ignored work/m4d2c7-20261011/",
+  "previousMilestoneBrowserEvidenceNotCounted": true,
+  "cleanup": {
+    "finalOwnScopesDisposed": 2,
+    "finalResources": {
+      "containers": 5,
+      "volumes": 5,
+      "networks": 2
+    },
+    "earlierFailedRuntimeDisposed": {
+      "containers": 2,
+      "volumes": 2,
+      "networks": 1
+    },
+    "allOwnScopesRemainingResources": 0,
+    "allOwnPortsClosed": [
+      15181,
+      19111,
+      25432,
+      25433,
+      25672,
+      26379,
+      26380
+    ]
+  },
+  "unchangedDependencyJarCount": 68
+}

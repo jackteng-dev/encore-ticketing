@@ -1,0 +1,332 @@
+{
+  "milestone": "M4D2C5",
+  "testedUtcDate": "2026-10-10",
+  "displayAsiaTaipeiDate": "2026-10-11",
+  "baseMain": "7ee6ec6f57df5f986386e5b335b995c1b732fa83",
+  "artifactAndTests": {
+    "baselineJarSha256": "036f4e7faa8b875059cf8a9e358bcda38dd230cef7a04d29e067ab92283ce025",
+    "finalJarSha256": "9bc63c72a6021a538a2b76640538941f132a089a52e6fff98a7adbaad20b06fe",
+    "unchangedOldProductionEntries": 131,
+    "changedProductionEntries": [
+      "BOOT-INF/classes/application.yml",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService$Command.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService$HistoricalReplay.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService$Outcome.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnService.class"
+    ],
+    "addedProductionEntries": [
+      "BOOT-INF/classes/db/migration/V15__staff_stock_returns.sql",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffController.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Actor.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Audit.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Begin.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Candidate.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Finished.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Receipt.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService$Settings.class",
+      "BOOT-INF/classes/dev/elpsy/ticket/inventory/StockReturnStaffService.class"
+    ],
+    "unchangedLibraries": 68,
+    "unchangedMigrations": 14,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCheckoutIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCommitCursorExperimentTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockHoldIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockMaintenanceIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockMultiCursorExperimentTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockOriginIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockPurchaseIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockRecoveryIntegrationTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReturnIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReturnStaffIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReviewIntegrationTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "tests": 452,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "frontendAssets": {
+      "index.html": "080ecd9bae32842626b6174b2fb9d1e04bf53d28fa648c0a14eef6ce15822966",
+      "assets/index-DW-_dcEI.css": "7ca8e0f0c527a009a284893eaf8896f29672bc485538cfb7da1f9f421cde3d0b",
+      "assets/index-jyifdYV6.js": "9231e61a03acca5285d9446557a52d4161b57d8ca656e2fc5aa539f1b3bb5dca"
+    }
+  },
+  "productionRuntime": {
+    "actualV14JarToV15Upgrade": true,
+    "oldPublicTablesUnchangedAtUpgrade": 42,
+    "oldPublicRowsUnchangedAtUpgrade": 243,
+    "noStaffReturnBackfill": true,
+    "browserGroups": 17,
+    "phases": [
+      {
+        "phase": "prepare",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 11,
+        "checks": [
+          "actual production UI lists the original acknowledged cancellation source and permits explicit manager handoff",
+          "real APPLIED commit followed by client ACK loss survives reload and freezes catalog; original PG GET resolves without another POST",
+          "original owned receipt and all three phase audits are readable after navigation without new operation",
+          "malformed actual terminal ACK preserves original UUID/body until full receipt is validated",
+          "actual staff APPLIED audit rollback leaves domain PG CLOSED/no ack after Redis OPEN; validated PG receipt stays visible after failing exact retry",
+          "fault removal resumes same original request without allocating another generation or duplicate return",
+          "newer source prevents UI handoff; real API records original BLOCKED and refuses another UUID for the same effect",
+          "actual expired COMMIT order is handed to a fresh generation through manager HTTP/UI",
+          "real anonymous/customer cookie, CSRF, expected staff, unknown actor field, immutable body and bounded page guards",
+          "real VIEWER reads evidence but cannot write; another manager cannot read or adopt original actor-owned operation",
+          "production return controls and identifiers fit mobile viewport"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "offline",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 1,
+        "checks": [
+          "actual stopped Redis leaves durable actor-owned CLOSED/REDIS_UNKNOWN; source and historical PG receipts remain readable"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "flag-off",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 2,
+        "checks": [
+          "API restart with return flag off preserves original unknown operation and uses PG-only lookup without POST",
+          "account switch cannot adopt original pending return even when its UUID is known"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "transport": "Chromium against final production JAR/dist and owned PG/Redis",
+        "passed": 3,
+        "checks": [
+          "same AOF and re-enabled API resume exact original request into APPLIED generation two with complete audit",
+          "actual role downgrade invalidates old session; original actor can read after viewer login but cannot POST",
+          "actual disabled staff account invalidates session and denies original receipt"
+        ],
+        "realPayments": false
+      }
+    ],
+    "coreVerification": {
+      "passed": 14,
+      "testOnlyRunner": true,
+      "checks": [
+        "lost: original business rows and full old ledger unchanged",
+        "lost: one actor-owned APPLIED and exact READY baseline four",
+        "malformed: original business rows and full old ledger unchanged",
+        "malformed: one actor-owned APPLIED and exact READY baseline four",
+        "rollback: original business rows and full old ledger unchanged",
+        "rollback: one actor-owned APPLIED and exact READY baseline four",
+        "stale: original business rows and full old ledger unchanged",
+        "newer source stays BLOCKED without domain return ack",
+        "offline: original business rows and full old ledger unchanged",
+        "offline: one actor-owned APPLIED and exact READY baseline four",
+        "expiry: original business rows and full old ledger unchanged",
+        "expiry: one actor-owned APPLIED and exact READY baseline four",
+        "original verified customer really holds one ticket in HTTP-created new epoch; available three held one",
+        "new HOLD preserves original FROZEN and COMMITTED ledger"
+      ]
+    },
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "return_original_source",
+      "return_original_commit_ack",
+      "return_snapshot_command",
+      "return_phase_audits",
+      "return_quantity_cause",
+      "staff_return_domain_binding",
+      "staff_return_applied_proof",
+      "staff_return_latest_audit",
+      "staff_return_consecutive_audits",
+      "staff_return_original_release"
+    ],
+    "operationalSignals": {
+      "unattributed_revisions": 0
+    },
+    "actualRedisStopSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "redisTcpClosedDuringOutage": true,
+    "baselineJarSha256": "036f4e7faa8b875059cf8a9e358bcda38dd230cef7a04d29e067ab92283ce025",
+    "finalJarSha256": "9bc63c72a6021a538a2b76640538941f132a089a52e6fff98a7adbaad20b06fe",
+    "realPayments": false,
+    "publicDeployment": false,
+    "tcpAckDropOrKill9": false
+  },
+  "cleanup": {
+    "disposedOwnScopes": 2,
+    "disposedContainers": 5,
+    "disposedVolumes": 5,
+    "disposedNetworks": 2,
+    "remainingOwnResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "closedOwnPorts": [
+      25432,
+      26379,
+      25672,
+      25433,
+      26380,
+      19111,
+      15181
+    ],
+    "ownApiPreviewAndRunnersExited": true,
+    "otherProjectsDisposed": false
+  },
+  "focusedFirstRun": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 1,
+    "cause": "Concurrent same-UUID registration lookup could race with the original domain phase commit",
+    "corrected": "Namespaced UUID PostgreSQL transaction advisory lock before original registration lookup"
+  },
+  "focusedCorrectedRun": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "frontendTypeAndProductionBuild": true,
+  "paidServicesOrModelsUsed": false,
+  "otherRepositorySourcesChanged": false
+}

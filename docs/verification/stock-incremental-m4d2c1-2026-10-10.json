@@ -1,0 +1,466 @@
+{
+  "milestone": "M4D2C1",
+  "actualUtcDate": "2026-10-10",
+  "baseMainCommit": "e287c0202cc832b95b1755982f8205a57aadbd1f",
+  "onlyRepository": "ticket-platform",
+  "runtimePolicyRevision": {
+    "start": 218,
+    "finish": 218
+  },
+  "policyEnforced": "unrestricted",
+  "versions": {
+    "postgresql": "17.11",
+    "redis": "7.4.11",
+    "rabbitmq": "4.1.8"
+  },
+  "backend": {
+    "tests": 361,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": "25",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": "22",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": "15",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": "18",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": "27",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": "33",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCheckoutIntegrationTest",
+        "tests": "21",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCommitCursorExperimentTest",
+        "tests": "20",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockHoldIntegrationTest",
+        "tests": "24",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockMaintenanceIntegrationTest",
+        "tests": "18",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": "24",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockPurchaseIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockRecoveryIntegrationTest",
+        "tests": "23",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockReviewIntegrationTest",
+        "tests": "20",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": "19",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "packageSuccess": true,
+    "jarSha256": "e69a5bbce69d9bcc4cd7e051a5e79e4381e472814f0cd24e8fcac43ec4ce5439",
+    "productionJarByteIdenticalToVerifiedM4D2B6": true
+  },
+  "frontend": {
+    "vueTscAndProductionBuildSuccess": true,
+    "artifactsByteIdenticalToM4D2B6": [
+      {
+        "file": "dist/assets/index-DJFr8V22.js",
+        "sha256": "cc3c80053d3473013a5e0ed3e18a859d51b324b3a03051082ccc56aabbb4f9b4"
+      },
+      {
+        "file": "dist/assets/index-DMryCJ9H.css",
+        "sha256": "c645d7a2f3a76fc0f66650409b3284988dee30bb9642c86c3fae182b3e8e8e98"
+      },
+      {
+        "file": "dist/index.html",
+        "sha256": "b1852480f96db35dc639533e7dae408fb137597f3e5775e380de4ec1d084193a"
+      }
+    ]
+  },
+  "artifactComparison": {
+    "productionClassesAndResourcesUnchanged": 130,
+    "frontendArtifactsUnchanged": 3,
+    "testPrototypeNotPackaged": true
+  },
+  "migrations": [
+    {
+      "file": "V10__stock_recovery_jobs.sql",
+      "sha256": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad"
+    },
+    {
+      "file": "V11__stock_maintenance.sql",
+      "sha256": "02ad252d3200bae2b6f5f82f958f132e78f2e0047f2e471c87f0ec306648acef"
+    },
+    {
+      "file": "V12__stock_review_operations.sql",
+      "sha256": "5324eadd7dbc3b391e558b806f3b487b07777bd38b69a8b068253bafdf8d122a"
+    },
+    {
+      "file": "V1__staff_and_event_catalog.sql",
+      "sha256": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+    },
+    {
+      "file": "V2__customer_identity.sql",
+      "sha256": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b"
+    },
+    {
+      "file": "V3__reservation_orders.sql",
+      "sha256": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc"
+    },
+    {
+      "file": "V4__mock_payments.sql",
+      "sha256": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8"
+    },
+    {
+      "file": "V5__purchase_requests_outbox.sql",
+      "sha256": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361"
+    },
+    {
+      "file": "V6__outbox_publication.sql",
+      "sha256": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36"
+    },
+    {
+      "file": "V7__stock_projection.sql",
+      "sha256": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509"
+    },
+    {
+      "file": "V8__stock_hold_intents.sql",
+      "sha256": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc"
+    },
+    {
+      "file": "V9__stock_hold_purchase_decisions.sql",
+      "sha256": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+    }
+  ],
+  "newProductionMigration": false,
+  "runtimeExperiment": {
+    "passed": 17,
+    "phases": [
+      {
+        "passed": 5,
+        "checks": [
+          "same-transaction original worker COMMIT and provenance committed",
+          "real PG audit CHECK failure after Redis checkpoint success",
+          "PG original cursor and REGISTERED audit retained",
+          "Redis cursor advanced once with original command tombstone",
+          "production gate remains DIRTY without READY publication"
+        ],
+        "sourceSchemaVersion": 12,
+        "testClasspathOnly": true,
+        "phaseAudits": 1,
+        "pgCursor": 1,
+        "phase": "prepare"
+      },
+      {
+        "sourceSchemaVersion": 12,
+        "checks": [
+          "original UUID and immutable PG body survive process restart",
+          "actual Redis outage stays UNKNOWN without reseed or new UUID",
+          "PG-only original command cursor and audit remain readable",
+          "original PG intent decision ack order event stock gate and journal unchanged",
+          "production gate remains DIRTY without READY publication"
+        ],
+        "passed": 5,
+        "phase": "offline",
+        "pgCursor": 1,
+        "phaseAudits": 1,
+        "testClasspathOnly": true
+      },
+      {
+        "phase": "verify",
+        "pgCursor": 2,
+        "phaseAudits": 2,
+        "testClasspathOnly": true,
+        "sourceSchemaVersion": 12,
+        "checks": [
+          "original UUID and immutable PG body survive process restart",
+          "same AOF original command replay commits the missing PG checkpoint",
+          "six later original retries use one acknowledged checkpoint",
+          "exact next revision and two immutable phase audits",
+          "whole original ledger and raw COMMITTED receipt bytes unchanged",
+          "original PG intent decision ack order event stock gate and journal unchanged",
+          "production gate remains DIRTY without READY publication"
+        ],
+        "passed": 7
+      }
+    ],
+    "actualRedisStopAndSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "redisTcpClosedDuringOutage": true,
+    "testClasspathOnly": true,
+    "productionJarHasNoExperimentClassesOrResources": true,
+    "productionJarSha256": "e69a5bbce69d9bcc4cd7e051a5e79e4381e472814f0cd24e8fcac43ec4ce5439",
+    "testResourceSha256": {
+      "commit-cursor.lua": "2ff8d2f1fe383782b7c5107df493aa71861ec243ded1141885b23a63abbdc4c4",
+      "commit-cursor-schema.sql": "66281562a0cfb3ef3fcb6fcc0d16d81ffad4c6150f4789762b308b5cc5ea843c"
+    },
+    "pgTcpCommitAckDropInjected": false,
+    "redisTcpSuccessfulAckDropInjected": false,
+    "clusterLoadOrHaClaim": false
+  },
+  "allThreeRunnerProcessesExitedAndEphemeralHttpPortsClosed": true,
+  "pgInvariants": {
+    "stock_maintenance": {
+      "missing_progress": 0,
+      "missing_audit": 0,
+      "audit_version_gap": 0,
+      "latest_audit_mismatch": 0,
+      "rebuild_identity_mismatch": 0,
+      "registered_with_domain_generation": 0,
+      "ready_with_failure": 0,
+      "checkpoint_without_original_command": 0
+    },
+    "payment": {
+      "inventoryBounds": 0,
+      "heldVsPending": 0,
+      "soldVsPaid": 0,
+      "heldVsLedgers": 0,
+      "soldVsLedger": 0,
+      "orderHoldRelease": 0,
+      "orderPaidConversion": 0,
+      "purchaseLimits": 0,
+      "pendingOrderLimit": 0,
+      "amountDeadlines": 0,
+      "orderLifecycle": 0,
+      "commandOwnership": 0,
+      "placeCommand": 0,
+      "paymentSnapshotCommand": 0,
+      "providerEventAllocation": 0,
+      "attemptState": 0,
+      "orderVersion": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "stock_projection": {
+      "missing_projection": 0,
+      "revision_head_mismatch": 0,
+      "journal_gap": 0,
+      "current_stock_mismatch": 0,
+      "generation_head_mismatch": 0,
+      "command_snapshot_mismatch": 0,
+      "ready_checkpoint_mismatch": 0
+    },
+    "purchase": {
+      "oneOutboxPerRequest": 0,
+      "outboxShape": 0,
+      "submitReceipt": 0,
+      "commandOwnership": 0,
+      "pendingAcceptanceLimit": 0,
+      "requestLifecycle": 0,
+      "reservationProjection": 0,
+      "terminalWithoutReservation": 0,
+      "reservedPlaceCommand": 0,
+      "commandNamespace": 0,
+      "expiryDeadline": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "delivery": {
+      "onePublicationPerIntent": 0,
+      "publicationOwnership": 0,
+      "claimPair": 0,
+      "publishedNotLeased": 0,
+      "publishedAfterAttempt": 0,
+      "errorShape": 0,
+      "deliveryFaultConstraintsRemaining": 0
+    },
+    "stock_review": {
+      "missing_progress": 0,
+      "review_history_mismatch": 0,
+      "decision_mismatch": 0,
+      "audit_version_gap": 0,
+      "latest_audit_mismatch": 0,
+      "unused_resolved_without_evidence": 0,
+      "settlement_resolved_without_evidence": 0,
+      "resolved_with_failure": 0
+    },
+    "stock_commit_experiment": {
+      "missing_registered_audit": 0,
+      "command_identity_mismatch": 0,
+      "command_snapshot_mismatch": 0,
+      "ack_cursor_mismatch": 0,
+      "ack_domain_evidence_mismatch": 0,
+      "audit_state_mismatch": 0,
+      "cursor_without_original_command": 0,
+      "command_without_cursor": 0
+    },
+    "stock_recovery": {
+      "missing_unused_job": 0,
+      "missing_settlement_job": 0,
+      "settlement_without_decision": 0,
+      "claim_count_mismatch": 0,
+      "lease_identity_mismatch": 0,
+      "settlement_done_without_ack": 0,
+      "unused_done_without_evidence": 0,
+      "invalid_budget": 0
+    },
+    "stock_purchase": {
+      "linked_identity_mismatch": 0,
+      "missing_original_command": 0,
+      "missing_outbox": 0,
+      "accepted_progress_mismatch": 0,
+      "terminal_decision_missing": 0,
+      "decision_result_mismatch": 0,
+      "commit_order_proof_missing": 0,
+      "release_has_formal_order": 0,
+      "contradictory_ack": 0,
+      "acknowledged_epoch_open": 0
+    },
+    "stock_hold": {
+      "missing_progress": 0,
+      "wrong_epoch_source": 0,
+      "wrong_quote_revision": 0,
+      "invalid_deadline": 0,
+      "legacy_command_collision": 0,
+      "unresolved_old_generation": 0,
+      "abandonment_gate_open": 0,
+      "missing_abort_decision": 0,
+      "missing_resolution_evidence": 0
+    }
+  },
+  "totalZeroViolationPgChecks": 95,
+  "pgIntegrityScope": "fresh final-JAR real-domain runtime case after disposing own unit-fault volumes; includes test-only experiment schema",
+  "newExperimentTestNames": [
+    "originalLedgerTtlWrongTypeOrInvalidCountersAreBlocked",
+    "changedBodyOrNewUuidCannotAdoptTheOriginalOperation",
+    "aNewOfficialGenerationFencesTheUnconsumedOldCommand",
+    "retroactiveAttributionToAnAlreadyCommittedJournalIsRejected",
+    "sidecarTtlOrForgedMarkerDoesNotAcknowledge",
+    "independentPhasesAndAnUnusedSeedAreRequired",
+    "aLaterCancellationJournalCannotBeSkipped",
+    "commandAckAuditAndCursorEvidenceCannotBeRewritten",
+    "activeOriginalHoldsBlockConsumptionWithoutModifyingEitherLedger",
+    "oppositeTerminalReceiptCannotReverseTheFormalDecision",
+    "anExistingPgAckDoesNotAuthorizeAChangedOriginalRedisReceipt",
+    "anAckCannotCommitWithoutTheExactFormalEvidenceAndAtomicCursor",
+    "provenanceFailureRollsBackTheOriginalWorkerOrderStockAndDecision",
+    "absentAcknowledgementCannotBeTreatedAsACommittedReceipt",
+    "commitAbsorbsTheJournalWithoutSubtractingAvailableTwiceOrReopening",
+    "heldOrUnacknowledgedReceiptCannotAdvanceEvidenceCursor",
+    "sixConcurrentOriginalRetriesAdvanceOneCursorWithOneAck",
+    "redisCursorSuccessThenPgAuditRollbackRecoversTheExactCommand",
+    "aProcessingPurchaseCannotSupplyAFormalCommitCommand",
+    "lostOriginalOrSidecarKeyDoesNotInitializeOrSeed"
+  ],
+  "testOnlySourceSha256": {
+    "backend/src/test/java/dev/elpsy/ticket/StockCommitCursorExperimentTest.java": "43071f864018e27e1ed35cedc0c047be28015f194757eab5e146e7b3942ca59e",
+    "backend/src/test/java/dev/elpsy/ticket/StockCommitCursorExperimentRunner.java": "67e4e016a31c87d32a5a6b12665441ca59056294b4d3f75015ce7bc4600b8c2c",
+    "backend/src/test/java/dev/elpsy/ticket/inventory/CommitCursorExperiment.java": "5294ddab15517861ee5cde42d401de4b3dae5dd7ce89fca2950b0175c2700947",
+    "backend/src/test/java/dev/elpsy/ticket/inventory/CommitCursorFixture.java": "5b200f444b667d28bbcb27d64a7196fb81ee79ace92a20b2a3df50459c6c38bd",
+    "backend/src/test/resources/experiments/commit-cursor-schema.sql": "66281562a0cfb3ef3fcb6fcc0d16d81ffad4c6150f4789762b308b5cc5ea843c",
+    "backend/src/test/resources/experiments/commit-cursor.lua": "2ff8d2f1fe383782b7c5107df493aa71861ec243ded1141885b23a63abbdc4c4",
+    "scripts/run_stock_commit_experiment.py": "264fa8ee6b327bd79338e608788b030deee616b7c329d0eb9ff68b44112e8d26",
+    "scripts/verify_stock_commit_experiment_invariants.sql": "af0994f1c4157ca6f0030c204942a4c49561a73a171ab93b1e2809bd999635a2"
+  },
+  "limits": {
+    "testClasspathOnly": true,
+    "noProductionIncrementalWriterApiOrScheduler": true,
+    "sameTransactionProvenanceOnlyInExperimentalWrapper": true,
+    "noRetroactiveJournalAttributionOrBackfill": true,
+    "singleCommitFromInitiallyEmptyEpochOnly": true,
+    "originalLedgerAndReceiptNotRewrittenByCursorApply": true,
+    "productionGateRemainsDirtyAndFrozen": true,
+    "noReadyPublicationOrThroughputClaim": true,
+    "activeHoldsAndLaterRevisionsBlocked": true,
+    "sidecarSeedSyntheticSetupOnlyNoRecoveryReseed": true,
+    "noFullLedgerGcOrUnregisteredReceiptAudit": true,
+    "noPgCommitAckOrRedisSuccessfulAckTcpDrop": true,
+    "normalStopRestartSameAofNotKill9": true,
+    "noClusterLoadOrHaClaim": true,
+    "noRealPaymentOrTicketIssuance": true,
+    "browserAndHttpSmokeNotRerun": true,
+    "browserAndHttpReason": "production JAR byte-identical, all130 classes/resources and all3 frontend artifacts unchanged; this milestone modifies only test harnesses, validation scripts and docs"
+  },
+  "attemptNote": "First complete package had experiment schema-loader setup error: semicolon splitting broke dollar-quoted PL/pgSQL; old341 tests passed. Switched to whole-schema atomic PG transaction and recreated only own isolated scope. Second package passed360 (new19); added post-PG-ack receipt tampering test and dedicated JUnit namespace so normal demo namespace is preserved. Final complete package361 passed with no failures/errors/skips. No timeout, gate or production behavior loosened.",
+  "cleanup": {
+    "onlyOwnProjectDisposed": "ticket-increment-20261010",
+    "resourcesRemaining": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "portsClosed": {
+      "25432": true,
+      "26379": true,
+      "25672": true,
+      "38439": true,
+      "34533": true,
+      "37675": true
+    },
+    "allOwnJavaProcessesExited": true
+  }
+}

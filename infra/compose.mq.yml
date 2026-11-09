@@ -1,0 +1,19 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4.1-alpine@sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee
+    environment:
+      RABBITMQ_DEFAULT_USER: ${TICKET_MQ_USER:?Provide isolated MQ user}
+      RABBITMQ_DEFAULT_PASS: ${TICKET_MQ_PASSWORD:?Provide private MQ password}
+      RABBITMQ_DEFAULT_VHOST: ${TICKET_MQ_VHOST:?Provide isolated MQ vhost}
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '+S 2:2 +SDcpu 1 +SDio 1'
+    ports:
+      - '127.0.0.1:${TICKET_MQ_PORT:-25672}:5672'
+    volumes:
+      - ticket-mq:/var/lib/rabbitmq
+    healthcheck:
+      test: [CMD, su-exec, rabbitmq, rabbitmq-diagnostics, -q, check_running]
+      interval: 3s
+      timeout: 5s
+      retries: 40
+volumes:
+  ticket-mq:

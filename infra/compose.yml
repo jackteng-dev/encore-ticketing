@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ticket_demo
+      POSTGRES_USER: ${TICKET_DB_USER:?Provide isolated DB user}
+      POSTGRES_PASSWORD: ${TICKET_DB_PASSWORD:?Provide private DB password}
+    ports:
+      - '127.0.0.1:${TICKET_PG_PORT:-25432}:5432'
+    volumes:
+      - ticket-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d ticket_demo']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis:7-alpine
+    command:
+      - sh
+      - -ec
+      - cp /run/ticket-redis.conf /run/runtime-redis.conf; chown redis:redis /run/runtime-redis.conf; chmod 600 /run/runtime-redis.conf; exec docker-entrypoint.sh redis-server /run/runtime-redis.conf
+    environment:
+      REDISCLI_AUTH: ${TICKET_REDIS_PASSWORD:?Provide private Redis password}
+    ports:
+      - '127.0.0.1:${TICKET_REDIS_PORT:-26379}:6379'
+    volumes:
+      - ticket-redis:/data
+      - ${TICKET_REDIS_CONFIG:-../work/redis.conf}:/run/ticket-redis.conf:ro
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+volumes:
+  ticket-redis:
+  ticket-pg:

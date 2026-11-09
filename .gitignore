@@ -1,0 +1,12 @@
+work/
+.env
+.env.*
+!.env.example
+**/node_modules/
+**/target/
+**/dist/
+*.log
+*.apk
+__pycache__/
+.idea/
+.DS_Store

@@ -1,0 +1,169 @@
+{
+  "milestone": "M4E1",
+  "date": "2026-10-11",
+  "timezone": "Asia/Taipei",
+  "startingMain": "ae4623fe59fe256a038ff980c14ce187191a67b1",
+  "implementationCommit": "dff462051156d62b9e187acc36e09a13f7d23cad",
+  "packageAndBuild": {
+    "suites": 23,
+    "tests": 522,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rerunOrFlaky": 0,
+    "jarSha256": "c327b0f607c7c54afc149d531df929f7c44a07f8cb6e99a1b298c74ac7cdf382",
+    "baselineV18JarSha256": "abbfa51e7ec1805180363ddeeca3cdfd3bcac6ef4fe767e1d3f0a1efce8a2782",
+    "javascript": [
+      "index-CvKkQWx4.js"
+    ],
+    "css": [
+      "index-DOGTeM__.css"
+    ],
+    "migrations": 19,
+    "v1ThroughV18SourceGitJarIdentical": true,
+    "testOnlyHelpersPackaged": false
+  },
+  "production": {
+    "actualV18JarToV19Upgrade": true,
+    "oldPublicTablesUnchangedAtUpgrade": 53,
+    "oldPublicRowsUnchangedAtUpgrade": 109,
+    "noTicketBackfill": true,
+    "groups": 10,
+    "phases": [
+      {
+        "phase": "seed",
+        "passed": 1,
+        "checks": [
+          "true V18 JAR creates four formal PAID orders, unpaid hold and cancelled late-success REVIEW"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V18 JAR",
+        "realPayments": false
+      },
+      {
+        "phase": "prepare",
+        "passed": 3,
+        "checks": [
+          "actual issuance commits complete units before lost client ACK; reload exact original UUID preserves codes and clears only complete receipt, with global customer freeze",
+          "production PAID proof issues only original quantity; unpaid and cancelled late REVIEW cannot issue",
+          "actual correct-session admission commits once before lost ACK; original staff body and expected ticket ID freeze other staff writes"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V18 JAR",
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "passed": 1,
+        "checks": [
+          "real API restart with issuance/admission flags off and Redis TCP down preserves codes; original staff pending replays one durable receipt, new writes refuse"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V18 JAR",
+        "realPayments": false
+      },
+      {
+        "phase": "finish",
+        "passed": 5,
+        "checks": [
+          "six real HTTP requests with different UUIDs competing for one code produce one admission and five conflicts while Redis is down",
+          "real production UI revokes unused original ticket with immutable audit; all original stock/order/source rows remain identical",
+          "two explicitly injected private simulator extra events processed by real reconcile stop new issuance/admission; unused REVIEW ticket can revoke, stock/revision remains byte identical",
+          "actual owner/anonymous/VIEWER/CSRF/strict body/expected staff/audit bounds hold; staff metadata omits codes and mobile fits",
+          "three immutable issuance batches/four original codes persist; two CHECKED_IN/two REVOKED with four terminal audits and no reissue"
+        ],
+        "transport": "Chromium/final JAR/dist and own PG; seed uses actual historical V18 JAR",
+        "realPayments": false
+      }
+    ],
+    "actualApiStopRestart": true,
+    "flagsOffReplayVerified": true,
+    "actualRedisStopAndTcpClosed": true,
+    "redisDownForResumeAndFinish": true,
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "unattributed_revisions",
+      "issuance_original_conversion",
+      "issuance_complete_units",
+      "issuance_exact_audit",
+      "issuance_original_command",
+      "admission_command_effect",
+      "terminal_ticket_audited"
+    ],
+    "issuanceBatches": 3,
+    "issuedUnits": 4,
+    "checkedIn": 2,
+    "revoked": 2,
+    "baselineJarSha256": "abbfa51e7ec1805180363ddeeca3cdfd3bcac6ef4fe767e1d3f0a1efce8a2782",
+    "finalJarSha256": "c327b0f607c7c54afc149d531df929f7c44a07f8cb6e99a1b298c74ac7cdf382",
+    "realPayments": false,
+    "publicDeployment": false,
+    "kill9OrTcpCommitAckDrop": false
+  },
+  "recordedCorrections": {
+    "focusedInitial": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 16,
+      "skipped": 0,
+      "cause": "Timestamp from JDBC map cast as OffsetDateTime; fixed typed Header row mapper"
+    },
+    "focusedAfterFix": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "firstProductionPrepare": "Two groups passed then exact implicit select-label locator timed out; fixed script locator, all ten groups passed in a new empty scope",
+    "productionApplicationOrMigrationBytesChangedAfterImplementationCommit": false,
+    "rawFailuresPreservedOnlyInIgnoredWork": true
+  },
+  "cleanup": {
+    "finalOwnScopes": {
+      "ticket-issuance-full-e1": {
+        "before": {
+          "containers": 3,
+          "volumes": 3,
+          "networks": 1
+        },
+        "after": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      },
+      "ticket-issuance-runtime-e1b": {
+        "before": {
+          "containers": 2,
+          "volumes": 2,
+          "networks": 1
+        },
+        "after": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      }
+    },
+    "failedRuntimeScopeRemainingResources": 0,
+    "ownApiAndPreviewPortsClosed": true,
+    "otherProjectsModifiedOrDisposed": false
+  },
+  "limitations": {
+    "freeMockPaymentsOnly": true,
+    "explicitPaidOwnerIssuance": true,
+    "noAutomaticIssuance": true,
+    "noQrCameraOrTimeWindow": true,
+    "permanentConflictPendingNeedsFutureNegativeProofFence": true,
+    "codesReadableInProtectedDatabase": true,
+    "unknownStaffCheckInCodeInSameTabStorageUntilConfirmed": true,
+    "staffSessionSingleApiMemory": true,
+    "multiApiClusterHaOrLoadTested": false
+  }
+}

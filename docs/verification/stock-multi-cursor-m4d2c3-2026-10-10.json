@@ -1,0 +1,375 @@
+{
+  "milestone": "M4D2C3",
+  "actualUtcDate": "2026-10-10",
+  "handoffTaipeiDate": "2026-10-11",
+  "baseMainCommit": "ba264bff63e809ee16bc925da280d00191303189",
+  "onlyRepository": "ticket-platform",
+  "runtimePolicyRevision": 221,
+  "policyEnforced": true,
+  "backend": {
+    "fullPackagePassed": true,
+    "tests": 407,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "suite": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockCheckoutIntegrationTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockCommitCursorExperimentTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockHoldIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockMaintenanceIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockMultiCursorExperimentTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockOriginIntegrationTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockPurchaseIntegrationTest",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockRecoveryIntegrationTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.StockReviewIntegrationTest",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "forkCount": 1,
+    "reuseForks": false,
+    "mavenHeapMb": 384,
+    "suiteHeapMb": 768
+  },
+  "frontend": {
+    "vueTscAndProductionBuildSuccess": true,
+    "currentBrowserOrHttpRegressionNotRerun": true
+  },
+  "artifacts": {
+    "baselineV13JarSha256": "02e009972af2fd808eb6458e238ad946b28b670c7d91a5f3e8a69f12bbaea6c1",
+    "finalJarSha256": "02e009972af2fd808eb6458e238ad946b28b670c7d91a5f3e8a69f12bbaea6c1",
+    "allProductionClassesAndResourcesByteIdentical": 131,
+    "allDependencyJarsByteIdentical": 68,
+    "testCodeAndResourcesNotPackaged": true,
+    "v1ThroughV13SourceAndJarBytesUnchanged": true,
+    "migrations": [
+      {
+        "file": "V10__stock_recovery_jobs.sql",
+        "sha256": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad"
+      },
+      {
+        "file": "V11__stock_maintenance.sql",
+        "sha256": "02ad252d3200bae2b6f5f82f958f132e78f2e0047f2e471c87f0ec306648acef"
+      },
+      {
+        "file": "V12__stock_review_operations.sql",
+        "sha256": "5324eadd7dbc3b391e558b806f3b487b07777bd38b69a8b068253bafdf8d122a"
+      },
+      {
+        "file": "V13__stock_revision_origins.sql",
+        "sha256": "1b61438090357f3a63689a6cf7ce653fdcb4188b19e7ce8e6acf4c8a14ecf8fa"
+      },
+      {
+        "file": "V1__staff_and_event_catalog.sql",
+        "sha256": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+      },
+      {
+        "file": "V2__customer_identity.sql",
+        "sha256": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b"
+      },
+      {
+        "file": "V3__reservation_orders.sql",
+        "sha256": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc"
+      },
+      {
+        "file": "V4__mock_payments.sql",
+        "sha256": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8"
+      },
+      {
+        "file": "V5__purchase_requests_outbox.sql",
+        "sha256": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361"
+      },
+      {
+        "file": "V6__outbox_publication.sql",
+        "sha256": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36"
+      },
+      {
+        "file": "V7__stock_projection.sql",
+        "sha256": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509"
+      },
+      {
+        "file": "V8__stock_hold_intents.sql",
+        "sha256": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc"
+      },
+      {
+        "file": "V9__stock_hold_purchase_decisions.sql",
+        "sha256": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+      }
+    ],
+    "frontendArtifactsByteIdenticalToC2": [
+      {
+        "file": "dist/assets/index-DJFr8V22.js",
+        "sha256": "cc3c80053d3473013a5e0ed3e18a859d51b324b3a03051082ccc56aabbb4f9b4"
+      },
+      {
+        "file": "dist/assets/index-DMryCJ9H.css",
+        "sha256": "c645d7a2f3a76fc0f66650409b3284988dee30bb9642c86c3fae182b3e8e8e98"
+      },
+      {
+        "file": "dist/index.html",
+        "sha256": "b1852480f96db35dc639533e7dae408fb137597f3e5775e380de4ec1d084193a"
+      }
+    ]
+  },
+  "runtimeExperiment": {
+    "passed": 22,
+    "phases": [
+      {
+        "checks": [
+          "four contiguous original V13 origins: two accepted HOLDs, formal RELEASE, successful PAYMENT",
+          "first COMMIT consumed without re-debiting original ledger",
+          "second Redis checkpoint applied before real PG audit CHECK rollback",
+          "original predecessor PG checkpoint and new Redis marker retained",
+          "original PG domain, journal, V13 context/origin/audit and decisions unchanged",
+          "production remains DIRTY; evidence never enables new holds"
+        ],
+        "phase": "prepare",
+        "sourceSchemaVersion": 13,
+        "passed": 6,
+        "testClasspathOnly": true
+      },
+      {
+        "checks": [
+          "all original UUIDs and digests survived process restart",
+          "actual Redis stop returns UNKNOWN without reseed or new command",
+          "previous committed command remains PG-only readable during outage",
+          "UNKNOWN leaves unacknowledged second command and original PG cursor intact",
+          "original PG domain, journal, V13 context/origin/audit and decisions unchanged",
+          "production remains DIRTY; evidence never enables new holds"
+        ],
+        "phase": "offline",
+        "sourceSchemaVersion": 13,
+        "passed": 6,
+        "testClasspathOnly": true
+      },
+      {
+        "sourceSchemaVersion": 13,
+        "passed": 10,
+        "testClasspathOnly": true,
+        "checks": [
+          "all original UUIDs and digests survived process restart",
+          "same AOF restart and original marker complete missing PG checkpoint",
+          "formal RELEASE advances separate evidence available without reversing original COMMIT receipt",
+          "PAYMENT held-to-sold conversion preserves evidence available",
+          "all old original retries retain final cursor and one ack per command",
+          "PG/Redis evidence cursor 5 and virtual available 3 match formal PG snapshot",
+          "whole original FROZEN ledger and both raw COMMITTED receipts unchanged",
+          "four immutable command acknowledgements with no duplicate consumption",
+          "original PG domain, journal, V13 context/origin/audit and decisions unchanged",
+          "production remains DIRTY; evidence never enables new holds"
+        ],
+        "phase": "verify"
+      }
+    ],
+    "experiment": "multi",
+    "actualRedisStopAndSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "redisTcpClosedDuringOutage": true,
+    "testClasspathOnly": true,
+    "productionJarHasNoExperimentClassesOrResources": true,
+    "productionJarSha256": "02e009972af2fd808eb6458e238ad946b28b670c7d91a5f3e8a69f12bbaea6c1",
+    "testResourceSha256": {
+      "multi-cursor.lua": "6b5fe8e5100d077d829a48d496064a3e34a6c143fb67d68a159d33178bda7409",
+      "multi-cursor-schema.sql": "fbf3a8e4330865c6b8633402f1c23fcc5dbc88c4029120c4975553121efcf1df"
+    },
+    "pgTcpCommitAckDropInjected": false,
+    "redisTcpSuccessfulAckDropInjected": false,
+    "clusterLoadOrHaClaim": false
+  },
+  "pg": {
+    "readOnly": true,
+    "checks": {
+      "missing_new_revision_context": 0,
+      "context_origin_audit_coverage": 0,
+      "new_context_image": 0,
+      "previous_context_image": 0,
+      "no_historical_backfill": 0,
+      "order_event_exact_images": 0,
+      "payment_event_exact_images": 0,
+      "catalog_original_result": 0,
+      "accepted_original_commit": 0,
+      "boundary_not_ahead_of_source": 0,
+      "multi_command_origin": 0,
+      "multi_command_stock_images": 0,
+      "multi_ack_digest": 0,
+      "multi_cursor_contiguous": 0,
+      "multi_cursor_image_and_last": 0,
+      "multi_phase_audits": 0,
+      "multi_pristine_root": 0,
+      "multi_original_claims": 0
+    },
+    "allZero": true,
+    "operationalSignalsInSyntheticTestScope": {
+      "unattributed_revisions": 39
+    }
+  },
+  "newTestNames": [
+    "directSynchronousHoldIsExplicitlyUnsupportedEvenWithRealOrigin",
+    "generationChangeCannotAdoptOldUnconsumedCommand",
+    "everyOriginalReceiptIsCheckedIncludingOtherClaimOwnerAndDecision",
+    "missingSidecarOrLedgerNeverReseeds",
+    "twoCommitsReleaseAndPaymentConsumeContiguouslyWithoutWritingOriginalLedger",
+    "immutableEvidenceAndAckRequireExactAtomicCheckpoint",
+    "sixConcurrentOriginalRetriesProduceExactlyOneCheckpointAndAudit",
+    "ttlWrongTypeAndCorruptCounterCannotConsume",
+    "forgedPlanCannotRegisterEvenWithRealSourceAndNewUuid",
+    "bodyConflictAndNewUuidCannotAdoptSameRevision",
+    "absentAndUnacknowledgedFormalCommitsCannotRegister",
+    "rollbackOnSecondCheckpointRecoversSameUuidDigestAndOriginalReceipts",
+    "replayOfOldPgAckAfterLaterCursorIsHistoricalOnly",
+    "expiredAcceptedOrderHasSeparateReleaseOriginAndOriginalCommitStaysCommitted",
+    "appendAfterRegistrationFencesExistingOriginalCommand",
+    "oneRevisionCannotSkipItsOriginalPredecessor",
+    "previousMarkerTamperingPreventsTheNextApply",
+    "seventeenRevisionsExceedBoundBeforeAnyApply",
+    "unattributedOrQuoteRevisionFencesEntireRangeInsteadOfSkipping",
+    "processingOrActiveClaimsCannotRegisterACommand",
+    "independentPhasesAndPristineSeedRequired"
+  ],
+  "attempts": {
+    "initialFocusedFailed": "test-only SQL row variable and table alias both named o; fixed and recreated own disposable PG/Redis/MQ scope",
+    "focusedAfterCorrection": {
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "fullPackagePassedOnFirstAttemptAfterCorrection": true
+  },
+  "limits": {
+    "testClasspathOnly": true,
+    "maxRevisions": 16,
+    "maxOriginalCommitClaims": 8,
+    "sourceHeadFixed": true,
+    "originalLedgerReadOnly": true,
+    "sidecarEvidenceAvailableNotSpendable": true,
+    "activeHoldsSupported": false,
+    "synchronousHoldOrTermsSupported": false,
+    "productionConsumerOrReadyPublication": false,
+    "historicalC2HttpBrowserAndV12UpgradeNotRerun": true,
+    "newProductionMigration": false,
+    "productionRulesOrTimeoutsChanged": false,
+    "exactContextOrTokenUsageInterfaceAvailable": false
+  },
+  "cleanup": {
+    "containers": 0,
+    "networks": 0,
+    "volumes": 0,
+    "ownPgRedisMqPortsClosed": true,
+    "threeExperimentProcessesExited": true
+  }
+}

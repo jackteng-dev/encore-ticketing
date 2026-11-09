@@ -1,0 +1,257 @@
+{
+  "milestone": "M6C",
+  "passed": 10,
+  "checks": [
+    "source real paid tickets/check-in/cancel/held/published and unpublished purchases/linked stock pending",
+    "quiescent custom backup preserves all source rows and sequences",
+    "new isolated target exact rows/sequences/functions and migration data restored",
+    "empty new broker receives two confirmed copies of one original event without PG receipt changes",
+    "restored owner/ticket/admission evidence works while all new ordering gates stay disabled",
+    "published duplicate/unpublished Outbox/linked stock each recover exactly one original order",
+    "missing original Redis generation gets KEY_MISSING proof and DIRTY gate, no blind reseed or added stock",
+    "real stop across original20s sales deadline expires once; paid/live/cancelled UUIDs remain original",
+    "restore onto source or nonempty target refused without changing either database",
+    "checksum corruption rejected and truncated payload genuinely rolls back; third target remains empty"
+  ],
+  "sourceTables": 74,
+  "sourceRows": 178,
+  "sequenceCount": 0,
+  "sourceUnchanged": true,
+  "sourceRedisMqUnchanged": true,
+  "initialRestoreExact": true,
+  "confirmedEventReplayedTwice": true,
+  "pendingRequestsRecovered": 3,
+  "newOrderingDisabled": true,
+  "originalDeadlinesChanged": false,
+  "missingRedisDecision": "KEY_MISSING",
+  "invariants": {
+    "payment.inventoryBounds": 0,
+    "payment.heldVsPending": 0,
+    "payment.soldVsPaid": 0,
+    "payment.heldVsLedgers": 0,
+    "payment.soldVsLedger": 0,
+    "payment.orderHoldRelease": 0,
+    "payment.orderPaidConversion": 0,
+    "payment.purchaseLimits": 0,
+    "payment.pendingOrderLimit": 0,
+    "payment.amountDeadlines": 0,
+    "payment.orderLifecycle": 0,
+    "payment.commandOwnership": 0,
+    "payment.placeCommand": 0,
+    "payment.paymentSnapshotCommand": 0,
+    "payment.providerEventAllocation": 0,
+    "payment.attemptState": 0,
+    "payment.orderVersion": 0,
+    "payment.faultConstraintsRemaining": 0,
+    "purchase.oneOutboxPerRequest": 0,
+    "purchase.outboxShape": 0,
+    "purchase.submitReceipt": 0,
+    "purchase.commandOwnership": 0,
+    "purchase.pendingAcceptanceLimit": 0,
+    "purchase.requestLifecycle": 0,
+    "purchase.reservationProjection": 0,
+    "purchase.terminalWithoutReservation": 0,
+    "purchase.reservedPlaceCommand": 0,
+    "purchase.commandNamespace": 0,
+    "purchase.expiryDeadline": 0,
+    "purchase.faultConstraintsRemaining": 0,
+    "delivery.onePublicationPerIntent": 0,
+    "delivery.publicationOwnership": 0,
+    "delivery.claimPair": 0,
+    "delivery.publishedNotLeased": 0,
+    "delivery.publishedAfterAttempt": 0,
+    "delivery.errorShape": 0,
+    "delivery.deliveryFaultConstraintsRemaining": 0,
+    "stock_purchase.linked_identity_mismatch": 0,
+    "stock_purchase.missing_original_command": 0,
+    "stock_purchase.missing_outbox": 0,
+    "stock_purchase.accepted_progress_mismatch": 0,
+    "stock_purchase.terminal_decision_missing": 0,
+    "stock_purchase.decision_result_mismatch": 0,
+    "stock_purchase.commit_order_proof_missing": 0,
+    "stock_purchase.release_has_formal_order": 0,
+    "stock_purchase.contradictory_ack": 0,
+    "stock_purchase.acknowledged_epoch_open": 0,
+    "stock_recovery.missing_unused_job": 0,
+    "stock_recovery.missing_settlement_job": 0,
+    "stock_recovery.settlement_without_decision": 0,
+    "stock_recovery.claim_count_mismatch": 0,
+    "stock_recovery.lease_identity_mismatch": 0,
+    "stock_recovery.settlement_done_without_ack": 0,
+    "stock_recovery.unused_done_without_evidence": 0,
+    "stock_recovery.invalid_budget": 0,
+    "ticket.issuance_original_conversion": 0,
+    "ticket.issuance_complete_units": 0,
+    "ticket.issuance_exact_audit": 0,
+    "ticket.issuance_original_command": 0,
+    "ticket.admission_command_effect": 0,
+    "ticket.terminal_ticket_audited": 0,
+    "admission_window.window_command_exact_audit": 0,
+    "admission_window.window_command_exact_policy": 0,
+    "admission_window.window_policy_contiguous": 0,
+    "admission_window.new_admission_time_proof": 0,
+    "admission_window.exact_admission_time_proof": 0,
+    "admission_window.legacy_has_no_invented_time_proof": 0
+  },
+  "artifactHashes": {
+    "backend/target/ticket-platform-0.1.0.jar": "35ca942f35ccbb8a6ef48b21fcf9d105722f5e45c08243bf76e98347fb59d4a9",
+    "scripts/run_backup_runtime.py": "7ec91a8735c68ab4565f4f7331ae55b9d9941a6b6699ba2c386c7aea179e77b9",
+    "scripts/backup_restore.py": "d235939a2f7f1f88036ce70822837d4fb448417cad29e8d13ca71426abd3c960",
+    "backend/src/main/resources/db/migration/V10__stock_recovery_jobs.sql": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad",
+    "backend/src/main/resources/db/migration/V11__stock_maintenance.sql": "02ad252d3200bae2b6f5f82f958f132e78f2e0047f2e471c87f0ec306648acef",
+    "backend/src/main/resources/db/migration/V12__stock_review_operations.sql": "5324eadd7dbc3b391e558b806f3b487b07777bd38b69a8b068253bafdf8d122a",
+    "backend/src/main/resources/db/migration/V13__stock_revision_origins.sql": "1b61438090357f3a63689a6cf7ce653fdcb4188b19e7ce8e6acf4c8a14ecf8fa",
+    "backend/src/main/resources/db/migration/V14__stock_return_handoffs.sql": "791eb2b135af748c0915080106f10f3b5c9d8ac12e35750c9db1d4c3d95d69b5",
+    "backend/src/main/resources/db/migration/V15__staff_stock_returns.sql": "bd106628441355da041f90290a1d7ec96a6653a3092844d7dd6d69ddb6622458",
+    "backend/src/main/resources/db/migration/V16__stock_return_resolutions.sql": "14f72e3e94b7ad6647bb0e350bc3ce9d48d9e81ea0a363c2dded960712da531a",
+    "backend/src/main/resources/db/migration/V17__stock_return_resolution_recovery.sql": "a75abe7896a356dc92bf89a1b1b7be695dae70b89e1c07a979d24a83b2937ed2",
+    "backend/src/main/resources/db/migration/V18__stock_return_recovery.sql": "e29c8754f6a7be385fad323edadb77363e06e9979c6ef2491fc8264caec8d88d",
+    "backend/src/main/resources/db/migration/V19__tickets.sql": "d9e3aaf6b316231583e4837c5f9aa0b562dbcdae8c429ba388d76104e5eec30e",
+    "backend/src/main/resources/db/migration/V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6",
+    "backend/src/main/resources/db/migration/V20__ticket_request_recovery.sql": "e1bc6592116d2bfc184b4a2d657bb723371b32ac26aefe386a4f1a994491ef55",
+    "backend/src/main/resources/db/migration/V21__admission_windows.sql": "7c6d5d9ce4a82003e933c4b92a9d3e9e410df60a38c416860a9583f2cd76f031",
+    "backend/src/main/resources/db/migration/V22__shared_staff_sessions.sql": "28bc6496c4bb09de4d3bac23eee0aa3e661f230c9fd54f37b35afce52b8d7729",
+    "backend/src/main/resources/db/migration/V23__stock_return_discovery.sql": "0487eb168a4597d7b68bf6345c4232814ce52efc1b2fb95539e380889c0515d0",
+    "backend/src/main/resources/db/migration/V24__runtime_monitoring.sql": "edd81d0f0da85e44bac9038c6e70ea536930101a9a460d4a7e9d9c846c9503c1",
+    "backend/src/main/resources/db/migration/V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "backend/src/main/resources/db/migration/V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "backend/src/main/resources/db/migration/V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "backend/src/main/resources/db/migration/V5__purchase_requests_outbox.sql": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361",
+    "backend/src/main/resources/db/migration/V6__outbox_publication.sql": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36",
+    "backend/src/main/resources/db/migration/V7__stock_projection.sql": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509",
+    "backend/src/main/resources/db/migration/V8__stock_hold_intents.sql": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc",
+    "backend/src/main/resources/db/migration/V9__stock_hold_purchase_decisions.sql": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+  },
+  "atomicFailureRuntimeVerified": true,
+  "realPayments": false,
+  "publicTls": false,
+  "crossHostHa": false,
+  "transport": "production JAR host API/Worker and separate real PG/Redis/single MQ scopes; true HTTP business seed",
+  "date": "2026-10-12",
+  "baseCommit": "9a8c045cf22cdd580e619e2d0542e7f351fdd86c",
+  "cleanup": {
+    "scopes": {
+      "failure": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "target": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "source": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      }
+    },
+    "allOwnedProcessesStopped": true,
+    "portsClosed": {
+      "25432": true,
+      "26379": true,
+      "25672": true,
+      "26432": true,
+      "27379": true,
+      "26672": true,
+      "27432": true,
+      "19110": true,
+      "19210": true
+    }
+  },
+  "backend": {
+    "goal": "package",
+    "tests": 627,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": 30
+  },
+  "frontend": {
+    "vueTsc": true,
+    "productionBuild": true
+  },
+  "automaticReruns": false,
+  "publishedMigrationsUnchanged": true,
+  "maintenanceRaceFix": {
+    "initialFullPackage": {
+      "tests": 626,
+      "failures": 0,
+      "errors": 1,
+      "skipped": 0
+    },
+    "deterministicOldCode": {
+      "tests": 1,
+      "errors": 1
+    },
+    "afterFixMaintenanceSuitePassed": true,
+    "cause": "READ COMMITTED initial missing staff command could be followed by committed peer core rebuild; legal replay was mistaken for legacy conflict.",
+    "fix": "Re-read matching actor/ticket/revision staff command under lock before rejecting a newly visible core rebuild; legacy commands remain rejected."
+  },
+  "preservedRuntimeFailures": [
+    {
+      "run": 1,
+      "cause": "Replay wrapper log filename collided with outer runtime command log; renamed distinct process log and checked it before broker IO.",
+      "cleanup": {
+        "scopes": {
+          "failure": {
+            "containers": 0,
+            "volumes": 0,
+            "networks": 0
+          },
+          "target": {
+            "containers": 0,
+            "volumes": 0,
+            "networks": 0
+          },
+          "source": {
+            "containers": 0,
+            "volumes": 0,
+            "networks": 0
+          }
+        },
+        "allOwnedProcessesStopped": true
+      }
+    },
+    {
+      "run": 2,
+      "passedBeforeFailure": 9,
+      "cause": "Source dependency comparison used raw Redis DUMP bytes and rabbitmqctl samples without persisting both observations. Cannot identify original differing field. Replaced with canonical persistent hash fields and direct passive AMQP counts, saved before/after snapshots; no business-rule change.",
+      "cleanup": {
+        "scopes": {
+          "failure": {
+            "containers": 0,
+            "volumes": 0,
+            "networks": 0
+          },
+          "target": {
+            "containers": 0,
+            "volumes": 0,
+            "networks": 0
+          },
+          "source": {
+            "containers": 0,
+            "volumes": 0,
+            "networks": 0
+          }
+        },
+        "allOwnedProcessesStopped": true
+      }
+    }
+  ],
+  "testOnlyProbe": {
+    "sourceSha256": "afd8515cf4c8f6d80a0eba100a4f6856c2a001a4c3fbfd1f05ed38d9ee993778",
+    "classSha256": "15a8c981ddd0f0c3010567b018266ff041bb285e35e9ed14f083aa4b25050b8a",
+    "productionJarContainsProbe": false,
+    "passiveOnly": true
+  },
+  "limitations": [
+    "V24 ticket_demo bounded logical backup, matchingPG major; no PITR/global roles/foreign storage/provider backup.",
+    "Source uses UUID identifiers and has0 sequences; nonempty sequence restoration was not exercised.",
+    "Offline clients must remain stopped; point checks do not prevent later external reconnects.",
+    "Restored Redis/MQ are new, not byte-for-byte source-volume restores; original gate remains DIRTY on missing generation.",
+    "Private archives contain hashes/sessions/bearer ticket codes; encryption/off-host storage/retention not implemented.",
+    "No UI/browser/phone/TLS/Cluster/HA/load benchmark claim in this round."
+  ]
+}

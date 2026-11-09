@@ -1,0 +1,549 @@
+{
+  "milestone": "M4D2B4",
+  "dateAsiaTaipei": "2026-10-10",
+  "actualUtcDate": "2026-10-10",
+  "baseMainCommit": "c2e5c03890d6f51f5c55faba467a268741e3094c",
+  "runtimePolicyRevision": {
+    "start": 215,
+    "finish": 215
+  },
+  "policyEnforced": "unrestricted",
+  "onlyRepository": "ticket-platform",
+  "versions": {
+    "postgresql": "17.11",
+    "redis": "7.4.11",
+    "rabbitmq": "4.1.8"
+  },
+  "backend": {
+    "tests": 303,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": "25",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": "22",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": "15",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.InventoryLedgerIntegrationTest",
+        "tests": "18",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": "27",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PurchaseIntegrationTest",
+        "tests": "33",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockCheckoutIntegrationTest",
+        "tests": "21",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockHoldIntegrationTest",
+        "tests": "24",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockProjectionIntegrationTest",
+        "tests": "24",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockPurchaseIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.StockRecoveryIntegrationTest",
+        "tests": "23",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.delivery.DeliveryIntegrationTest",
+        "tests": "19",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "packageSuccess": true,
+    "jarSha256": "7792c7312914190b125e30946335f54c97b1645d2cde01896611e68883ff6911",
+    "baselineV10JarSha256": "f38a607373ddce9e7ea9146df79ddd038abff7061a7a7f18158b315ca4d5ed92"
+  },
+  "frontend": {
+    "vueTscAndProductionBuildSuccess": true,
+    "artifacts": [
+      {
+        "file": "dist/assets/index-BN3ILrkG.css",
+        "sha256": "41f49b3e84629cbcb05b8f29805f7f54726950ae24fbabd96c4598f8f23db283"
+      },
+      {
+        "file": "dist/assets/index-ouyKISft.js",
+        "sha256": "f2508e34dd5f3816142ec05aea403d288e04210d4b16199ff76c2bdded1b96c8"
+      },
+      {
+        "file": "dist/index.html",
+        "sha256": "ea17ddf839c8609298943903e2bb9a8da269e323baa5cc004b6166c714e10129"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "file": "V10__stock_recovery_jobs.sql",
+      "sha256": "01ef587e1dcf22913200e31cd8c681e0b91e88635c0f877b69aa4a2804c951ad"
+    },
+    {
+      "file": "V1__staff_and_event_catalog.sql",
+      "sha256": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+    },
+    {
+      "file": "V2__customer_identity.sql",
+      "sha256": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b"
+    },
+    {
+      "file": "V3__reservation_orders.sql",
+      "sha256": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc"
+    },
+    {
+      "file": "V4__mock_payments.sql",
+      "sha256": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8"
+    },
+    {
+      "file": "V5__purchase_requests_outbox.sql",
+      "sha256": "1d172fb60600c742bf6dfa43538d3991528dd006d3421740c8cb25b4469c7361"
+    },
+    {
+      "file": "V6__outbox_publication.sql",
+      "sha256": "167ea8af849bb6eb737fa9e7ec288563a06e9c5c8d0de5ece75e0a3329abdb36"
+    },
+    {
+      "file": "V7__stock_projection.sql",
+      "sha256": "1982a390d91066512bb7bea089067262f18b0b5dd0f52f76ccff58f53abf8509"
+    },
+    {
+      "file": "V8__stock_hold_intents.sql",
+      "sha256": "1fc89061f4d3b37a379176de80687e013a259f3fc661d4d8c8cfb4bcf77922cc"
+    },
+    {
+      "file": "V9__stock_hold_purchase_decisions.sql",
+      "sha256": "70dc25fb38e5bc90d391218a95af6b055169ecb272bfacb990d6970196259137"
+    }
+  ],
+  "publishedV1ToV10BytesUnchanged": true,
+  "newSchemaMigration": false,
+  "oldDeploymentPreserved": {
+    "fromMigration": 10,
+    "toMigration": 10,
+    "noSchemaChange": true,
+    "originalRowsPreserved": 64,
+    "tablesChecked": [
+      "catalog_command",
+      "catalog_guard",
+      "customer_account",
+      "customer_session",
+      "event",
+      "event_session",
+      "flyway_schema_history",
+      "mock_payment_receipt",
+      "order_command",
+      "order_inventory_event",
+      "outbox_publication",
+      "payment_attempt",
+      "payment_event",
+      "payment_inventory_event",
+      "purchase_command",
+      "purchase_outbox",
+      "purchase_request",
+      "staff_account",
+      "stock_hold_acceptance",
+      "stock_hold_ack",
+      "stock_hold_decision",
+      "stock_hold_intent",
+      "stock_hold_progress",
+      "stock_projection",
+      "stock_rebuild_command",
+      "stock_recovery_claim",
+      "stock_recovery_job",
+      "stock_revision",
+      "ticket_order",
+      "ticket_type"
+    ],
+    "allOriginalRowsEquivalentAsCanonicalJson": true,
+    "publisherConsumerExpiryRecoveryAndBootstrapDisabled": true
+  },
+  "browser": {
+    "setup": {
+      "phase": "setup",
+      "transport": "Chromium against production JAR/dist with isolated PostgreSQL/Redis/RabbitMQ",
+      "passed": 1,
+      "checks": [
+        "isolated synthetic tickets created; operator must prepare projections before entry"
+      ],
+      "realPayments": false
+    },
+    "prepare": {
+      "phase": "prepare",
+      "transport": "Chromium against production JAR/dist with isolated PostgreSQL/Redis/RabbitMQ",
+      "passed": 8,
+      "checks": [
+        "effective runtime flag chooses pre-debit with legacy async/sync choices retained",
+        "real committed 202 then browser ACK loss preserves original UUID/body and freezes checkout",
+        "reload GET of original UUID resolves committed purchase without another POST/order/payment countdown",
+        "malformed committed progress lacking purchase field retains UUID and resolves by original GET",
+        "real PG acceptance constraint rollback leaves HELD without fake purchase; reload retries exact original body",
+        "constraint removal resumes same held receipt into one formal acceptance",
+        "stopped real worker exposes PROCESSING only, without official stock reservation",
+        "mobile pending/history layout has no horizontal overflow"
+      ],
+      "realPayments": false
+    },
+    "verify-worker": {
+      "phase": "verify-worker",
+      "transport": "Chromium against production JAR/dist with isolated PostgreSQL/Redis/RabbitMQ",
+      "passed": 1,
+      "checks": [
+        "real MQ worker produces one PG reserved order and only then starts payment deadline"
+      ],
+      "realPayments": false
+    },
+    "offline": {
+      "phase": "offline",
+      "transport": "Chromium against production JAR/dist with isolated PostgreSQL/Redis/RabbitMQ",
+      "passed": 2,
+      "checks": [
+        "actual stopped Redis leaves durable PREPARED intent, no formal purchase or payment countdown",
+        "PG-only original accepted progress remains readable during actual Redis outage"
+      ],
+      "realPayments": false
+    },
+    "flag-off": {
+      "phase": "flag-off",
+      "transport": "Chromium against production JAR/dist with isolated PostgreSQL/Redis/RabbitMQ",
+      "passed": 4,
+      "checks": [
+        "disabled entry keeps unresolved original command frozen and serves PG progress without replacement UUID",
+        "flag-off retains owned committed purchase lookup",
+        "actual cookie/account switch cannot retry or read original owned progress",
+        "disabled fresh entry creates no intent or purchase; missing original GET has no side effects"
+      ],
+      "realPayments": false
+    },
+    "verify-aborted": {
+      "phase": "verify-aborted",
+      "transport": "Chromium against production JAR/dist with isolated PostgreSQL/Redis/RabbitMQ",
+      "passed": 1,
+      "checks": [
+        "separate actual short-deadline unused recovery reaches ABORTED; original GET clears UI freeze without creating an order"
+      ],
+      "realPayments": false
+    }
+  },
+  "browserChecksPassed": 17,
+  "http": {
+    "orders": {
+      "transport": "real loopback JAR HTTP",
+      "phase": "normal",
+      "passed": 18,
+      "checks": [
+        "anonymous orders denied",
+        "reservation requires customer CSRF",
+        "owner spoof field denied",
+        "server quote rejects client total",
+        "invalid quantity rejected",
+        "real hold and immutable priced order snapshot",
+        "same original command replays once",
+        "same request changed body rejected",
+        "public remaining ticket availability reflects hold",
+        "other customer cannot read or cancel order",
+        "limit includes holds across orders",
+        "request ID cannot cross place and cancel actions",
+        "cancel releases held ticket",
+        "cancel and place replay do not revive order",
+        "own history survives catalog archive",
+        "last ticket over actual concurrent HTTP has one winner",
+        "real sales deadline scheduler expires and releases exactly once",
+        "own order pagination is bounded"
+      ],
+      "realPayments": false
+    },
+    "payments": {
+      "transport": "production JAR loopback HTTP",
+      "phase": "normal",
+      "passed": 18,
+      "checks": [
+        "mock payment requires customer CSRF",
+        "other customer cannot initiate payment on owned order",
+        "client cannot inject provider event field",
+        "server rejects altered payment quote amount",
+        "initiation persists one unresolved attempt without selling",
+        "original initiation UUID replays same payment",
+        "same UUID changed payment body conflicts",
+        "new UUID cannot create another attempt",
+        "other customer cannot reconcile payment",
+        "successful reconcile converts order to paid",
+        "same and different command replay one provider event without reselling",
+        "paid order refuses ordinary cancellation",
+        "paid quantity remains in per-customer quota",
+        "paid quantity remains unavailable",
+        "declined mock does not sell and allows cancellation",
+        "cancelled late success becomes review without reclaiming inventory",
+        "real deadline expiry then delayed success stays expired and reviewed",
+        "concurrent real HTTP reconciliation applies one provider event"
+      ],
+      "realPayments": false
+    },
+    "purchases": {
+      "transport": "production JAR loopback HTTP + real PostgreSQL",
+      "phase": "normal",
+      "passed": 13,
+      "checks": [
+        "anonymous purchase history denied",
+        "acceptance requires customer CSRF",
+        "client owner injection rejected",
+        "altered quote does not create intent",
+        "202 and Location expose only safe PROCESSING state, not a reservation",
+        "acceptance changes neither PG availability nor order history",
+        "original UUID replay returns same receipt and deadline",
+        "changed body and synchronous bypass using pending UUID denied",
+        "other member cannot read cancel or list owned receipt",
+        "six actual concurrent HTTP retries return one durable purchase",
+        "cancel and original submit replay never revive intent",
+        "purchase history pagination bounded",
+        "actual DB deadline and running sweeper expire intent without a hold"
+      ],
+      "rabbitMQ": false,
+      "realPayments": false
+    }
+  },
+  "productionRuntime": {
+    "actualRedisStoppedAndTcpClosed": true,
+    "sameAofVolumeRestarted": true,
+    "entryFlagOffAfterActualJarRestart": true,
+    "productionWorkerWasSeparateJvmAndRealMqConsumer": true,
+    "acceptedOriginal": {
+      "acceptances": 1,
+      "formalOrders": 1,
+      "outbox": 1,
+      "decision": "COMMIT",
+      "ack": "COMMITTED",
+      "settlementJob": "DONE",
+      "redisReceiptStatus": "COMMITTED"
+    },
+    "outageUnusedAfterRedisReturned": {
+      "progress": "ABORTING",
+      "jobState": "REVIEW",
+      "attempts": 6,
+      "lastCode": "REDIS_UNKNOWN",
+      "claims": 6,
+      "formalPurchases": 0,
+      "projection": "DIRTY"
+    },
+    "separateShortDeadlineAutomaticUnused": {
+      "progress": "ABORTED",
+      "jobState": "DONE",
+      "attempts": 2,
+      "lastCode": "ABORTED",
+      "claims": 2,
+      "formalPurchases": 0,
+      "projection": "DIRTY"
+    },
+    "reviewNotResetOrAutomaticallyReopened": true,
+    "readonlyOperationalReport": {
+      "waiting": 0,
+      "due": 0,
+      "decided_unused_ready": 0,
+      "leased": 0,
+      "expired_leases": 0,
+      "done": 24,
+      "review_history": 1,
+      "review_unresolved": 1,
+      "unacked_decisions": 0,
+      "aborting_unused": 1,
+      "oldest_due_seconds": 0
+    }
+  },
+  "pgReadOnlyInvariants": {
+    "purchase": {
+      "oneOutboxPerRequest": 0,
+      "outboxShape": 0,
+      "submitReceipt": 0,
+      "commandOwnership": 0,
+      "pendingAcceptanceLimit": 0,
+      "requestLifecycle": 0,
+      "reservationProjection": 0,
+      "terminalWithoutReservation": 0,
+      "reservedPlaceCommand": 0,
+      "commandNamespace": 0,
+      "expiryDeadline": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "payment": {
+      "inventoryBounds": 0,
+      "heldVsPending": 0,
+      "soldVsPaid": 0,
+      "heldVsLedgers": 0,
+      "soldVsLedger": 0,
+      "orderHoldRelease": 0,
+      "orderPaidConversion": 0,
+      "purchaseLimits": 0,
+      "pendingOrderLimit": 0,
+      "amountDeadlines": 0,
+      "orderLifecycle": 0,
+      "commandOwnership": 0,
+      "placeCommand": 0,
+      "paymentSnapshotCommand": 0,
+      "providerEventAllocation": 0,
+      "attemptState": 0,
+      "orderVersion": 0,
+      "faultConstraintsRemaining": 0
+    },
+    "delivery": {
+      "onePublicationPerIntent": 0,
+      "publicationOwnership": 0,
+      "claimPair": 0,
+      "publishedNotLeased": 0,
+      "publishedAfterAttempt": 0,
+      "errorShape": 0,
+      "deliveryFaultConstraintsRemaining": 0
+    },
+    "stock_projection": {
+      "missing_projection": 0,
+      "revision_head_mismatch": 0,
+      "journal_gap": 0,
+      "current_stock_mismatch": 0,
+      "generation_head_mismatch": 0,
+      "command_snapshot_mismatch": 0,
+      "ready_checkpoint_mismatch": 0
+    },
+    "stock_hold": {
+      "missing_progress": 0,
+      "wrong_epoch_source": 0,
+      "wrong_quote_revision": 0,
+      "invalid_deadline": 0,
+      "legacy_command_collision": 0,
+      "unresolved_old_generation": 0,
+      "abandonment_gate_open": 0,
+      "missing_abort_decision": 0,
+      "missing_resolution_evidence": 0
+    },
+    "stock_purchase": {
+      "linked_identity_mismatch": 0,
+      "missing_original_command": 0,
+      "missing_outbox": 0,
+      "accepted_progress_mismatch": 0,
+      "terminal_decision_missing": 0,
+      "decision_result_mismatch": 0,
+      "commit_order_proof_missing": 0,
+      "release_has_formal_order": 0,
+      "contradictory_ack": 0,
+      "acknowledged_epoch_open": 0
+    },
+    "stock_recovery": {
+      "missing_unused_job": 0,
+      "missing_settlement_job": 0,
+      "settlement_without_decision": 0,
+      "claim_count_mismatch": 0,
+      "lease_identity_mismatch": 0,
+      "settlement_done_without_ack": 0,
+      "unused_done_without_evidence": 0,
+      "invalid_budget": 0
+    }
+  },
+  "integrityChecksScope": "fresh final-JAR runtime fixtures; isolated suite containers/volumes were disposed and recreated before runtime checks",
+  "faultInjection": {
+    "browserAcknowledgementLoss": "route.abort after a real backend 202; client response loss simulation, not PG TCP commit ACK loss",
+    "malformedBrowserAcknowledgement": "removed purchase field from real committed response",
+    "pgAcceptanceRollback": "real isolated PostgreSQL CHECK constraint mapped to HTTP 409 by existing API handler",
+    "actualRedisOutage": "own Redis stopped, TCP confirmed closed; same AOF volume restarted",
+    "networkPgCommitAckDropInjected": false,
+    "networkRedisSuccessfulAckDropInjected": false
+  },
+  "limits": {
+    "entryDefaultOff": true,
+    "entryRequiresConfiguredDeliveryPublisherRecoveryAndExpiry": true,
+    "effectiveFlagDoesNotProveDependencyHealth": true,
+    "internalReadyProjectionMaintenanceStillRequired": true,
+    "noAutomaticProjectionRebuild": true,
+    "noContinuousThroughputClaim": true,
+    "legacyPgCheckoutComparisonEndpointsRetained": true,
+    "unacceptedProgressRequiresManualUiCheck": true,
+    "clientPendingSessionStorageIsNotCrossDeviceDurable": true,
+    "manualReviewResolutionToolNotBuilt": true,
+    "noFullUnregisteredLedgerAuditOrEpochGc": true,
+    "noPublicOperationsEndpoint": true,
+    "noClusterLoadOrHaClaim": true,
+    "noRealPaymentOrTicketIssuance": true
+  },
+  "attemptNote": "Initial private smoke attempts required response readiness, HTTP 409 constraint handling and explicit restoration of the original command between separate browser processes (storageState excludes sessionStorage). Those attempts are not counted. A resume-failure browser check exposed that verified GET progress was not retained; fixed and final production build/browser phases passed. Long Redis outage exhausted the original unused job to REVIEW; it remains REVIEW6 after Redis returns. Automatic ABORTED is proved by a separate fresh short-deadline final-JAR HELD fixture, not by resetting the original REVIEW.",
+  "cleanup": {
+    "scopeResourceCounts": {
+      "ticket-checkout-20261010": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      },
+      "ticket-checkout-upgrade-20261010": {
+        "containers": 0,
+        "volumes": 0,
+        "networks": 0
+      }
+    },
+    "verifiedClosedPorts": [
+      25432,
+      25433,
+      26379,
+      25672,
+      19110,
+      19111,
+      15180
+    ],
+    "onlyOwnScopesCleaned": true,
+    "ownApiWorkerUpgradeMaintenanceAndPreviewExited": true
+  }
+}

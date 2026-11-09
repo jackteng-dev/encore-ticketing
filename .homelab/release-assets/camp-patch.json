@@ -1,0 +1,7 @@
+{
+  "source_commit": "407574be535a8409627a65b0ef4cac6bb3f4e0ef",
+  "path": "backend/src/main/java/com/fadaiting/camp/controller/MinioController.java",
+  "source_sha256": "02a4fe2431ed8ebc2188a7ad7f67232ae748871c38df8d22fe3d77b57a292450",
+  "patched_sha256": "bd249565782016d0fb7da479e806d99ac6c49ca76425161bb6295d113c036f4a",
+  "reason": "Browser cannot resolve private minio:9000; preserve signature and original relative path/query through same-origin gateway. Default remains unchanged."
+}

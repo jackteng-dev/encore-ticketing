@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-08",
+  "milestone": "M3 backend checkpoint",
+  "sourceBaseline": "74c3d851682e80aca31edc94135738e186226a34",
+  "postgresql": "17 isolated ticket-admission-20261008 / ticket_demo",
+  "redis": "7.4.11 isolated password-protected standalone",
+  "maven": {
+    "tests": 110,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "dev.elpsy.ticket.AdmissionIntegrationTest",
+        "tests": "22",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CatalogIntegrationTest",
+        "tests": "21",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.PaymentIntegrationTest",
+        "tests": "26",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.OrderIntegrationTest",
+        "tests": "27",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "dev.elpsy.ticket.CustomerIntegrationTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ]
+  },
+  "backendBuild": true,
+  "frontendBuild": "vue-tsc + Vite; M2C UI retained at this checkpoint",
+  "migrationSha256": {
+    "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "V4__mock_payments.sql": "5e1dc037954c5613abc0c148013cc49354fe93c14e21b2c488a0d958c14e54f8",
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "backendJarSha256": "4d382bc1a47e4c337f8aafdaa74018e6ae0773d0e8d5f04881f385613b59dee6",
+  "redisScriptSha256": {
+    "waiting-room.lua": "25e8d23b9968b175683341447ed898b09eae24d86f850698a07fd595114d6922",
+    "rate-limit.lua": "e124d6ee864ef9f1c295de0385e36c6f29b86f32dd691d9e38b888053b2f196b"
+  },
+  "generator": {
+    "privateFiles0600": true,
+    "refusesOverwrite": true,
+    "redisOnlyPreservesOldDBStaff": true
+  },
+  "admissionEnabledByDefault": false,
+  "uiSocketOutageVerification": "pending next checkpoint",
+  "realPayments": false,
+  "otherProjectsUntouched": true
+}

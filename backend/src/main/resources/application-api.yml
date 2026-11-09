@@ -1,0 +1,6 @@
+spring:
+  main:
+    web-application-type: servlet
+server:
+  shutdown: graceful
+  forward-headers-strategy: none

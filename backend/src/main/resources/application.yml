@@ -1,0 +1,118 @@
+server:
+  address: ${TICKET_BIND:127.0.0.1}
+  port: ${TICKET_PORT:19110}
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: TICKET_STAFF_SESSION
+        http-only: true
+        secure: ${TICKET_COOKIE_SECURE:true}
+        same-site: strict
+spring:
+  rabbitmq:
+    host: ${TICKET_MQ_HOST:127.0.0.1}
+    port: ${TICKET_MQ_PORT:25672}
+    username: ${TICKET_MQ_USER:ticket_demo}
+    password: ${TICKET_MQ_PASSWORD:}
+    virtual-host: ${TICKET_MQ_VHOST:/ticket-demo}
+    connection-timeout: 2000ms
+    requested-heartbeat: 10s
+    publisher-confirm-type: correlated
+    publisher-returns: true
+  datasource:
+    url: ${TICKET_DB_URL}
+    username: ${TICKET_DB_USER}
+    password: ${TICKET_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+      connection-timeout: 3000
+  data:
+    redis:
+      host: ${TICKET_REDIS_HOST:127.0.0.1}
+      port: ${TICKET_REDIS_PORT:26379}
+      password: ${TICKET_REDIS_PASSWORD:}
+      connect-timeout: 500ms
+      timeout: 500ms
+      repositories:
+        enabled: false
+  flyway:
+    clean-disabled: true
+    baseline-on-migrate: false
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  sql:
+    init:
+      mode: never
+ticket:
+  monitoring:
+    enabled: ${TICKET_MONITORING_ENABLED:false}
+    stale-seconds: ${TICKET_MONITORING_STALE_SECONDS:15}
+    heartbeat-ms: ${TICKET_MONITORING_HEARTBEAT_MS:3000}
+    expected-apis: ${TICKET_MONITORING_EXPECTED_APIS:2}
+    expected-workers: ${TICKET_MONITORING_EXPECTED_WORKERS:2}
+  stock-return-discovery:
+    enabled: ${TICKET_STOCK_RETURN_DISCOVERY_ENABLED:false}
+    batch: ${TICKET_STOCK_RETURN_DISCOVERY_BATCH:4}
+    poll-ms: ${TICKET_STOCK_RETURN_DISCOVERY_POLL_MS:1000}
+  stock-return-resolution:
+    enabled: ${TICKET_STOCK_RETURN_RESOLUTION_ENABLED:false}
+  stock-return:
+    enabled: ${TICKET_STOCK_RETURN_ENABLED:false}
+  stock-review:
+    enabled: ${TICKET_STOCK_REVIEW_ENABLED:false}
+  stock-maintenance:
+    enabled: ${TICKET_STOCK_MAINTENANCE_ENABLED:false}
+  pre-debit:
+    enabled: ${TICKET_PREDEBIT_ENABLED:false}
+  stock-return-recovery:
+    enabled: ${TICKET_STOCK_RETURN_RECOVERY_ENABLED:false}
+    lease-seconds: ${TICKET_STOCK_RETURN_RECOVERY_LEASE_SECONDS:30}
+    batch: ${TICKET_STOCK_RETURN_RECOVERY_BATCH:4}
+    poll-ms: ${TICKET_STOCK_RETURN_RECOVERY_POLL_MS:1000}
+  stock-recovery:
+    enabled: ${TICKET_STOCK_RECOVERY_ENABLED:false}
+    lease-seconds: ${TICKET_STOCK_RECOVERY_LEASE_SECONDS:30}
+    batch: ${TICKET_STOCK_RECOVERY_BATCH:10}
+    poll-ms: ${TICKET_STOCK_RECOVERY_POLL_MS:1000}
+  delivery:
+    enabled: ${TICKET_DELIVERY_ENABLED:false}
+    publisher-enabled: ${TICKET_PUBLISHER_ENABLED:false}
+    consumer-enabled: ${TICKET_CONSUMER_ENABLED:false}
+    namespace: ${TICKET_MQ_NAMESPACE:encore-demo-local}
+    confirm-timeout-ms: ${TICKET_MQ_CONFIRM_TIMEOUT_MS:2000}
+    lease-seconds: ${TICKET_OUTBOX_LEASE_SECONDS:15}
+    retry-delay-ms: ${TICKET_MQ_RETRY_DELAY_MS:5000}
+    max-retries: ${TICKET_MQ_MAX_RETRIES:3}
+    prefetch: ${TICKET_MQ_PREFETCH:4}
+    poll-ms: ${TICKET_OUTBOX_POLL_MS:500}
+  purchases:
+    enabled: ${TICKET_PURCHASES_ENABLED:false}
+    deadline-seconds: ${TICKET_PURCHASE_DEADLINE_SECONDS:60}
+  admission:
+    enabled: ${TICKET_ADMISSION_ENABLED:false}
+    namespace: ${TICKET_REDIS_NAMESPACE:encore-demo-local}
+    active: ${TICKET_ADMISSION_ACTIVE:2}
+    queue: ${TICKET_ADMISSION_QUEUE:100}
+    permit-seconds: ${TICKET_ADMISSION_PERMIT_SECONDS:30}
+    idle-seconds: ${TICKET_ADMISSION_IDLE_SECONDS:20}
+    wait-seconds: ${TICKET_ADMISSION_WAIT_SECONDS:300}
+    join-rate: ${TICKET_ADMISSION_JOIN_RATE:30}
+    place-rate: ${TICKET_ADMISSION_PLACE_RATE:5}
+  mock-payments:
+    enabled: ${TICKET_MOCK_PAYMENTS_ENABLED:false}
+  issuance:
+    enabled: ${TICKET_ISSUANCE_ENABLED:false}
+  check-in:
+    enabled: ${TICKET_CHECK_IN_ENABLED:false}
+  admission-window:
+    enabled: ${TICKET_ADMISSION_WINDOW_ENABLED:false}
+  orders:
+    enabled: ${TICKET_ORDERS_ENABLED:false}
+  expiry:
+    enabled: ${TICKET_EXPIRY_ENABLED:true}
+    delay-ms: ${TICKET_EXPIRY_DELAY_MS:30000}
+  demo-bootstrap: ${TICKET_DEMO_BOOTSTRAP:false}
+  staff-username: ${TICKET_STAFF_USERNAME:manager}
+  staff-password: ${TICKET_STAFF_PASSWORD:}

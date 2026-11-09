@@ -1,0 +1,244 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "milestone": "M2B PostgreSQL synchronous reservations",
+  "sourceBaseline": "849ef66116465768bd187f8578544925c7291162",
+  "postgresql": "17 isolated ticket-orders-20261008 / ticket_demo",
+  "maven": {
+    "tests": 62,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "dbInvariantViolations": {
+    "inventoryBounds": 0,
+    "heldVsPending": 0,
+    "heldVsLedger": 0,
+    "orderHoldAndRelease": 0,
+    "purchaseLimits": 0,
+    "pendingOrderLimit": 0,
+    "amountAndDeadlines": 0,
+    "commandOwnership": 0,
+    "orderPlaceCommand": 0,
+    "releasedState": 0,
+    "faultConstraintsRemaining": 0,
+    "unexpectedSoldTickets": 0
+  },
+  "ordersHTTP": {
+    "transport": "real loopback JAR HTTP",
+    "phase": "normal",
+    "passed": 18,
+    "checks": [
+      "anonymous orders denied",
+      "reservation requires customer CSRF",
+      "owner spoof field denied",
+      "server quote rejects client total",
+      "invalid quantity rejected",
+      "real hold and immutable priced order snapshot",
+      "same original command replays once",
+      "same request changed body rejected",
+      "public remaining ticket availability reflects hold",
+      "other customer cannot read or cancel order",
+      "limit includes holds across orders",
+      "request ID cannot cross place and cancel actions",
+      "cancel releases held ticket",
+      "cancel and place replay do not revive order",
+      "own history survives catalog archive",
+      "last ticket over actual concurrent HTTP has one winner",
+      "real sales deadline scheduler expires and releases exactly once",
+      "own order pagination is bounded"
+    ],
+    "realPayments": false
+  },
+  "ordersBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 15,
+    "checks": [
+      "anonymous checkout registers and returns to original selection",
+      "committed hold response loss freezes new reservations",
+      "original UUID body survives page reload",
+      "401 retry retains unknown committed command",
+      "other customer cannot take over pending command or see original order",
+      "original owner retries exact UUID body and still has one order",
+      "order snapshot safely renders HTML-looking title",
+      "lost cancellation ACK reloads and replays without double release",
+      "older delayed GET cannot overwrite newer cancellation receipt",
+      "ACK success followed by GET failure keeps receipt and clears pending",
+      "new reservation after prior release and successful cancellation",
+      "acknowledged receipt from previous customer never leaks after account switch",
+      "mobile checkout has no horizontal overflow",
+      "actual deadline scheduler updates expired UI and restores ticket availability",
+      "mobile order history has no horizontal overflow"
+    ],
+    "realPayments": false
+  },
+  "recoveryHTTP": {
+    "transport": "real loopback JAR HTTP",
+    "phase": "verify-restart",
+    "passed": 4,
+    "checks": [
+      "actual JAR outage across deadline and scheduled restart recovery",
+      "original request replay after restart returns expired order without new hold",
+      "disabled placement flag rejects new hold while recovery remains active",
+      "restart recovery restores public ticket availability"
+    ],
+    "realPayments": false
+  },
+  "catalogHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 27,
+    "checks": [
+      "anonymous staff endpoint rejected",
+      "invalid credentials rejected",
+      "real session login and manager capability",
+      "write without csrf rejected",
+      "event create",
+      "same command replay same snapshot",
+      "command content conflict",
+      "unknown actor field rejected",
+      "draft hidden publicly",
+      "incomplete publish rejected",
+      "versioned event update",
+      "stale event rejected",
+      "session create",
+      "invalid sales interval rejected",
+      "ticket type create",
+      "invalid price rejected",
+      "session update",
+      "ticket update",
+      "publish",
+      "public detail real price and ordering disabled",
+      "public projection no staff secrets",
+      "published conditions immutable",
+      "bounded pagination",
+      "durable audit read",
+      "archive",
+      "archived hidden publicly",
+      "logout revokes session"
+    ],
+    "ownFixturesArchived": 1,
+    "realPayment": false
+  },
+  "catalogBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 16,
+    "checks": [
+      "anonymous admin redirects login",
+      "real staff login",
+      "committed write response lost freezes new writes",
+      "pending command survives page reload",
+      "exact UUID body retry returns same event",
+      "one event after acknowledgement loss",
+      "session acknowledgement loss and reload retry restore parent event",
+      "ticket create from form",
+      "GET failure after successful write does not resurrect pending",
+      "publish locks edit controls",
+      "public content safely escaped",
+      "ordering visibly disabled",
+      "mobile no horizontal overflow",
+      "archive from UI",
+      "logout from UI",
+      "archived event hidden publicly"
+    ],
+    "physicalDevice": false
+  },
+  "customerHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 17,
+    "checks": [
+      "anonymous customer access rejected",
+      "registration login logout require customer CSRF",
+      "staff CSRF cannot authorize customer write",
+      "unknown customer owner field rejected",
+      "bcrypt UTF-8 byte bound enforced",
+      "registration creates safe profile and authenticates",
+      "customer cookie HttpOnly Strict and scoped path",
+      "authenticated profile",
+      "customer cannot access staff identity or admin",
+      "duplicate handle registration rejected",
+      "known and unknown invalid login give same response",
+      "successful login rotates and revokes previous browser token",
+      "staff and customer coexist in one cookie jar",
+      "staff logout preserves customer session",
+      "customer logout preserves staff session",
+      "anonymous logout retry safely succeeds",
+      "private persistence fixture saved for separate JAR restart verification"
+    ]
+  },
+  "customerBrowser": {
+    "transport": "Chromium against JAR + production dist",
+    "passed": 14,
+    "checks": [
+      "anonymous member page redirects to customer login",
+      "committed registration response loss directs login and clears password",
+      "password and registration body never persist in browser storage",
+      "same handle login resolves unknown registration result",
+      "customer display name escaped as text",
+      "session cookie cannot be read by page script",
+      "customer login survives page reload",
+      "customer cookie does not grant staff access",
+      "staff login preserves customer identity",
+      "committed logout response loss safely retries while anonymous",
+      "customer logout preserves staff authorization",
+      "staff logout preserves customer authorization",
+      "member page and navigation fit mobile width",
+      "customer registration form fits mobile width"
+    ]
+  },
+  "v2CustomerSessionUpgradeHTTP": {
+    "transport": "real loopback HTTP",
+    "passed": 2,
+    "checks": [
+      "database customer session survives actual JAR restart",
+      "persisted session logout revokes original token"
+    ]
+  },
+  "actualOutage": {
+    "apiStoppedBeforeDeadline": true,
+    "apiPortConfirmedClosed": true,
+    "stoppedAt": "2026-10-08T08:15:00.426904+00:00",
+    "deadline": "2026-10-08T08:15:14.540586+00:00",
+    "restartingAfterDeadline": true,
+    "restartingAt": "2026-10-08T08:16:55.847759+00:00"
+  },
+  "upgrade": {
+    "actualRetainedV2JarSeededBeforeMigration": true,
+    "schemaVersion": 3,
+    "v1AndV2BytesUnchanged": true,
+    "legacyCatalogProjectionPreserved": true,
+    "availableFieldInitializedToCapacity": true,
+    "catalogAuditRecordsPreserved": 4,
+    "staffLoginStillValid": true,
+    "orderingEnabled": false
+  },
+  "backendJar": {
+    "sha256": "6cbd07c64f7fbb3dc4f1e41007bf8f5566ef80e551391e0a3762bc3ce9dc8068",
+    "bytes": 29525519
+  },
+  "migrationSha256": {
+    "V3__reservation_orders.sql": "a23a2a551e1df407c0b51c8265a3a1bbfba9ae382b1485961dc905b3116e84cc",
+    "V2__customer_identity.sql": "4ccff0daff0469c68924de2c1a84aaa3e48552a83f185c32d5cfedc0c4bdb74b",
+    "V1__staff_and_event_catalog.sql": "ee2189d3a5974acdfad45f1587ad6a35bf4dae3cf841f88ff1abeb2576a447b6"
+  },
+  "frontendBuild": "vue-tsc and Vite passed",
+  "frontendArtifacts": {
+    "index.html": "f6438b7fc2101f386b13edb7057d95c569f5bd68c913418a0625284c65dcdc10",
+    "assets/index-CkY8jRsE.css": "c39ef7e153dedd76693114364ce4656c72aa8498ce2940af2f1cc8f6ca358fd0",
+    "assets/index-BOX8tAvv.js": "fc871a53edfeb3acd55738576fb1bd4de005880172773505d633c431b4b7ef8d"
+  },
+  "newReservationsEnabledByDefault": false,
+  "realPayments": false,
+  "externalHTTPSVerified": false,
+  "schedulerTestIntervalMs": 1000,
+  "schedulerDefaultIntervalMs": 30000,
+  "cleanup": {
+    "ownAPIAndPreviewStopped": true,
+    "ownPostgresContainerVolumeNetworkRemoved": true,
+    "closedPorts": [
+      25432,
+      19110,
+      15180
+    ],
+    "otherProjectsUntouched": true
+  }
+}

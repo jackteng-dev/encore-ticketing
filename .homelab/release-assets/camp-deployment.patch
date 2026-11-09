@@ -1,0 +1,32 @@
+--- a/backend/src/main/java/com/fadaiting/camp/controller/MinioController.java
++++ b/backend/src/main/java/com/fadaiting/camp/controller/MinioController.java
+@@ -22,6 +22,9 @@
+ 
+     @Value("${minio.secretKey}")
+     private String secretKey;
++
++    @Value("${minio.public-base-path:}")
++    private String publicBasePath;
+ 
+ 
+     public String fileupload(MultipartFile file, String BucketName, String filename) throws Exception {
+@@ -53,7 +56,18 @@
+                         .object(filename)
+                         .build());
+ //        System.out.println(url);
+-        return url;
++        return browserUrl(url, publicBasePath);
+     }
+ 
++    // A relative same-origin prefix keeps browser URLs usable behind the trusted
++    // gateway. The gateway preserves the internal S3 Host and raw signed query.
++    static String browserUrl(String signedUrl, String prefix) {
++        if (prefix == null || prefix.isBlank()) return signedUrl;
++        if (!prefix.matches("/[a-zA-Z0-9/_-]+") || prefix.endsWith("/"))
++            throw new IllegalArgumentException("Use a fixed relative object prefix");
++        var uri = java.net.URI.create(signedUrl);
++        if (!java.util.Set.of("http", "https").contains(uri.getScheme()) || uri.getHost() == null)
++            throw new IllegalArgumentException("Expected an internal signed HTTP URL");
++        return prefix + uri.getRawPath() + (uri.getRawQuery() == null ? "" : "?" + uri.getRawQuery());
++    }
+ }

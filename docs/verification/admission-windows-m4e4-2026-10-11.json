@@ -1,0 +1,158 @@
+{
+  "artifactsUnchangedThroughoutRuntime": true,
+  "frontendAssetsSha256": {
+    "frontend/dist/assets/index-2jdYrfsH.css": "72c167c5c7dd1cb26d11cfdf3f12481c34f6f67299862ec07c7c0f856f6ff58b",
+    "frontend/dist/assets/index-C7NWNqKc.js": "362bf172b47a44c3995b44dff36f8cd28666a87be957ba1545fe66624a8d1d7e",
+    "frontend/dist/index.html": "47bfb5b56f2161b33c7123e0289e99221b8ea5f2cd117d7098ca322469019609"
+  },
+  "actualV20JarToV21Upgrade": true,
+  "oldPublicTablesUnchangedAtUpgrade": 62,
+  "oldPublicRowsUnchangedAtUpgrade": 61,
+  "noWindowPolicyOrAdmissionProofBackfill": true,
+  "groups": 14,
+  "phases": [
+    {
+      "phase": "seed",
+      "passed": 1,
+      "checks": [
+        "actual V20 JAR creates two PAID orders, three original codes and one historical CHECK_IN"
+      ],
+      "transport": "Chromium/final JAR/dist/own PG; seed true historical V20 JAR",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "prepare",
+      "passed": 6,
+      "checks": [
+        "unconfigured upgrade rejects new admission; classified original V20 success replays without invented proof",
+        "real window UI commits before lost ACK; global freeze persists on wrong fingerprint and clears only complete original policy",
+        "future and closed policies disable UI and reject real API without an admission effect",
+        "real original QR admits only after explicit confirmation; missing or sub-millisecond altered new time proof keeps unknown pending frozen",
+        "replacing current policy with CLOSED leaves original policy version 4 receipt unchanged and readable",
+        "stale original window explicitly stops with lost ACK; one immutable fence/audit does not overwrite current policy or stock"
+      ],
+      "transport": "Chromium/final JAR/dist/own PG; seed true historical V20 JAR",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "resume",
+      "passed": 4,
+      "checks": [
+        "actual API restart with all ticket flags false and Redis TCP down resolves original window fence from PG even before session selection",
+        "exact historical APPLIED settings return original version 1 policy and do not replace current CLOSED version 5",
+        "real UI resolves legacy null-proof and new exact time-proof receipts with flags off and closed policy",
+        "customer persistent session retains original ACTIVE QR with CLOSED window information after real restart"
+      ],
+      "transport": "Chromium/final JAR/dist/own PG; seed true historical V20 JAR",
+      "realPayments": false,
+      "publicDeployment": false
+    },
+    {
+      "phase": "finish",
+      "passed": 3,
+      "checks": [
+        "actual DB clock crosses closing time after inspection; monotonic UI preview disables button and API rejects stale inspect without effect",
+        "explicit new open policy accepts original unused ticket once with version 7 time proof; original stock/order/source bytes remain identical while Redis down",
+        "actual HTTP CSRF, strict body, expected staff and customer owner guards hold; time-window UI fits mobile"
+      ],
+      "transport": "Chromium/final JAR/dist/own PG; seed true historical V20 JAR",
+      "realPayments": false,
+      "publicDeployment": false
+    }
+  ],
+  "actualApiStopRestart": true,
+  "flagsOffReplayVerified": true,
+  "actualRedisStopAndTcpClosed": true,
+  "redisDownForResumeAndFinish": true,
+  "zeroViolationChecks": [
+    "missing_new_revision_context",
+    "context_origin_audit_coverage",
+    "new_context_image",
+    "previous_context_image",
+    "no_historical_backfill",
+    "order_event_exact_images",
+    "payment_event_exact_images",
+    "catalog_original_result",
+    "accepted_original_commit",
+    "boundary_not_ahead_of_source",
+    "unattributed_revisions",
+    "issuance_original_conversion",
+    "issuance_complete_units",
+    "issuance_exact_audit",
+    "issuance_original_command",
+    "admission_command_effect",
+    "terminal_ticket_audited",
+    "issuance_fence_excludes_commands",
+    "admission_fence_excludes_command",
+    "issuance_fence_exact_audit",
+    "admission_fence_exact_audit",
+    "window_command_exact_audit",
+    "window_command_exact_policy",
+    "window_policy_contiguous",
+    "new_admission_time_proof",
+    "exact_admission_time_proof",
+    "legacy_has_no_invented_time_proof"
+  ],
+  "legacyCheckinsClassified": 1,
+  "windowPolicies": 7,
+  "timeProofs": 2,
+  "windowCommands": 8,
+  "issuanceBatches": 2,
+  "issuedUnits": 3,
+  "checkedIn": 3,
+  "revoked": 0,
+  "baselineJarSha256": "baae5e9687624f607295644195407672031451a849efe3e9f49fa723207a8cc7",
+  "finalJarSha256": "ef7567aa9e8790dfc2bcfe7e8f1584a03e42e98e3077c9435403b2d912396c43",
+  "realPayments": false,
+  "publicDeployment": false,
+  "kill9OrTcpCommitAckDrop": false,
+  "date": "2026-10-11",
+  "timezone": "Asia/Taipei",
+  "implementationCommit": "99962d69478ad6e36610a6ba339aecf7d6977846",
+  "exactTimestampValidationCommit": "ab98e2f7758e1695c9572f42436ec853ae876623",
+  "backendPackage": {
+    "suites": 25,
+    "tests": 561,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "baselineJarSha256": "baae5e9687624f607295644195407672031451a849efe3e9f49fa723207a8cc7",
+    "finalJarSha256": "ef7567aa9e8790dfc2bcfe7e8f1584a03e42e98e3077c9435403b2d912396c43",
+    "migrationCount": 21,
+    "publishedMigrationBytesUnchanged": true
+  },
+  "frontendProductionBuild": {
+    "typecheck": true,
+    "vite": true,
+    "js": "index-C7NWNqKc.js",
+    "css": "index-2jdYrfsH.css"
+  },
+  "resourceCleanup": {
+    "fullTest": "3 containers / 3 volumes / 1 network disposed; remaining 0",
+    "initialRuntime": "2 containers / 2 volumes / 1 network disposed; remaining 0",
+    "finalRuntime": "2 containers / 2 volumes / 1 network disposed; remaining 0",
+    "api19111Closed": true,
+    "preview15181Closed": true,
+    "otherRepositoriesUntouched": true
+  },
+  "initialIncompleteAttempt": {
+    "seedGroups": 1,
+    "prepareGroups": 6,
+    "resumeGroupsBeforeFailure": 3,
+    "completed": false,
+    "failure": "customer navigation ERR_HTTP_RESPONSE_CODE_FAILURE during concurrent frontend dist rebuild",
+    "changesAfterFailure": "Full checkedAt string equality; real altered-submillisecond response test; artifact freeze guard; new empty owned scope",
+    "automaticRerun": false,
+    "privateEvidencePreserved": true
+  },
+  "limits": {
+    "browserAckLoss": "Playwright route.fetch completes actual API commit then route.abort; not TCP commit ACK drop",
+    "physicalCameraOrPhone": false,
+    "currentViewerRole": "true PG and MockMvc in 21 new tests; not provisioned in this runtime",
+    "sharedStaffSession": false,
+    "loadTest": false,
+    "publicReportContainsCodesCookiesOrCredentials": false
+  }
+}

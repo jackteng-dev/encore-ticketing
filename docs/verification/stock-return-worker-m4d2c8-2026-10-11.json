@@ -1,0 +1,199 @@
+{
+  "milestone": "M4D2C8",
+  "date": "2026-10-11",
+  "timezone": "Asia/Taipei",
+  "startingMain": "e2723c4210488802ada2b9419baa72b8f1ee74f3",
+  "implementationCommit": "1fb5c1ce1cd45c4c4a4cd47aa254eca6fc1f40e9",
+  "packageAndBuild": {
+    "backend": {
+      "suites": 22,
+      "tests": 502,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "rerunOrFlaky": 0
+    },
+    "frontend": {
+      "javascript": "index-C2TzexXT.js",
+      "css": "index-DOGTeM__.css"
+    },
+    "packagedMigrations": 18,
+    "v1ThroughV17SourceGitJarIdentical": true,
+    "testOnlyHelpersPackaged": false
+  },
+  "production": {
+    "actualV17JarToV18Upgrade": true,
+    "oldPublicTablesUnchangedAtUpgrade": 50,
+    "oldPublicRowsUnchangedAtUpgrade": 226,
+    "noRecoveryBackfill": true,
+    "browserGroups": 11,
+    "phases": [
+      {
+        "phase": "prepare",
+        "transport": "Chromium/final JAR/dist and own PG/Redis",
+        "passed": 4,
+        "checks": [
+          "real enrollment commit/client ACK loss and reload GET-only recover one queue job while original return pending/global freeze remains",
+          "real enrollment audit CHECK fault rolls back job and keeps original body; exact retry registers once",
+          "actual customer order advances source after enrollment; actor downgrade invalidates session before scheduled work",
+          "new real routes enforce exact UUID/body, expected staff, CSRF, role/owner, bounded audit; production mobile fits"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "offline",
+        "transport": "Chromium/final JAR/dist and own PG/Redis",
+        "passed": 1,
+        "checks": [
+          "Redis TCP really down: actual scheduler retries original CLOSED phases with REDIS_UNKNOWN and finite PG backoff"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "flag-off",
+        "transport": "Chromium/final JAR/dist and own PG/Redis",
+        "passed": 1,
+        "checks": [
+          "flag off plus Redis down preserves durable attempts/history, original UI pending and disables new enrollment"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "drain",
+        "transport": "Chromium/final JAR/dist and own PG/Redis",
+        "passed": 2,
+        "checks": [
+          "same AOF restart and actual scheduler complete original UUIDs without recredit; changed source/authority stop at REVIEW without resolution or rebind",
+          "original return GET-only APPLIED evidence clears saved pending after background completion"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "crash-enroll",
+        "transport": "Chromium/final JAR/dist and own PG/Redis",
+        "passed": 1,
+        "checks": [
+          "fresh original CLOSED return explicitly enrolled before real process interruption"
+        ],
+        "realPayments": false
+      },
+      {
+        "phase": "resume",
+        "transport": "Chromium/final JAR/dist and own PG/Redis",
+        "passed": 2,
+        "checks": [
+          "API stopped while claimed original phase was PG-blocked; restart takes expired lease, preserves budget and acknowledges original UUID once",
+          "five original g1 and three g2 full HASH records unchanged; original sources unchanged except explicit order; three DONE/two REVIEW and no automatic resolution/fence"
+        ],
+        "realPayments": false
+      }
+    ],
+    "coreVerification": {
+      "fiveOriginalG1Unchanged": true,
+      "threeOriginalG2Unchanged": true,
+      "originalDomainFingerprintsUnchangedExceptExplicitOrder": true,
+      "done": 3,
+      "review": 2,
+      "automaticResolutionOrFence": 0
+    },
+    "zeroViolationChecks": [
+      "missing_new_revision_context",
+      "context_origin_audit_coverage",
+      "new_context_image",
+      "previous_context_image",
+      "no_historical_backfill",
+      "order_event_exact_images",
+      "payment_event_exact_images",
+      "catalog_original_result",
+      "accepted_original_commit",
+      "boundary_not_ahead_of_source",
+      "return_original_source",
+      "return_original_commit_ack",
+      "return_snapshot_command",
+      "return_phase_audits",
+      "return_quantity_cause",
+      "staff_return_domain_binding",
+      "staff_return_applied_proof",
+      "staff_return_latest_audit",
+      "staff_return_consecutive_audits",
+      "staff_return_original_release",
+      "resolution_original_binding",
+      "resolution_original_release",
+      "resolution_snapshot_binding",
+      "resolution_publication_proof",
+      "resolution_exact_audit",
+      "resolution_not_original_return_ack",
+      "recovery_fence_original",
+      "recovery_fence_not_applied",
+      "recovery_exact_fence_audit",
+      "recovery_exact_rebind_audit",
+      "recovery_rebind_completed",
+      "recovery_no_orphan_audit",
+      "return_job_original_body",
+      "return_job_done_acknowledged",
+      "return_job_claim_budget",
+      "return_job_exact_latest_audit",
+      "return_job_audit_sequence",
+      "return_job_live_claim_identity"
+    ],
+    "operationalSignals": {
+      "unattributed_revisions": 0
+    },
+    "actualApiStopDuringClaimedBlockedPhase": true,
+    "expiredLeaseResumeKeptBudget": true,
+    "actualRedisStopSameAofRestart": true,
+    "localWaitaofConfirmed": true,
+    "redisTcpClosedDuringOutage": true,
+    "baselineJarSha256": "5e3d2ee11bd5d65a4521d3181b23d1c8170edd60f6cdb15d9ee6763d58a19ed7",
+    "finalJarSha256": "abbfa51e7ec1805180363ddeeca3cdfd3bcac6ef4fe767e1d3f0a1efce8a2782",
+    "realPayments": false,
+    "publicDeployment": false,
+    "tcpAckDropOrKill9": false
+  },
+  "harnessCorrections": {
+    "failedPrepareAttemptsPreservedPrivately": 2,
+    "postAckLossInterceptionOnly": "Allow original GET-before-enrollment 404; intercept only POST after actual server commit",
+    "awaitExactRetryBeforeReading": "Wait for exact retry POST response before GET; second failed attempt already committed original job",
+    "productionSourceOrMigrationChangesRequired": false
+  },
+  "cleanup": {
+    "finalOwnScopes": {
+      "ticket-return-full-c8": {
+        "before": {
+          "containers": 3,
+          "volumes": 3,
+          "networks": 1
+        },
+        "after": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      },
+      "ticket-return-runtime-c8c": {
+        "before": {
+          "containers": 2,
+          "volumes": 2,
+          "networks": 1
+        },
+        "after": {
+          "containers": 0,
+          "volumes": 0,
+          "networks": 0
+        }
+      }
+    },
+    "twoFailedScopesHaveNoRemainingResources": true,
+    "ownApiAndPreviewPortsClosed": true,
+    "otherProjectsModifiedOrDisposed": false
+  },
+  "limits": {
+    "singleApiMemoryStaffSessions": true,
+    "explicitOriginalManagerEnrollmentOnly": true,
+    "automaticNewReturnDiscovery": false,
+    "multiApiOrRedisClusterOrHaTested": false,
+    "sustainedThroughputTested": false,
+    "leaseCannotCancelAlreadySentRedisOperation": true,
+    "crossRedisPgExactlyOnce": false
+  }
+}

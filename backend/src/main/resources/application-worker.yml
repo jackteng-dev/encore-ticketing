@@ -1,0 +1,7 @@
+spring:
+  main:
+    web-application-type: none
+  flyway:
+    enabled: false
+ticket:
+  demo-bootstrap: false

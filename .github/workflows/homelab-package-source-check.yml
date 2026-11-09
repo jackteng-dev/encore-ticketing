@@ -1,0 +1,21 @@
+name: Read-only GHCR source proof regression
+on:
+  push:
+    branches: [homelab/package-source-fix-20261018]
+permissions:
+  contents: read
+  packages: read
+jobs:
+  source-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: API shape and rejected-source unit regressions
+        run: python3 scripts/test-package-source.py
+      - name: Verify already-published private image without running a container
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/probe-package-source.py

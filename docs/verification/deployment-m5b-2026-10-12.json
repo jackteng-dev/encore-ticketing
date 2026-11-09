@@ -1,0 +1,243 @@
+{
+  "milestone": "M5B",
+  "passed": 16,
+  "checks": [
+    "isolated V22 schema in deployment network",
+    "broker healthcheck runs as rabbitmq and Erlang cookie owner is private UID100",
+    "actual image JAR nginx config and frontend bytes match verified artifacts",
+    "no host DB Redis MQ API ports; nonroot read-only application and gateway",
+    "real Nginx routes authenticated requests to both APIs",
+    "production SPA deep link and forwarded headers do not supply identity",
+    "actual API-a stop; original browser pending and cookie replay through API-b",
+    "API-a rejoins after explicit Nginx reload without container restart and same staff identity",
+    "two API profiles accept durably but never publish consume or reserve without worker",
+    "one nonweb worker publishes consumes and commits exactly one reservation effect",
+    "actual worker stop and same-volume restart drains pending original request",
+    "real 15-second upstream timeout does not auto-resend POST; original UUID later resolves once",
+    "actual PG stop returns readiness and authenticated API 503",
+    "same-volume PG recovery restores shared session",
+    "six simultaneous HTTP logins across real API containers retain exactly five valid PG sessions",
+    "read-only business invariants and unchanged verified build artifacts"
+  ],
+  "browser": [
+    {
+      "phase": "seed",
+      "passed": 2,
+      "checks": [
+        "staff login through container gateway",
+        "actual committed catalog command with client response deliberately discarded"
+      ],
+      "physicalDevice": false
+    },
+    {
+      "phase": "resume",
+      "passed": 3,
+      "checks": [
+        "same staff cookie and pending survive API node outage",
+        "same UUID and exact body replay via remaining API",
+        "mobile production UI no horizontal overflow"
+      ],
+      "physicalDevice": false
+    }
+  ],
+  "zeroViolationChecks": [
+    "onePublicationPerIntent",
+    "publicationOwnership",
+    "claimPair",
+    "publishedNotLeased",
+    "publishedAfterAttempt",
+    "errorShape",
+    "deliveryFaultConstraintsRemaining",
+    "missing_new_revision_context",
+    "context_origin_audit_coverage",
+    "new_context_image",
+    "previous_context_image",
+    "no_historical_backfill",
+    "order_event_exact_images",
+    "payment_event_exact_images",
+    "catalog_original_result",
+    "accepted_original_commit",
+    "boundary_not_ahead_of_source",
+    "issuance_original_conversion",
+    "issuance_complete_units",
+    "issuance_exact_audit",
+    "issuance_original_command",
+    "admission_command_effect",
+    "terminal_ticket_audited",
+    "issuance_fence_excludes_commands",
+    "admission_fence_excludes_command",
+    "issuance_fence_exact_audit",
+    "admission_fence_exact_audit",
+    "window_command_exact_audit",
+    "window_command_exact_policy",
+    "window_policy_contiguous",
+    "new_admission_time_proof",
+    "exact_admission_time_proof",
+    "legacy_has_no_invented_time_proof"
+  ],
+  "operationalSignals": {
+    "unattributed_revisions": 0
+  },
+  "artifactSha256": {
+    "backend/target/ticket-platform-0.1.0.jar": "f5d9cc294c114ffd19c107c86985c64a061a66e6b227cd55d399aa146729e7a0",
+    "infra/nginx.conf": "b2bb6ff78f6cae10105b5fb7233c313399553443fbf64d520a264b424a0f4dfb",
+    "scripts/smoke_deployment_browser.cjs": "689e278ec66fa0a5644a6aa675843b5ef043a7a0048909ef938e377c900a4a36",
+    "frontend/dist/assets/index-2jdYrfsH.css": "72c167c5c7dd1cb26d11cfdf3f12481c34f6f67299862ec07c7c0f856f6ff58b",
+    "frontend/dist/assets/index-C7NWNqKc.js": "362bf172b47a44c3995b44dff36f8cd28666a87be957ba1545fe66624a8d1d7e",
+    "frontend/dist/index.html": "47bfb5b56f2161b33c7123e0289e99221b8ea5f2cd117d7098ca322469019609"
+  },
+  "backendRequestsObserved": {
+    "api-a": 128,
+    "api-b": 158
+  },
+  "actualApiStop": true,
+  "singleNodeReadProbeStatuses": [
+    200
+  ],
+  "singleNodeReadRecoverySeconds": 1.013,
+  "singleNodeRecoveryBoundSeconds": 8,
+  "strictReadsAfterRecovery": 20,
+  "transparentReadFailover": false,
+  "actualWorkerRestart": true,
+  "actualPostReadTimeoutSeconds": 15,
+  "actualPgStopRestart": true,
+  "publicTls": false,
+  "crossHostHa": false,
+  "loadBenchmark": false,
+  "multipleWorkers": false,
+  "realPayment": false,
+  "verifiedDate": "2026-10-12",
+  "timezone": "Asia/Taipei",
+  "runtimeTransport": "actual Docker Compose / Nginx / two API containers / nonweb Worker / own PostgreSQL Redis RabbitMQ / production Chromium",
+  "disposeState": [
+    {
+      "service": "worker",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    },
+    {
+      "service": "gateway",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    },
+    {
+      "service": "api-b",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    },
+    {
+      "service": "api-a",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    },
+    {
+      "service": "postgres",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    },
+    {
+      "service": "redis",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    },
+    {
+      "service": "rabbitmq",
+      "oomKilled": false,
+      "restartCount": 0,
+      "exitCode": 0
+    }
+  ],
+  "cleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    },
+    "gatewayPortClosed": true
+  },
+  "diskObservation": {
+    "workspaceTotalBytes": 33770192896,
+    "workspaceFreeBytes": 2079232000,
+    "dockerStorageDriver": "vfs",
+    "deduplicatedDependencyBytes": 1446612960,
+    "unchangedDependencyContent": true,
+    "sevenContainersSample": {
+      "freeBytes": 1568477184,
+      "utcEpoch": 1791737454.3551362
+    }
+  },
+  "coverageNotes": [
+    "Normal async checkout only; predebit, admission, mock payment and QR flags remain disabled in this scenario.",
+    "Read-only electronic-ticket and window checks do not replace their earlier dedicated runtime proofs; no tickets/windows were created here.",
+    "Static upstream DNS requires explicit Nginx reload after API rejoin; no active readiness-aware routing or cross-host HA.",
+    "Browser ACK loss is deliberately induced at the client; the separate POST read-timeout is caused by an actual PostgreSQL lock."
+  ],
+  "priorRuntimeFailures": [
+    {
+      "cause": "root healthcheck raced Erlang-cookie ownership; EACCES",
+      "fix": "su-exec rabbitmq diagnostics, UID100/private mode asserted",
+      "logsRetainedPrivately": true
+    },
+    {
+      "cause": "quorum queue ra_log initialization ENOSPC",
+      "oomKilled": false,
+      "fix": "free own unused images/SDK and deduplicate identical dependency bytes; fresh empty scope",
+      "logsRetainedPrivately": true
+    }
+  ],
+  "backendPackage": {
+    "tests": {
+      "tests": 597,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "suites": 28,
+    "freshReports": true,
+    "noRerunOrFlaky": true,
+    "productionBuildPassed": true,
+    "realIsolatedPostgresRedisRabbitmq": true,
+    "migrationBytesUnchanged": 22,
+    "mavenHeapMiB": 256,
+    "testHeapMiB": 384,
+    "forkCount": 1,
+    "reuseForks": false,
+    "activeProcessorCount": 2
+  },
+  "frontendProductionBuild": {
+    "typecheckAndVite": true,
+    "bytesEqualRuntimeArtifacts": true
+  },
+  "fullTestScopeCleanup": {
+    "remainingOwnedResources": {
+      "containers": 0,
+      "volumes": 0,
+      "networks": 0
+    }
+  },
+  "originalMqOverlayHealthcheck": {
+    "brokerUserUid": 100,
+    "cookieMode": "400",
+    "brokerHealthcheckVerifiedInFreshFullTestScope": true
+  },
+  "historicalValidation": {
+    "previousSuccessfulPackageTests": 597,
+    "previousFocusedAfterFixtureCorrection": 36,
+    "initialFullPackageFailureCount": 1,
+    "cause": "unproxied second service in concurrent staff-session test fixture; corrected with real transactions and synchronized start",
+    "failedReportsRetainedPrivately": true
+  },
+  "syntaxAndConfig": {
+    "python": true,
+    "node": true,
+    "deploymentCompose": true,
+    "originalMqOverlayCompose": true,
+    "gitDiffCheck": true
+  }
+}

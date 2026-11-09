@@ -1,0 +1,166 @@
+# Independent deployment scope. Do not combine with the old host-process demo compose.
+x-app: &app
+  image: ${TICKET_APP_IMAGE:-ticket-platform-app:local}
+  build:
+    context: ..
+    dockerfile: infra/app.Dockerfile
+    args:
+      JAVA_IMAGE: ${TICKET_JAVA_IMAGE:-eclipse-temurin:21-jre-alpine@sha256:51ab5e3302e7141ce665ca3ea85e8b5cd648eafbc3c0c90dd79d6537684e4555}
+  init: true
+  restart: unless-stopped
+  read_only: true
+  tmpfs: ['/tmp:rw,noexec,nosuid,size=64m,mode=1777']
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  mem_limit: 512m
+  cpus: 1.0
+  stop_grace_period: 30s
+  environment: &app-env
+    JAVA_TOOL_OPTIONS: '-Xmx256m -XX:+UseSerialGC -XX:ActiveProcessorCount=2'
+    TICKET_BIND: 0.0.0.0
+    TICKET_PORT: '8080'
+    TICKET_DB_URL: jdbc:postgresql://postgres:5432/ticket_demo
+    TICKET_DB_USER: ${TICKET_DB_USER:?Private isolated DB user required}
+    TICKET_DB_PASSWORD: ${TICKET_DB_PASSWORD:?Private DB password required}
+    TICKET_REDIS_HOST: redis
+    TICKET_REDIS_PORT: '6379'
+    TICKET_REDIS_PASSWORD: ${TICKET_REDIS_PASSWORD:?Private Redis password required}
+    TICKET_REDIS_NAMESPACE: ${TICKET_REDIS_NAMESPACE:?Isolated namespace required}
+    TICKET_MQ_HOST: rabbitmq
+    TICKET_MQ_PORT: '5672'
+    TICKET_MQ_USER: ${TICKET_MQ_USER:?Private MQ user required}
+    TICKET_MQ_PASSWORD: ${TICKET_MQ_PASSWORD:?Private MQ password required}
+    TICKET_MQ_VHOST: ${TICKET_MQ_VHOST:?Isolated vhost required}
+    TICKET_MQ_NAMESPACE: ${TICKET_MQ_NAMESPACE:?Isolated namespace required}
+    TICKET_COOKIE_SECURE: ${TICKET_COOKIE_SECURE:-true}
+    TICKET_DEMO_BOOTSTRAP: 'false'
+    TICKET_ORDERS_ENABLED: ${TICKET_ORDERS_ENABLED:-false}
+    TICKET_PURCHASES_ENABLED: ${TICKET_PURCHASES_ENABLED:-false}
+    TICKET_DELIVERY_ENABLED: ${TICKET_DELIVERY_ENABLED:-false}
+    TICKET_PUBLISHER_ENABLED: ${TICKET_PUBLISHER_ENABLED:-false}
+    TICKET_CONSUMER_ENABLED: ${TICKET_CONSUMER_ENABLED:-false}
+    TICKET_ADMISSION_ENABLED: ${TICKET_ADMISSION_ENABLED:-false}
+    TICKET_PREDEBIT_ENABLED: ${TICKET_PREDEBIT_ENABLED:-false}
+    TICKET_STOCK_RECOVERY_ENABLED: ${TICKET_STOCK_RECOVERY_ENABLED:-false}
+    TICKET_STOCK_MAINTENANCE_ENABLED: ${TICKET_STOCK_MAINTENANCE_ENABLED:-false}
+    TICKET_STOCK_REVIEW_ENABLED: ${TICKET_STOCK_REVIEW_ENABLED:-false}
+    TICKET_STOCK_RETURN_ENABLED: ${TICKET_STOCK_RETURN_ENABLED:-false}
+    TICKET_STOCK_RETURN_RESOLUTION_ENABLED: ${TICKET_STOCK_RETURN_RESOLUTION_ENABLED:-false}
+    TICKET_STOCK_RETURN_RECOVERY_ENABLED: ${TICKET_STOCK_RETURN_RECOVERY_ENABLED:-false}
+    TICKET_STOCK_RETURN_DISCOVERY_ENABLED: ${TICKET_STOCK_RETURN_DISCOVERY_ENABLED:-false}
+    TICKET_MONITORING_ENABLED: ${TICKET_MONITORING_ENABLED:-false}
+    TICKET_MONITORING_STALE_SECONDS: ${TICKET_MONITORING_STALE_SECONDS:-15}
+    TICKET_MONITORING_HEARTBEAT_MS: ${TICKET_MONITORING_HEARTBEAT_MS:-3000}
+    TICKET_MONITORING_EXPECTED_APIS: ${TICKET_MONITORING_EXPECTED_APIS:-2}
+    TICKET_MONITORING_EXPECTED_WORKERS: ${TICKET_MONITORING_EXPECTED_WORKERS:-2}
+    TICKET_EXPIRY_ENABLED: ${TICKET_EXPIRY_ENABLED:-true}
+    TICKET_MOCK_PAYMENTS_ENABLED: ${TICKET_MOCK_PAYMENTS_ENABLED:-false}
+    TICKET_ISSUANCE_ENABLED: ${TICKET_ISSUANCE_ENABLED:-false}
+    TICKET_CHECK_IN_ENABLED: ${TICKET_CHECK_IN_ENABLED:-false}
+    TICKET_ADMISSION_WINDOW_ENABLED: ${TICKET_ADMISSION_WINDOW_ENABLED:-false}
+  depends_on:
+    postgres: {condition: service_healthy}
+    redis: {condition: service_healthy}
+    rabbitmq: {condition: service_healthy}
+x-api-health: &api-health
+  test: [CMD, wget, -Y, off, -q, -O, /dev/null, 'http://127.0.0.1:8080/api/public/readiness']
+  interval: 3s
+  timeout: 5s
+  start_period: 30s
+  retries: 20
+services:
+  postgres:
+    restart: unless-stopped
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ticket_demo
+      POSTGRES_USER: ${TICKET_DB_USER:?Private isolated DB user required}
+      POSTGRES_PASSWORD: ${TICKET_DB_PASSWORD:?Private DB password required}
+    volumes: [ticket-pg:/var/lib/postgresql/data]
+    mem_limit: 256m
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d ticket_demo']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  redis:
+    restart: unless-stopped
+    image: redis:7-alpine
+    command: [sh, -ec, 'cp /run/ticket-redis.conf /run/runtime-redis.conf; chown redis:redis /run/runtime-redis.conf; chmod 600 /run/runtime-redis.conf; exec docker-entrypoint.sh redis-server /run/runtime-redis.conf']
+    environment:
+      REDISCLI_AUTH: ${TICKET_REDIS_PASSWORD:?Private Redis password required}
+    volumes:
+      - ticket-redis:/data
+      - ${TICKET_REDIS_CONFIG:?Private Redis config required}:/run/ticket-redis.conf:ro
+    mem_limit: 192m
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  rabbitmq:
+    restart: unless-stopped
+    image: rabbitmq:4.1-alpine@sha256:33335c41151058d46086c04859e6b91bfdf97f9575efd3ca9709a20b5cd45aee
+    environment:
+      RABBITMQ_DEFAULT_USER: ${TICKET_MQ_USER:?Private MQ user required}
+      RABBITMQ_DEFAULT_PASS: ${TICKET_MQ_PASSWORD:?Private MQ password required}
+      RABBITMQ_DEFAULT_VHOST: ${TICKET_MQ_VHOST:?Private MQ vhost required}
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '+S 2:2 +SDcpu 1 +SDio 1'
+    volumes: [ticket-mq:/var/lib/rabbitmq]
+    mem_limit: 384m
+    healthcheck:
+      test: [CMD, su-exec, rabbitmq, rabbitmq-diagnostics, -q, check_running]
+      interval: 3s
+      timeout: 5s
+      retries: 40
+  api-a:
+    <<: *app
+    environment:
+      <<: *app-env
+      SPRING_PROFILES_ACTIVE: api
+      TICKET_DEMO_BOOTSTRAP: ${TICKET_DEMO_BOOTSTRAP:-false}
+      TICKET_STAFF_USERNAME: ${TICKET_STAFF_USERNAME:-manager}
+      TICKET_STAFF_PASSWORD: ${TICKET_STAFF_PASSWORD:-}
+    healthcheck: *api-health
+  api-b:
+    <<: *app
+    environment:
+      <<: *app-env
+      SPRING_PROFILES_ACTIVE: api
+    depends_on:
+      api-a: {condition: service_healthy}
+    healthcheck: *api-health
+  worker:
+    <<: *app
+    environment:
+      <<: *app-env
+      SPRING_PROFILES_ACTIVE: worker
+    depends_on:
+      api-a: {condition: service_healthy}
+  gateway:
+    restart: unless-stopped
+    image: ${TICKET_GATEWAY_IMAGE:-ticket-platform-gateway:local}
+    build:
+      context: ..
+      dockerfile: infra/gateway.Dockerfile
+      args:
+        NGINX_IMAGE: ${TICKET_NGINX_IMAGE:-nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236}
+    ports: ['127.0.0.1:${TICKET_GATEWAY_PORT:-15184}:8080']
+    read_only: true
+    tmpfs: ['/tmp:rw,noexec,nosuid,size=64m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 64m
+    cpus: 0.5
+    depends_on:
+      api-a: {condition: service_healthy}
+      api-b: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -Y, off, -q, -O, /dev/null, 'http://127.0.0.1:8080/healthz']
+      interval: 3s
+      timeout: 3s
+      retries: 10
+volumes:
+  ticket-pg:
+  ticket-redis:
+  ticket-mq:
