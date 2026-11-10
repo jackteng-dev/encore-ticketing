@@ -143,7 +143,7 @@ def build(project,repo,out,source):
         tag='ghcr.io/'+REGISTRY+'/'+package+':'+source
         command(['docker','build','--platform','linux/amd64','--build-arg','JAVA_IMAGE='+images['java21']['image'],
             '--build-arg','NGINX_IMAGE='+images['nginx']['image'],'--label','org.opencontainers.image.source=https://github.com/'+OWNER+'/'+repo,
-            '--label','org.opencontainers.image.revision='+source,'--label','dev.elpsy.showcase.recipe='+recipe_sha,'-t',tag,str(ctx)],'build-'+service,timeout=1800)
+            '--label','org.opencontainers.image.revision='+source,'--label','dev.jackteng.showcase.recipe='+recipe_sha,'-t',tag,str(ctx)],'build-'+service,timeout=1800)
         metadata=json.loads(subprocess.check_output(['docker','image','inspect',tag]))[0]
         T.require(metadata['Config']['User'] in ['10001:10001','101:101'],'Nonroot runtime required')
         if kind=='gateway':

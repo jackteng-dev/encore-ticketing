@@ -22,7 +22,7 @@ class PackageSource(unittest.TestCase):
         self.component={'repository':self.repo,'source':'a'*40,'recipe_sha256':'b'*64}
         self.image={'RepoDigests':[self.ref],'Os':'linux','Architecture':'amd64','Config':{'User':'10001:10001','Labels':{
             'org.opencontainers.image.source':'https://github.com/Elpsy-Deng/'+self.repo,
-            'org.opencontainers.image.revision':'a'*40,'dev.elpsy.showcase.recipe':'b'*64}}}
+            'org.opencontainers.image.revision':'a'*40,'dev.jackteng.showcase.recipe':'b'*64}}}
     def check(self,value=None,defer=False):return T.private_package(API(value or self.value),self.package,self.repo,defer_to_oci=defer)
     def test_real_ghcr_shape_requires_source_proof_by_default(self):
         with self.assertRaises(T.PackageSourceEvidenceRequired):self.check()
@@ -37,7 +37,7 @@ class PackageSource(unittest.TestCase):
     def test_present_correct_repository(self):
         self.assertEqual(self.check({**self.value,'repository':{'full_name':'Elpsy-Deng/'+self.repo}}),'PASS')
     def test_wrong_oci_source_revision_recipe_cannot_prove_source(self):
-        for field in ['org.opencontainers.image.source','org.opencontainers.image.revision','dev.elpsy.showcase.recipe']:
+        for field in ['org.opencontainers.image.source','org.opencontainers.image.revision','dev.jackteng.showcase.recipe']:
             image=copy.deepcopy(self.image);image['Config']['Labels'][field]='wrong'
             with self.subTest(field=field),self.assertRaises(ValueError):T.verify_local_image(image,self.ref,self.component,'api')
     def test_wrong_digest_platform_or_root_cannot_prove_source(self):
