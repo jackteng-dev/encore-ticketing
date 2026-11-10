@@ -7,8 +7,11 @@ Encore 是面向活動主辦方、購票者與驗票人員的售票平台展示�
 
 ## 展示
 
-- [公開唯讀展示](https://swaggyserver.tail5b604b.ts.net:8443/demos/encore/)：目前沒有活動，僅供瀏覽，不開放購票或後台操作。
-- 完整互動流程可依[展示操作手冊](docs/SHOWCASE.md)在本機以合成資料重現。
+- [線上沙盒 encore.jackteng.dev](https://encore.jackteng.dev)：可實際排隊購票、模擬付款、領取電子票券，並用員工後台（`/staff/login`）建立活動與驗票入場。活動與訂單皆為虛構，每天 04:10（台北時間）自動重置。
+  - 觀眾：`demo-fan` / `encore-demo-customer`（也可自行註冊）
+  - 員工：`manager` / `encore-demo-manager`
+- 沙盒與正式部署使用相同版本；為了讓每位訪客都能使用，停用活動封存。
+- 完整互動流程也可依[展示操作手冊](docs/SHOWCASE.md)在本機以合成資料重現。
 
 ## 主要功能
 
