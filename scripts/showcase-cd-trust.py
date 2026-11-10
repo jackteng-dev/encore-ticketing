@@ -221,6 +221,6 @@ def verify_local_image(metadata,image,component,service):
             'Pulled image digest/platform mismatch')
     require(labels.get('org.opencontainers.image.source')=='https://github.com/'+OWNER+'/'+component['repository'] and
             labels.get('org.opencontainers.image.revision')==component['source'] and
-            labels.get('dev.elpsy.showcase.recipe')==component['recipe_sha256'], 'OCI source/revision/recipe provenance mismatch')
+            labels.get('dev.jackteng.showcase.recipe')==component['recipe_sha256'], 'OCI source/revision/recipe provenance mismatch')
     require(metadata.get('Config',{}).get('User') in ['10001:10001','101:101'], 'Nonroot artifact required')
     return True
