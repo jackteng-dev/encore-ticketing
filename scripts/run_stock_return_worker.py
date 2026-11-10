@@ -37,7 +37,7 @@ def main():
   log=scope/(name+'.log')
   with log.open('x')as f:
    log.chmod(0o600);e=env.copy();e.update(extra or {});subprocess.run(args,env=e,cwd=cwd,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=timeout)
- run('seed',[a.java,'-Xmx384m','-XX:+UseSerialGC','-cp',oldcp,'dev.elpsy.ticket.StockReturnRecoveryRuntimeSeed',str(fixture)])
+ run('seed',[a.java,'-Xmx384m','-XX:+UseSerialGC','-cp',oldcp,'dev.jackteng.encore.StockReturnRecoveryRuntimeSeed',str(fixture)])
  require(json.loads(fixture.read_text())['baselineSchema']==17,'True historical V17 seed required');tables=sql("SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename<>'flyway_schema_history' ORDER BY tablename;").splitlines()
  def data():
   value={}

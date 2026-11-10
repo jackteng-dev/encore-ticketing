@@ -17,13 +17,13 @@ def main():
  require(cfg['TICKET_GATEWAY_PORT']=='15184'and cfg['TICKET_COOKIE_SECURE']=='false','Explicit loopback fixture required')
  require(all(cfg.get(k)=='true'for k in ['TICKET_ORDERS_ENABLED','TICKET_PURCHASES_ENABLED','TICKET_DELIVERY_ENABLED','TICKET_PUBLISHER_ENABLED','TICKET_CONSUMER_ENABLED']),'Explicit normal async fixture required')
  scope=private(a.output);require(not scope.exists(),'Preserve prior evidence');scope.mkdir(mode=0o700)
- probe_class=ROOT/'backend/target/test-classes/dev/elpsy/ticket/delivery/MultiWorkerBrokerProbe.class'
+ probe_class=ROOT/'backend/target/test-classes/dev/jackteng/encore/delivery/MultiWorkerBrokerProbe.class'
  require(probe_class.is_file(),'Run full Maven package, including test compilation, first')
  # Maven output may be private to the host user. Expose only this secret-free
  # bytecode file, not the complete test directory, to the nonroot probe container.
  probe_archive=scope/'probe.jar'
  with zipfile.ZipFile(probe_archive,'x')as archive:
-  entry=zipfile.ZipInfo('dev/elpsy/ticket/delivery/MultiWorkerBrokerProbe.class')
+  entry=zipfile.ZipInfo('dev/jackteng/encore/delivery/MultiWorkerBrokerProbe.class')
   archive.writestr(entry,probe_class.read_bytes())
  probe_archive.chmod(0o444)
  env=os.environ.copy();env.update(cfg)
@@ -70,7 +70,7 @@ def main():
  def probe(*args):
   nonlocal probe_number
   probe_number+=1;name=project+'-probe-'+str(probe_number)
-  command=['run','--rm','--name',name,'--label','com.docker.compose.project='+project,'--label','ticket.private.probe=true','--network',project+'_default','--read-only','--tmpfs','/tmp:rw,noexec,nosuid,size=32m,mode=1777','--cap-drop=ALL','--security-opt=no-new-privileges:true','--memory=128m','--cpus=.5','--env-file',str(probe_env),'--mount','type=bind,src='+str(probe_archive)+',dst=/probe.jar,readonly','--entrypoint','java',cfg['TICKET_APP_IMAGE'],'-Xmx96m','-XX:+UseSerialGC','-XX:ActiveProcessorCount=2','-Dloader.path=/probe.jar','-Dloader.main=dev.elpsy.ticket.delivery.MultiWorkerBrokerProbe','-cp','/app/ticket.jar','org.springframework.boot.loader.launch.PropertiesLauncher',*args]
+  command=['run','--rm','--name',name,'--label','com.docker.compose.project='+project,'--label','ticket.private.probe=true','--network',project+'_default','--read-only','--tmpfs','/tmp:rw,noexec,nosuid,size=32m,mode=1777','--cap-drop=ALL','--security-opt=no-new-privileges:true','--memory=128m','--cpus=.5','--env-file',str(probe_env),'--mount','type=bind,src='+str(probe_archive)+',dst=/probe.jar,readonly','--entrypoint','java',cfg['TICKET_APP_IMAGE'],'-Xmx96m','-XX:+UseSerialGC','-XX:ActiveProcessorCount=2','-Dloader.path=/probe.jar','-Dloader.main=dev.jackteng.encore.delivery.MultiWorkerBrokerProbe','-cp','/app/ticket.jar','org.springframework.boot.loader.launch.PropertiesLauncher',*args]
   path=scope/('probe-'+str(probe_number)+'.log')
   try:
    result=subprocess.run(docker+command,env=env,text=True,capture_output=True,timeout=30)
@@ -103,7 +103,7 @@ def main():
   except urllib.error.HTTPError as e:status=e.code;raw=e.read()
   require(status==expected,path+': unexpected status '+str(status));return json.loads(raw)if raw else None
  def command(**kw):return dict(requestId=str(uuid4()),expectedVersion=0,**kw)
- artifacts=[ROOT/'backend/target/ticket-platform-0.1.0.jar',ROOT/'infra/nginx.conf',ROOT/'infra/compose.deploy.yml',Path(__file__).resolve(),ROOT/'backend/src/test/java/dev/elpsy/ticket/delivery/MultiWorkerBrokerProbe.java',probe_class,*sorted((ROOT/'frontend/dist').rglob('*'))]
+ artifacts=[ROOT/'backend/target/ticket-platform-0.1.0.jar',ROOT/'infra/nginx.conf',ROOT/'infra/compose.deploy.yml',Path(__file__).resolve(),ROOT/'backend/src/test/java/dev/jackteng/encore/delivery/MultiWorkerBrokerProbe.java',probe_class,*sorted((ROOT/'frontend/dist').rglob('*'))]
  def hashes():return{str(x.relative_to(ROOT)):hashlib.sha256(x.read_bytes()).hexdigest()for x in artifacts if x.is_file()}
  frozen=hashes()
  def fixture(capacity):

@@ -37,7 +37,7 @@ def main():
   log=scope/(name+'.log')
   with log.open('x')as f:
    log.chmod(0o600);e=env.copy();e.update(extra or {});subprocess.run(args,env=e,cwd=cwd,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=timeout)
- run('seed',[a.java,'-Xmx384m','-XX:+UseSerialGC','-cp',oldcp,'dev.elpsy.ticket.StockReturnResolutionRuntimeSeed',str(fixture)])
+ run('seed',[a.java,'-Xmx384m','-XX:+UseSerialGC','-cp',oldcp,'dev.jackteng.encore.StockReturnResolutionRuntimeSeed',str(fixture)])
  require(json.loads(fixture.read_text())['baselineSchema']==15,'True historical V15 seed required');tables=sql("SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename<>'flyway_schema_history' ORDER BY tablename;").splitlines()
  def data():
   value={}
@@ -73,7 +73,7 @@ def main():
   phase('offline');start_api(False,'api-flag-off');phase('flag-off');dock(['start',redis]);stopped=False;deadline=time.monotonic()+30
   while dock(['inspect','--format','{{.State.Health.Status}}',redis])!='healthy':require(time.monotonic()<deadline,'Redis restart timeout');time.sleep(.2)
   start_api(True,'api-resume');phase('resume');api.terminate();api.wait(timeout=30);api=None
-  run('core-verify',[a.java,'-Xmx384m','-XX:+UseSerialGC','-cp',newcp,'dev.elpsy.ticket.StockReturnResolutionRuntimeVerify',str(fixture),str(scope/'core.json')]);core=json.loads((scope/'core.json').read_text())
+  run('core-verify',[a.java,'-Xmx384m','-XX:+UseSerialGC','-cp',newcp,'dev.jackteng.encore.StockReturnResolutionRuntimeVerify',str(fixture),str(scope/'core.json')]);core=json.loads((scope/'core.json').read_text())
   invariants=[];operational={}
   for file in ('verify_stock_origin_invariants.sql','verify_stock_return_invariants.sql','verify_stock_return_staff_invariants.sql','verify_stock_return_resolution_invariants.sql'):
    lines=sql((ROOT/'scripts'/file).read_text()).splitlines()

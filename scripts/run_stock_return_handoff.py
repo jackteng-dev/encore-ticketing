@@ -67,7 +67,7 @@ def main():
     final = ROOT/'backend/target/ticket-platform-0.1.0.jar'
     baseline = private_path(args.baseline_jar)
     require(final.is_file() and baseline.is_file(), 'Final package and historical JAR required.')
-    require((tests/'dev/elpsy/ticket/StockReturnHandoffRunner.class').is_file(), 'Compile test runners with full package first.')
+    require((tests/'dev/jackteng/encore/StockReturnHandoffRunner.class').is_file(), 'Compile test runners with full package first.')
 
     def extract(jar, name):
         target = scope/name
@@ -90,7 +90,7 @@ def main():
         log = scope/(name+'.log')
         with log.open('x') as output:
             log.chmod(0o600)
-            subprocess.run([args.java, '-Xmx384m', '-cp', cp, 'dev.elpsy.ticket.'+runner]+arguments,
+            subprocess.run([args.java, '-Xmx384m', '-cp', cp, 'dev.jackteng.encore.'+runner]+arguments,
                            cwd=ROOT, env=env, check=True, stdout=output, stderr=subprocess.STDOUT, timeout=90)
 
     run('baseline', baseline_cp, 'StockReturnBaselineSeed', [str(original)])

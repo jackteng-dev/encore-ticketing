@@ -73,7 +73,7 @@ def main():
         probe_env = env.copy()
         probe_env.update(cfg)
         broker = subprocess.check_output([str(java),'-Dloader.path=' + str(ROOT/'backend/target/test-classes'),
-                 '-Dloader.main=dev.elpsy.ticket.backup.QueueProbe','-cp',str(jar),
+                 '-Dloader.main=dev.jackteng.encore.backup.QueueProbe','-cp',str(jar),
                  'org.springframework.boot.loader.launch.PropertiesLauncher'],env=probe_env,text=True,timeout=15)
         rows = sorted(line for line in broker.splitlines() if line.startswith(('purchase|','retry|','dead|')))
         require(len(rows)==3, 'Original three source queues required')

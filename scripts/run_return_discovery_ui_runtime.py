@@ -34,8 +34,8 @@ def main():
  def save(name,data):
   path=scope/name;require(not path.exists(),'Preserve metadata');path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n');path.chmod(0o600)
  final=ROOT/'backend/target/ticket-platform-0.1.0.jar';require(migration_version(final)==23,'Full current package required')
- probe=ROOT/'backend/target/test-classes/dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class';require(probe.is_file(),'Full test compilation required');archive=scope/'seed-probe.jar'
- with zipfile.ZipFile(archive,'x')as z:z.writestr('dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class',probe.read_bytes())
+ probe=ROOT/'backend/target/test-classes/dev/jackteng/encore/inventory/ReturnDiscoverySeedProbe.class';require(probe.is_file(),'Full test compilation required');archive=scope/'seed-probe.jar'
+ with zipfile.ZipFile(archive,'x')as z:z.writestr('dev/jackteng/encore/inventory/ReturnDiscoverySeedProbe.class',probe.read_bytes())
  archive.chmod(0o600)
  java=Path(a.java_home).resolve()/'bin/java';require(java.is_file(),'Installed complete JDK21 required');jvm=[str(java),'-Xmx256m','-XX:+UseSerialGC','-XX:ActiveProcessorCount=2','-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts']
  artifacts=[final,probe,Path(__file__).resolve(),ROOT/'scripts/smoke_return_discovery_ui_browser.cjs',*sorted((ROOT/'frontend/dist').rglob('*')),*sorted((ROOT/'backend/src/main/resources/db/migration').glob('V*.sql'))]
@@ -56,13 +56,13 @@ def main():
   output=scope/(phase+'.json');e=env.copy();e['TICKET_DISCOVERY_UI_OUTPUT']=str(output);run(['node','scripts/smoke_return_discovery_ui_browser.cjs',phase],'browser-'+phase,180,e);result=json.loads(output.read_text());require(result['passed']>0,'Actual browser checks required');results.append(result);print('PASS browser '+phase+': '+str(result['passed'])+' groups',flush=True)
  try:
   started=True;run(compose+['up','-d','--wait'],'start');require(sql("SELECT count(*) FROM pg_tables WHERE schemaname='public';")=='0','Empty owned PG required')
-  run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.elpsy.ticket.inventory.ReturnDiscoverySeedProbe','-cp',str(baseline),'org.springframework.boot.loader.launch.PropertiesLauncher','seed',str(scope/'fixture.json')],'seed')
+  run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.jackteng.encore.inventory.ReturnDiscoverySeedProbe','-cp',str(baseline),'org.springframework.boot.loader.launch.PropertiesLauncher','seed',str(scope/'fixture.json')],'seed')
   api=launch('api',jvm+['-jar',str(final),'--spring.profiles.active=api']);until(lambda:ready('http://127.0.0.1:19110/api/public/readiness'))
   launch('preview',['node',str(ROOT/'frontend/node_modules/vite/bin/vite.js'),'preview','--host','127.0.0.1','--port','15180','--strictPort',str(ROOT/'frontend')]);until(lambda:ready('http://127.0.0.1:15180'))
   browser('prepare')
   fsync=json.loads(dock(['exec',cid('redis'),'redis-cli','--json','WAITAOF','1','0','5000']));require(fsync[0]==1,'Local AOF fsync required');run(compose+['stop','-t','10','redis'],'redis-stop')
   with socket.socket()as s:require(s.connect_ex(('127.0.0.1',26379))!=0,'Redis TCP must close')
-  run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.elpsy.ticket.inventory.ReturnDiscoverySeedProbe','-cp',str(final),'org.springframework.boot.loader.launch.PropertiesLauncher','release',str(scope/'fixture.json')],'release')
+  run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.jackteng.encore.inventory.ReturnDiscoverySeedProbe','-cp',str(final),'org.springframework.boot.loader.launch.PropertiesLauncher','release',str(scope/'fixture.json')],'release')
   for name in ['worker-a','worker-b']:launch(name,jvm+['-jar',str(final),'--spring.profiles.active=worker'])
   until(lambda:sql("SELECT count(*) FROM stock_return_recovery_job WHERE state='WAITING' AND last_code='REDIS_UNKNOWN' AND attempts BETWEEN 1 AND 5;")=='1');browser('offline')
   run(compose+['start','redis'],'redis-start');until(lambda:sql("SELECT count(*) FROM stock_return_recovery_job WHERE state='DONE';")=='1');browser('drain')

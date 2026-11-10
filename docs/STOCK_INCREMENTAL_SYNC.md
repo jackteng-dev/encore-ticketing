@@ -69,11 +69,11 @@ python scripts/run_stock_commit_experiment.py --env work/你的scope/runtime.env
 也可以在相同受控scope手動執行：
 
 ```bash
-java -cp "$TICKET_EXPERIMENT_CP" dev.elpsy.ticket.StockCommitCursorExperimentRunner prepare work/你的scope/original.json work/你的scope/prepare.json
+java -cp "$TICKET_EXPERIMENT_CP" dev.jackteng.encore.StockCommitCursorExperimentRunner prepare work/你的scope/original.json work/你的scope/prepare.json
 # 停止自己的Redis，確認其TCP關閉後
-java -cp "$TICKET_EXPERIMENT_CP" dev.elpsy.ticket.StockCommitCursorExperimentRunner offline work/你的scope/original.json work/你的scope/offline.json
+java -cp "$TICKET_EXPERIMENT_CP" dev.jackteng.encore.StockCommitCursorExperimentRunner offline work/你的scope/original.json work/你的scope/offline.json
 # 啟動同一Redis AOF volume後
-java -cp "$TICKET_EXPERIMENT_CP" dev.elpsy.ticket.StockCommitCursorExperimentRunner verify work/你的scope/original.json work/你的scope/verify.json
+java -cp "$TICKET_EXPERIMENT_CP" dev.jackteng.encore.StockCommitCursorExperimentRunner verify work/你的scope/original.json work/你的scope/verify.json
 ```
 
 這是CHECK commit前rollback與正常停止／重啟，不是PG TCP commit ACK loss、Redis成功回覆TCP drop、kill-9、Cluster、跨主機HA或負載測試。實際結果、artifact與cleanup見本輪HANDOFF及verification證據。
