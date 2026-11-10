@@ -44,15 +44,15 @@ def main():
   return dict(zip(raw[::2],raw[1::2]))if isinstance(raw,list)else raw
  def save(name,data):
   path=scope/name;require(not path.exists(),'Preserve metadata');path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n');path.chmod(0o600)
- probe=ROOT/'backend/target/test-classes/dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class';require(probe.is_file(),'Full Maven package required')
+ probe=ROOT/'backend/target/test-classes/dev/jackteng/encore/inventory/ReturnDiscoverySeedProbe.class';require(probe.is_file(),'Full Maven package required')
  archive=scope/'seed-probe.jar'
- with zipfile.ZipFile(archive,'x')as z:z.writestr(zipfile.ZipInfo('dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class'),probe.read_bytes())
+ with zipfile.ZipFile(archive,'x')as z:z.writestr(zipfile.ZipInfo('dev/jackteng/encore/inventory/ReturnDiscoverySeedProbe.class'),probe.read_bytes())
  archive.chmod(0o600);fixture=scope/'fixture.json';final=ROOT/'backend/target/ticket-platform-0.1.0.jar'
  require(migration_version(baseline)==22 and migration_version(final)==23,'Exact verified upgrade artifacts required')
  artifacts=[final,baseline,probe,Path(__file__).resolve(),ROOT/'backend/src/main/resources/db/migration/V23__stock_return_discovery.sql',*sorted((ROOT/'scripts').glob('verify_stock*invariants.sql')),*sorted((ROOT/'frontend/dist').rglob('*'))]
  def hashes():return{str(x.relative_to(ROOT)):hashlib.sha256(x.read_bytes()).hexdigest()for x in artifacts if x.is_file()}
  frozen=hashes();jvm=[str(java),'-Xmx256m','-XX:+UseSerialGC','-XX:ActiveProcessorCount=2','-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts']
- def helper(jar,phase):run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.elpsy.ticket.inventory.ReturnDiscoverySeedProbe','-cp',str(jar),'org.springframework.boot.loader.launch.PropertiesLauncher',phase,str(fixture)],'helper-'+phase,180)
+ def helper(jar,phase):run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.jackteng.encore.inventory.ReturnDiscoverySeedProbe','-cp',str(jar),'org.springframework.boot.loader.launch.PropertiesLauncher',phase,str(fixture)],'helper-'+phase,180)
  processes=[];started=False;checks=[]
  def stop_process(proc):
   if proc.poll()is not None:return

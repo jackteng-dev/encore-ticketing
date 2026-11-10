@@ -79,7 +79,7 @@ def main():
                 'Private endpoint does not match its own loopback container binding.')
     jar = ROOT / 'backend/target/ticket-platform-0.1.0.jar'
     tests = ROOT / 'backend/target/test-classes'
-    require(jar.is_file() and (tests / ('dev/elpsy/ticket/' + runner + '.class')).is_file(),
+    require(jar.is_file() and (tests / ('dev/jackteng/encore/' + runner + '.class')).is_file(),
             'Run full mvn package before the experiment.')
     for name in resources:
         require((tests / 'experiments' / name).read_bytes()
@@ -101,7 +101,7 @@ def main():
         log = scope / (name + '.log')
         with log.open('x') as stream:
             log.chmod(0o600)
-            subprocess.run([args.java, '-Xmx384m', '-cp', classpath, 'dev.elpsy.ticket.' + runner,
+            subprocess.run([args.java, '-Xmx384m', '-cp', classpath, 'dev.jackteng.encore.' + runner,
                             name, str(fixture), str(scope / (name + '.json'))],
                            env=env, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, check=True, timeout=90)
         result = json.loads((scope / (name + '.json')).read_text())

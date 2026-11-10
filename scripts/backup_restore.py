@@ -169,7 +169,7 @@ def replay(database, receipt, java_home, jar, output):
     log = destination.with_name(destination.name + '.process.log')
     require(not log.exists(), 'Preserve replay log before any broker side effect')
     result = subprocess.run([str(java), '-Xmx256m', '-XX:+UseSerialGC', '-XX:ActiveProcessorCount=2',
-              '-Dloader.main=dev.elpsy.ticket.operations.PendingPurchaseReplay', '-cp', str(artifact),
+              '-Dloader.main=dev.jackteng.encore.operations.PendingPurchaseReplay', '-cp', str(artifact),
               'org.springframework.boot.loader.launch.PropertiesLauncher', 'replay-pending'], cwd=ROOT, env=env,
               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=60)
     log.write_bytes(result.stdout)

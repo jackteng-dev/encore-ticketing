@@ -33,8 +33,8 @@ def main():
  def run(args,name,extra=None,timeout=180):
   with(scope/(name+'.log')).open('x')as f:Path(f.name).chmod(0o600);subprocess.run(args,cwd=ROOT,env=extra or env,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=timeout)
  java=Path(a.java_home).resolve()/'bin/java';require(java.is_file(),'Installed complete JDK21 required');jvm=[str(java),'-Xmx256m','-XX:+UseSerialGC','-XX:ActiveProcessorCount=2','-Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts'];final=ROOT/'backend/target/ticket-platform-0.1.0.jar';require(migration_version(final)==24,'Full verified V24 required')
- probe=ROOT/'backend/target/test-classes/dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class';archive=scope/'seed-probe.jar'
- with zipfile.ZipFile(archive,'x')as z:z.writestr('dev/elpsy/ticket/inventory/ReturnDiscoverySeedProbe.class',probe.read_bytes())
+ probe=ROOT/'backend/target/test-classes/dev/jackteng/encore/inventory/ReturnDiscoverySeedProbe.class';archive=scope/'seed-probe.jar'
+ with zipfile.ZipFile(archive,'x')as z:z.writestr('dev/jackteng/encore/inventory/ReturnDiscoverySeedProbe.class',probe.read_bytes())
  archive.chmod(0o600)
  paths=[final,probe,Path(__file__).resolve(),ROOT/'scripts/smoke_monitoring_browser.cjs',*sorted((ROOT/'frontend/dist').rglob('*')),*sorted((ROOT/'backend/src/main/resources/db/migration').glob('V*.sql'))]
  def hashes():return{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()for p in paths if p.is_file()}
@@ -56,7 +56,7 @@ def main():
   e=env.copy();e['TICKET_MONITOR_OUTPUT']=str(scope/(phase+'.json'));run(['node','scripts/smoke_monitoring_browser.cjs',phase],'browser-'+phase,e);r=json.loads((scope/(phase+'.json')).read_text());require(r['passed']>0,'Browser proof required');results.append(r);print('PASS '+phase+': '+str(r['passed'])+' groups',flush=True)
  try:
   started=True;run(compose+['up','-d','--wait'],'start');require(sql("SELECT count(*) FROM pg_tables WHERE schemaname='public';")=='0','Empty PG required')
-  e=env.copy();e['TICKET_MONITORING_ENABLED']='false';run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.elpsy.ticket.inventory.ReturnDiscoverySeedProbe','-cp',str(seed),'org.springframework.boot.loader.launch.PropertiesLauncher','seed',str(scope/'fixture.json')],'seed',e)
+  e=env.copy();e['TICKET_MONITORING_ENABLED']='false';run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.jackteng.encore.inventory.ReturnDiscoverySeedProbe','-cp',str(seed),'org.springframework.boot.loader.launch.PropertiesLauncher','seed',str(scope/'fixture.json')],'seed',e)
   old=api('api-v23',baseline,extra=e);require(sql('SELECT max(version::int) FROM flyway_schema_history;')=='23','Actual V23 upgrade boundary required')
   tables=sql("SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename<>'flyway_schema_history' ORDER BY tablename;").splitlines()
   def rows():return{t:hashlib.sha256(sql('SELECT row_to_json(x)::text FROM "'+t+'" x ORDER BY row_to_json(x)::text;').encode()).hexdigest()for t in tables}
@@ -68,7 +68,7 @@ def main():
     with urllib.request.build_opener(urllib.request.ProxyHandler({})).open('http://127.0.0.1:15180',timeout=2)as r:return r.status==200
    except (urllib.error.URLError,TimeoutError):return False
   until(preview_ready);browser('prepare')
-  run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.elpsy.ticket.inventory.ReturnDiscoverySeedProbe','-cp',str(final),'org.springframework.boot.loader.launch.PropertiesLauncher','release',str(scope/'fixture.json')],'release',e);browser('advance')
+  run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.jackteng.encore.inventory.ReturnDiscoverySeedProbe','-cp',str(final),'org.springframework.boot.loader.launch.PropertiesLauncher','release',str(scope/'fixture.json')],'release',e);browser('advance')
   workerEnv=env.copy();workerEnv['TICKET_PUBLISHER_ENABLED']='false'
   w1=launch('worker-a',jvm+['-jar',str(final),'--spring.profiles.active=worker'],workerEnv);w2=launch('worker-b',jvm+['-jar',str(final),'--spring.profiles.active=worker'],workerEnv)
   until(lambda:sql("SELECT count(*) FROM runtime_heartbeat WHERE role='WORKER' AND last_seen>=clock_timestamp()-interval '15 seconds';")=='2'and sql("SELECT count(*) FROM stock_return_recovery_job WHERE state='REVIEW';")=='1');browser('healthy')
