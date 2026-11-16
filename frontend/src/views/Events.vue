@@ -1,18 +1,75 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { api, type CatalogEvent, type Page } from '../api'
-const data=ref<Page<CatalogEvent>|null>(null),error=ref(''),page=ref(1),loading=ref(false)
-async function load(){loading.value=true;error.value='';try{data.value=await api(`/public/events?page=${page.value}&size=12`)}catch(e){error.value=(e as Error).message}finally{loading.value=false}}
+import { api, date, money, type CatalogEvent, type Detail, type Page } from '../api'
+import { posterArt } from '../poster'
+const data=ref<Page<CatalogEvent>|null>(null),error=ref(''),page=ref(1),loading=ref(false),featured=ref<Detail|null>(null)
+const cards=computed(()=>(data.value?.items||[]).map(e=>({...e,art:posterArt(e.id,e.title)})))
+const lead=computed(()=>page.value===1?cards.value[0]:undefined)
+const ticker=computed(()=>cards.value.slice(0,8).map(e=>e.title))
+const featuredFacts=computed(()=>{
+ const d=featured.value;if(!d||d.event.id!==lead.value?.id)return null
+ const prices=d.sessions.flatMap(s=>s.tickets.map(t=>t.priceTwd)),first=d.sessions[0]
+ return {from:prices.length?Math.min(...prices):null,when:first?date(first.startsAt):null,sessions:d.sessions.length,selling:d.sessions.some(s=>s.salesStatus==='SELLING')}
+})
+async function load(){loading.value=true;error.value='';try{data.value=await api(`/public/events?page=${page.value}&size=12`);void loadFeatured()}catch(e){error.value=(e as Error).message}finally{loading.value=false}}
+async function loadFeatured(){const id=lead.value?.id;if(!id)return;try{const d=await api<Detail>(`/public/events/${id}`);if(lead.value?.id===id)featured.value=d}catch{featured.value=null}}
 onMounted(load)
 async function move(n:number){page.value+=n;await load()}
 </script>
 <template>
- <section class="hero"><div class="eyebrow">A LITTLE ANTICIPATION. A LOT OF LIFE.</div><h1>下一個現場，<br>有你的位置。</h1><p>音樂、舞台，以及那些值得一起記住的時刻。<br>從這裡，找到你的下一場期待。</p><span class="hero-mark" aria-hidden="true">e.</span><div class="hero-foot"><span>EXPLORE / DISCOVER / EXPERIENCE</span><span>↓ 往下探索</span></div></section>
- <section class="content"><div class="section-heading"><div><div class="eyebrow">WHAT'S NEXT</div><h2>即將相遇</h2></div><span class="muted">{{ data?.total ?? '—' }} 場活動</span></div>
+ <section v-if="lead" class="stage-hero" aria-label="焦點活動">
+  <div class="stage-hero-inner">
+   <RouterLink :to="`/events/${lead.id}`" class="poster" :class="lead.art.tone">
+    <span class="poster-mark" aria-hidden="true">{{lead.art.mark}}</span>
+    <span class="poster-word">{{lead.art.word}}</span>
+    <h1>{{lead.title}}</h1>
+    <span class="hero-meta">{{lead.venue}}</span>
+   </RouterLink>
+   <div class="hero-side">
+    <div class="hero-card">
+     <div class="eyebrow">{{featuredFacts?.selling?'熱賣中':'焦點活動'}}</div>
+     <template v-if="featuredFacts">
+      <div v-if="featuredFacts.from!==null"><span class="muted">票價</span><div class="price">{{money(featuredFacts.from)}} 起</div></div>
+      <div v-if="featuredFacts.when" class="muted">{{featuredFacts.when}} 起 · 共 {{featuredFacts.sessions}} 場</div>
+     </template>
+     <p class="muted">開賣時啟用等候室，依序取得購票資格。</p>
+     <div class="button-row"><RouterLink :to="`/events/${lead.id}`" class="button-link primary">立即購票</RouterLink></div>
+    </div>
+    <div v-if="cards.length>1" class="hero-list">
+     <RouterLink v-for="e in cards.slice(1,4)" :key="e.id" :to="`/events/${e.id}`">
+      <span class="poster thumb" :class="e.art.tone" aria-hidden="true">{{e.art.mark}}</span>
+      <span><strong>{{e.title}}</strong><span>{{e.venue}}</span></span>
+     </RouterLink>
+    </div>
+   </div>
+  </div>
+ </section>
+ <div v-if="ticker.length" class="ticker" aria-hidden="true"><div class="ticker-track"><span v-for="(t,i) in [...ticker,...ticker]" :key="i">{{t}}</span></div></div>
+
+ <section class="content">
+  <div class="block-heading"><h2>NOW ON SALE</h2><span class="sub">即將相遇</span><span class="spacer"></span><span class="muted">{{ data?.total ?? '—' }} 場活動</span></div>
   <p v-if="loading" role="status">正在載入活動…</p><div v-else-if="error" class="notice error" role="alert">{{error}} <button @click="load">重新讀取</button></div>
-  <div v-else-if="!data?.items.length" class="empty"><span class="empty-icon">◎</span><h3>精彩，正在準備中</h3><p>目前沒有已發布的活動。發布後會出現在這裡。</p></div>
-  <div v-else class="event-grid"><RouterLink v-for="(e,i) in data.items" :key="e.id" :to="`/events/${e.id}`" class="event-card"><div class="poster" :class="`tone-${i%3}`"><span>ENCORE / LIVE</span><strong>{{e.title.slice(0,2)}}</strong><small>LET'S BE THERE.</small></div><div class="card-copy"><span class="eyebrow">{{e.venue}}</span><h3>{{e.title}}</h3><p>{{e.description.slice(0,90)}}</p><span class="card-link">查看場次 <span>↗</span></span></div></RouterLink></div>
+  <div v-else-if="!data?.items.length" class="empty"><span class="empty-icon" aria-hidden="true">ENCORE</span><h3>精彩，正在準備中</h3><p>目前沒有已發布的活動。發布後會出現在這裡。</p></div>
+  <div v-else class="event-grid">
+   <RouterLink v-for="e in cards" :key="e.id" :to="`/events/${e.id}`" class="event-card">
+    <div class="poster" :class="e.art.tone"><span class="poster-mark" aria-hidden="true">{{e.art.mark}}</span><span class="poster-tag">ENCORE / LIVE</span><span class="poster-word" aria-hidden="true">{{e.art.word}}</span></div>
+    <span class="venue">{{e.venue}}</span>
+    <h3>{{e.title}}</h3>
+    <span class="more">查看場次 →</span>
+   </RouterLink>
+  </div>
   <div v-if="data&&data.total>12" class="pagination"><button :disabled="page===1||loading" @click="move(-1)">上一頁</button><span>{{page}}</span><button :disabled="page*12>=data.total||loading" @click="move(1)">下一頁</button></div>
+ </section>
+
+ <section class="content" style="padding-top:0">
+  <div class="fair-queue">
+   <span class="display" aria-hidden="true">FAIR<br>QUEUE</span>
+   <div>
+    <h2>搶票不靠手速，靠排隊</h2>
+    <p>開賣瞬間所有人進入同一個等候室，依序取得購票資格；保留的票在期限內完成模擬付款即可領取 QR 電子票，逾時自動釋出。</p>
+    <ol class="fair-steps"><li><b>01</b>進入等候室</li><li><b>02</b>選擇票種張數</li><li><b>03</b>保留期內付款</li><li><b>04</b>領取 QR 票</li></ol>
+   </div>
+  </div>
  </section>
 </template>

@@ -1,5 +1,18 @@
 # Encore 售票平台交接
 
+## 2026-11-17：前端視覺改版（B 版「夜場舞台」）
+
+只修改 `frontend/`，未動受保護路徑（`backend/src/main/resources/`、`infra/`、套件根目錄），無 schema 變更、無 API／旗標變更。
+
+- 完成：深色主題全站樣式（`style.css` 重寫，保留既有 class）；首頁焦點活動海報、跑馬燈、海報牆、公平排隊說明；活動頁海報＋資訊格、步驟條、場次票種表格；購票頁步驟條與右側合計摘要；等候室大字順位／秒數；訂單狀態徽章配色。
+- 重要檔案：`frontend/src/style.css`、`App.vue`、`views/Events.vue`、`views/EventDetail.vue`、`views/Reserve.vue`、`views/Orders.vue`、`components/WaitingRoom.vue`、新增 `poster.ts`（活動無圖片欄位，依標題產生文字海報與固定色調）、`index.html`（Google Fonts：Anton／Noto Sans TC）。
+- 保留：購票、排隊、付款、DIRTY gate 與非同步購票邏輯未改；smoke 腳本依賴的文字與 label（「選擇張數 →」「確認保票 →」「保票張數」「加入等候室」「目前排第 N 位，等待入場。」「會員」連結、場次 h3、「還沒有保票訂單。」）均保留。
+- 實測：`npm run build`（vue-tsc＋vite）通過；本機 preview 於桌面 1440 與手機 375 寬檢查首頁／活動頁無橫向溢出。後端 `mvn package` 於本機隔離 PostgreSQL 先前通過 629 tests（本輪未改後端）。
+- 未完成／已知：`scripts/smoke_*_browser.cjs` 未在本輪重跑；登入後保票→模擬付款→領票流程未逐頁目視；會員／後台頁僅隨 CSS 變深色。字型外部載入失敗時退回系統字型。
+- 下一步：跑瀏覽器 smoke；如需真實海報圖片，需另開 schema 變更 PR（新增可 NULL 欄位）並走作者受控切換。
+
+---
+
 ## 2026-11-08：自動更新端到端驗證（Encore）
 
 本次只增加此交接段落；不變更應用邏輯、資料庫、帳號、映像 recipe、CI 或部署契約。
