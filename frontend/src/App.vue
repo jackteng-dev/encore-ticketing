@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import MockNotice from './components/MockNotice.vue'
 import { showMock } from './mockNotice'
+const router=useRouter(),keyword=ref('')
+function search(){const q=keyword.value.trim().slice(0,60);keyword.value='';void router.push({path:'/search',query:q?{q}:{}})}
 </script>
 <template>
  <header class="site-header">
@@ -11,6 +14,7 @@ import { showMock } from './mockNotice'
     <RouterLink to="/">探索活動</RouterLink>
     <RouterLink to="/help/guide" class="nav-extra">購票須知</RouterLink>
     <span class="spacer" aria-hidden="true"></span>
+    <form class="header-search" role="search" @submit.prevent="search"><input v-model="keyword" type="search" maxlength="60" placeholder="搜尋活動、場館" aria-label="搜尋活動"><button aria-label="送出搜尋">⌕</button></form>
     <RouterLink to="/account/orders">我的票券</RouterLink>
     <RouterLink to="/staff">員工後台 ↗</RouterLink>
     <RouterLink to="/account" class="nav-cta">會員</RouterLink>
