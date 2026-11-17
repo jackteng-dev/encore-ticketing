@@ -3,8 +3,9 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { api,date,money,status,type Detail,type Session } from '../api'
 import { posterArt } from '../poster'
+import { setTitle } from '../title'
 const route=useRoute(),data=ref<Detail|null>(null),error=ref('')
-async function load(){error.value='';try{data.value=await api(`/public/events/${route.params.id}`)}catch(e){error.value=(e as Error).message}}
+async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title)}catch(e){error.value=(e as Error).message}}
 onMounted(load)
 const art=computed(()=>data.value?posterArt(data.value.event.id,data.value.event.title):null)
 const facts=computed(()=>{
