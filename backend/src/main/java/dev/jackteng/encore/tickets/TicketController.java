@@ -15,6 +15,7 @@ public class TicketController {
  @PostMapping("/api/customer/orders/{id}/tickets") public Bundle issue(@AuthenticationPrincipal Principal p,@PathVariable UUID id,@Valid @RequestBody Issue b){return service.issue(p,id,b);}
  @GetMapping("/api/admin/admissions/settings") public Settings settings(java.security.Principal p){return service.settings(p.getName());}
  @GetMapping("/api/admin/admissions/tickets") public Page<StaffTicket> list(java.security.Principal p,@RequestParam UUID sessionId,@RequestParam(defaultValue="1")int page,@RequestParam(defaultValue="12")int size){return service.list(p.getName(),sessionId,page,size);}
+ @GetMapping("/api/admin/admissions/tickets/{id}") public StaffTicket staffRead(java.security.Principal p,@PathVariable UUID id){return service.staffRead(p.getName(),id);}
  @GetMapping("/api/admin/admissions/tickets/{id}/audit") public Page<Audit> audit(java.security.Principal p,@PathVariable UUID id,@RequestParam(defaultValue="1")int page,@RequestParam(defaultValue="12")int size){return service.audit(p.getName(),id,page,size);}
  @PostMapping("/api/admin/admissions/inspect") public StaffTicket inspect(java.security.Principal p,@Valid @RequestBody Inspect b){return service.inspect(p.getName(),b);}
  @PostMapping("/api/admin/admissions/check-ins") public Receipt checkIn(java.security.Principal p,@RequestHeader(value="X-Expected-Staff-Username",required=false)String expected,@Valid @RequestBody CheckIn b){return service.checkIn(actor(p,expected),b);}

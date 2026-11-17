@@ -224,6 +224,9 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .chip.check { cursor: pointer }
 .chip.check input { width: auto; margin: 0; accent-color: var(--accent) }
 .result-count { margin: 0 0 16px }
+.refund-panel { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line) }
+.refund-form textarea { width: 100% }
+.refund-card .section-heading strong { font-size: 20px }
 /* 讓寬表格在格線內自行捲動，不撐開頁面 */
 .admin-grid > * { min-width: 0 }
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 12px }
