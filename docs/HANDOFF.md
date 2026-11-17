@@ -1,5 +1,29 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M6 主辦方銷售報表與 CSV 匯出（無 schema 變更，疊在 M5 上）
+
+- 範圍決定：本里程碑只做唯讀報表與匯出。**折扣碼與早鳥票延後**。
+  - 訂單總額在至少五處計算並交叉核對 `expectedTotalTwd`：直接保票、非同步購票請求兩處、庫存預扣、stock checkout。且總額會存進原命令重送的核對。
+  - 加入折扣需改動全部購票路徑與重送指紋，屬 AGENTS.md 要求不可弱化的保護，需另行設計並經作者同意。
+- 後端（`catalog` 套件內新增 `SalesReportService`／`SalesReportController`，唯讀，REPEATABLE READ）：
+  - `GET /api/admin/reports/events`：活動摘要（票額、已售、保留、已付款營收）。
+  - `GET /api/admin/reports/events/{id}`：各場次與票種的票額、已售、保留、剩餘、已付款訂單／張數／營收、待付款／取消／逾期數、出票數、入場數，以及每日已付款營收（台北日期）。
+  - 票額以 PostgreSQL `ticket_type.held/sold` 為準；營收只計 PAID 訂單。只輸出彙總，不含會員個資。
+- 前端：`/staff/reports`（員工後台連結「銷售報表」）。
+  - KPI：營收、售出率、保留、已付款訂單、入場率。
+  - 票種表格含售出率條；每日營收條圖。
+  - 匯出票種／每日 CSV：含 UTF-8 BOM；以 `= + - @` 開頭的文字前加 `'`，防試算表公式注入。
+- 實測：
+  - `mvn package` 648 tests 全過（新增 2 項，含以合成訂單核對營收只計 PAID）。
+  - `npm run build` 通過。
+  - Playwright `work/m6-ui-check.cjs` 5 項通過：報表與 API 一致、CSV 的 BOM／公式防護／數字、手機 375。
+  - 曾有一次腳本第一個員工 API 請求回 403，之後連續三次重跑皆通過，未能重現。
+- Codex 第 1 輪指出兩點，皆已修正：
+  - 報表每個票種各掃一次訂單（改為 GROUP BY 一次彙總，活動列表同樣改寫）。
+  - 活動列表分頁回應亂序（加請求序號）。
+- 另修正：員工後台格線內寬表格會撐開手機頁面（`.admin-grid > * { min-width: 0 }`）。
+- Codex 第 2 輪未發現缺陷。
+
 ## 2026-11-17：M5 場次區域座位圖（**含 schema 變更 V27**，疊在 M4 上）
 
 **此 PR 新增 `V27__session_seat_map.sql`（受保護路徑），開 PR 後先不 merge，需作者受控切換。**
