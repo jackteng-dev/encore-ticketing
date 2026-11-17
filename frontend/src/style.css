@@ -201,6 +201,29 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .event-card .venue { font-size: 13px; color: var(--text-3); letter-spacing: 1px }
 .event-card h3 { margin: 0; font-size: 17px; line-height: 1.45 }
 .event-card .more { font-size: 14px; color: var(--accent-text); font-weight: 700 }
+.event-card .poster { position: relative }
+.card-badge { position: absolute; top: 12px; right: 12px }
+.card-date { font-family: var(--display); font-size: 15px; letter-spacing: 1px; color: var(--accent-text) }
+.card-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-top: auto; padding-top: 4px; border-top: 1px solid var(--line) }
+.card-price { font-weight: 900; color: var(--text) }
+.header-search { display: flex; align-items: center; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); padding: 0 4px 0 14px }
+.header-search input { border: 0; background: transparent; padding: 7px 0; width: 180px; margin: 0; font-size: 14px }
+.header-search input:focus-visible { outline: none }
+.header-search:focus-within { border-color: var(--accent) }
+.header-search button { border: 0; background: transparent; padding: 4px 8px; font-size: 18px; line-height: 1; color: var(--text-2) }
+.search-page h1 { margin: 6px 0 20px }
+.search-filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; padding: 20px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface) }
+.search-filters label { flex: 0 1 170px }
+.search-filters label.grow { flex: 1 1 240px }
+.search-filters label select { margin-bottom: 0 }
+.search-filters input, .search-filters select { width: 100% }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--text-2); font-size: 14px; font-weight: 500 }
+.chip:hover { color: var(--text); border-color: var(--text) }
+.chip.on { border-color: var(--accent); color: var(--text); background: var(--raised) }
+.chip.check { cursor: pointer }
+.chip.check input { width: auto; margin: 0; accent-color: var(--accent) }
+.result-count { margin: 0 0 16px }
 .fair-queue { border: 1px solid var(--line); border-radius: 6px; padding: 36px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center }
 .fair-queue .display { font-size: 72px; color: var(--accent) }
 .fair-queue > div { flex: 1 1 420px; min-width: 0 }
@@ -299,6 +322,8 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
   .info-page { grid-template-columns: 1fr; gap: 16px }
   .info-nav { position: static; flex-direction: row; flex-wrap: wrap }
   .info-nav a { border-left: 0; border-bottom: 2px solid var(--line) }
+  .header-search { order: 10; flex: 1 1 100% }
+  .header-search input { width: 100% }
   .admin-grid { grid-template-columns: 1fr }
   .event-sidebar .event-select { display: inline-block; width: auto; max-width: 100% }
   .event-sidebar .pagination { justify-content: flex-start }

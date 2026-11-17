@@ -96,4 +96,45 @@ class CatalogIntegrationTest {
  }
  @Test void createRequiresZeroVersion(){problem(400,()->service.createEvent(manager,input(UUID.randomUUID(),1,"新增版本")));}
  @Test void databaseConstraints(){var e=event();var s=session(e);assertThrows(org.springframework.dao.DataIntegrityViolationException.class,()->db.update("INSERT INTO ticket_type(id,session_id,name,price_twd,capacity,max_per_customer) VALUES(?,?,?,0,1,1)",UUID.randomUUID(),s.id(),"無效價格"));}
+ private Event published(String title,String venue,int startsInDays,boolean selling,int... prices){
+  var e=service.createEvent(manager,new EventInput(UUID.randomUUID(),0L,"search-"+UUID.randomUUID(),title,"搜尋測試",venue));var now=OffsetDateTime.now();
+  var s=service.createSession(manager,e.id(),new SessionInput(UUID.randomUUID(),0L,"場次",now.plusDays(startsInDays),selling?now.minusHours(1):now.plusDays(1),now.plusDays(startsInDays).minusHours(1)));
+  for(int price:prices)service.createTicket(manager,s.id(),new TicketInput(UUID.randomUUID(),0L,"票"+price,price,10,2));
+  return service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true);
+ }
+ private List<UUID> ids(Page<PublicEvent> p){return p.items().stream().map(PublicEvent::id).toList();}
+ @Test void publicSearchMatchesTitleOrVenueAndHidesDrafts(){
+  String token="tk"+UUID.randomUUID().toString().substring(0,8);
+  var byTitle=published("搜尋"+token+"演唱會","台北小巨蛋",5,false,800,2400);var byVenue=published("其他活動","高雄"+token+"中心",6,false,1000);
+  service.createEvent(manager,new EventInput(UUID.randomUUID(),0L,"draft-"+UUID.randomUUID(),"草稿"+token,"",token));
+  var page=service.search(token.toUpperCase(),null,null,PublicSort.NEWEST,false,1,20);
+  assertEquals(2,page.total());assertEquals(Set.of(byTitle.id(),byVenue.id()),Set.copyOf(ids(page)));
+  var hit=page.items().stream().filter(x->x.id().equals(byTitle.id())).findFirst().orElseThrow();
+  assertEquals(800,hit.minPriceTwd());assertEquals(2400,hit.maxPriceTwd());assertEquals(1,hit.sessionCount());assertNotNull(hit.firstStartsAt());assertFalse(hit.selling());
+ }
+ @Test void publicSearchTreatsWildcardsLiterally(){
+  String token="wc"+UUID.randomUUID().toString().substring(0,8);var literal=published(token+"_50%","場地",5,false,500);published(token+"x50y","場地",5,false,500);
+  assertEquals(List.of(literal.id()),ids(service.search(token+"_50%",null,null,PublicSort.NEWEST,false,1,20)));
+  assertEquals(0,service.search(token+"%x",null,null,PublicSort.NEWEST,false,1,20).total());
+ }
+ @Test void publicSearchFiltersDatesSortsAndOnSale(){
+  String token="ds"+UUID.randomUUID().toString().substring(0,8);
+  var soon=published(token+"近","場地",3,true,1500);var later=published(token+"遠","場地",30,false,500);
+  var day=java.time.LocalDate.now(java.time.ZoneId.of("Asia/Taipei"));
+  assertEquals(List.of(soon.id()),ids(service.search(token,day,day.plusDays(10),PublicSort.NEWEST,false,1,20)));
+  assertEquals(List.of(later.id()),ids(service.search(token,day.plusDays(20),null,PublicSort.NEWEST,false,1,20)));
+  assertEquals(List.of(soon.id(),later.id()),ids(service.search(token,null,null,PublicSort.DATE,false,1,20)));
+  assertEquals(List.of(later.id(),soon.id()),ids(service.search(token,null,null,PublicSort.PRICE,false,1,20)));
+  var selling=service.search(token,null,null,PublicSort.NEWEST,true,1,20);assertEquals(List.of(soon.id()),ids(selling));assertTrue(selling.items().getFirst().selling());
+  problem(400,()->service.search(token,day.plusDays(2),day,PublicSort.NEWEST,false,1,20));
+  problem(400,()->service.search("x".repeat(61),null,null,PublicSort.NEWEST,false,1,20));
+  problem(400,()->service.search(token,null,null,PublicSort.NEWEST,false,1,21));
+ }
+ @Test void publicSearchHttpContract() throws Exception {
+  String token="ht"+UUID.randomUUID().toString().substring(0,8);published(token+"活動","場地",4,false,900);
+  mvc.perform(get("/api/public/events").param("q",token).param("sort","price")).andExpect(status().isOk())
+   .andExpect(jsonPath("$.total").value(1)).andExpect(jsonPath("$.items[0].minPriceTwd").value(900)).andExpect(jsonPath("$.items[0].sessionCount").value(1));
+  mvc.perform(get("/api/public/events").param("sort","random")).andExpect(status().isBadRequest());
+  mvc.perform(get("/api/public/events").param("from","2026-13-01")).andExpect(status().isBadRequest());
+ }
 }

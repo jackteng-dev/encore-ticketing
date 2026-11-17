@@ -1,4 +1,5 @@
 export interface CatalogEvent { id: string; slug: string; title: string; description: string; venue: string; status: string; version: number }
+export interface PublicEvent extends CatalogEvent { firstStartsAt: string | null; lastStartsAt: string | null; sessionCount: number; minPriceTwd: number | null; maxPriceTwd: number | null; selling: boolean }
 export interface Ticket { id: string; name: string; priceTwd: number; capacity: number; maxPerCustomer: number; version: number; available: number }
 export interface Payment { id:string; requestId:string; status:string; reason:string|null; amountTwd:number; createdAt:string; processedAt:string|null }
 export interface Order { id:string; requestId:string; ticketId:string; eventTitle:string; sessionName:string; startsAt:string; ticketName:string; priceTwd:number; quantity:number; totalTwd:number; status:string; version:number; createdAt:string; expiresAt:string; closedAt:string|null; payment:Payment|null; mockPaymentsEnabled:boolean }

@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { api, date, money, type CatalogEvent, type Detail, type Page } from '../api'
+import { api, date, money, type Page, type PublicEvent } from '../api'
 import { posterArt } from '../poster'
-const data=ref<Page<CatalogEvent>|null>(null),error=ref(''),page=ref(1),loading=ref(false),featured=ref<Detail|null>(null)
+import EventCard from '../components/EventCard.vue'
+const data=ref<Page<PublicEvent>|null>(null),error=ref(''),page=ref(1),loading=ref(false)
 const cards=computed(()=>(data.value?.items||[]).map(e=>({...e,art:posterArt(e.id,e.title)})))
 const lead=computed(()=>page.value===1?cards.value[0]:undefined)
 const ticker=computed(()=>cards.value.slice(0,8).map(e=>e.title))
 const featuredFacts=computed(()=>{
- const d=featured.value;if(!d||d.event.id!==lead.value?.id)return null
- const prices=d.sessions.flatMap(s=>s.tickets.map(t=>t.priceTwd)),first=d.sessions[0]
- return {from:prices.length?Math.min(...prices):null,when:first?date(first.startsAt):null,sessions:d.sessions.length,selling:d.sessions.some(s=>s.salesStatus==='SELLING')}
+ const e=lead.value;if(!e)return null
+ return {from:e.minPriceTwd,when:e.firstStartsAt?date(e.firstStartsAt):null,sessions:e.sessionCount,selling:e.selling}
 })
-async function load(){loading.value=true;error.value='';try{data.value=await api(`/public/events?page=${page.value}&size=12`);void loadFeatured()}catch(e){error.value=(e as Error).message}finally{loading.value=false}}
-async function loadFeatured(){const id=lead.value?.id;if(!id)return;try{const d=await api<Detail>(`/public/events/${id}`);if(lead.value?.id===id)featured.value=d}catch{featured.value=null}}
+async function load(){loading.value=true;error.value='';try{data.value=await api<Page<PublicEvent>>(`/public/events?page=${page.value}&size=12`)}catch(e){error.value=(e as Error).message}finally{loading.value=false}}
 onMounted(load)
 async function move(n:number){page.value+=n;await load()}
 </script>
@@ -49,16 +48,10 @@ async function move(n:number){page.value+=n;await load()}
 
  <section class="content">
   <div class="block-heading"><h2>NOW ON SALE</h2><span class="sub">即將相遇</span><span class="spacer"></span><span class="muted">{{ data?.total ?? '—' }} 場活動</span></div>
+  <nav class="filter-chips" aria-label="快速探索"><RouterLink to="/search?onSale=true" class="chip">售票中</RouterLink><RouterLink to="/search?sort=date" class="chip">依演出日期</RouterLink><RouterLink to="/search?sort=price" class="chip">票價低到高</RouterLink><RouterLink to="/search" class="chip">進階搜尋 →</RouterLink></nav>
   <p v-if="loading" role="status">正在載入活動…</p><div v-else-if="error" class="notice error" role="alert">{{error}} <button @click="load">重新讀取</button></div>
   <div v-else-if="!data?.items.length" class="empty"><span class="empty-icon" aria-hidden="true">ENCORE</span><h3>精彩，正在準備中</h3><p>目前沒有已發布的活動。發布後會出現在這裡。</p></div>
-  <div v-else class="event-grid">
-   <RouterLink v-for="e in cards" :key="e.id" :to="`/events/${e.id}`" class="event-card">
-    <div class="poster" :class="e.art.tone"><span class="poster-mark" aria-hidden="true">{{e.art.mark}}</span><span class="poster-tag">ENCORE / LIVE</span><span class="poster-word" aria-hidden="true">{{e.art.word}}</span></div>
-    <span class="venue">{{e.venue}}</span>
-    <h3>{{e.title}}</h3>
-    <span class="more">查看場次 →</span>
-   </RouterLink>
-  </div>
+  <div v-else class="event-grid"><EventCard v-for="e in cards" :key="e.id" :event="e" /></div>
   <div v-if="data&&data.total>12" class="pagination"><button :disabled="page===1||loading" @click="move(-1)">上一頁</button><span>{{page}}</span><button :disabled="page*12>=data.total||loading" @click="move(1)">下一頁</button></div>
  </section>
 

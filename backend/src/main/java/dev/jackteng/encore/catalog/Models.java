@@ -23,5 +23,9 @@ public final class Models {
   OffsetDateTime salesEnd,long version,String salesStatus,List<Ticket> tickets) {}
  public record Detail(Event event,List<Session> sessions,boolean orderingEnabled,boolean waitingRoomEnabled,boolean purchaseRequestsEnabled,boolean preDebitEnabled) {}
  public record Page<T>(List<T> items,long total,int page,int size) {}
+ /** 公開列表摘要：活動欄位加上場次與票價彙總，供搜尋結果與卡片顯示。 */
+ public record PublicEvent(UUID id,String slug,String title,String description,String venue,String status,long version,
+  OffsetDateTime firstStartsAt,OffsetDateTime lastStartsAt,int sessionCount,Integer minPriceTwd,Integer maxPriceTwd,boolean selling) {}
+ public enum PublicSort {NEWEST,DATE,PRICE}
  public record Audit(UUID requestId,String action,UUID resourceId,OffsetDateTime createdAt) {}
 }

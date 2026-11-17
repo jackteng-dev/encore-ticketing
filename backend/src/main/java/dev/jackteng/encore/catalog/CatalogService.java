@@ -65,6 +65,44 @@ public class CatalogService {
   return new Page<>(db.query("SELECT * FROM event"+filter+" ORDER BY created_at DESC,id LIMIT ? OFFSET ?",eventRow,size,(page-1)*size),
    db.queryForObject("SELECT count(*) FROM event"+filter,Long.class),page,size);
  }
+ private static final java.time.ZoneId TAIPEI=java.time.ZoneId.of("Asia/Taipei");
+ /** 公開活動搜尋：關鍵字比對標題與場館，日期以台北時間的場次開演日為準。 */
+ @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
+ public Page<PublicEvent> search(String q,java.time.LocalDate from,java.time.LocalDate to,PublicSort sort,boolean onSale,int page,int size) {
+  if(page<1||page>100000||size<1||size>20)throw new Problem(400,"INVALID_INPUT","分頁超出範圍");
+  String keyword=q==null?"":q.strip();
+  if(keyword.length()>60)throw new Problem(400,"INVALID_INPUT","搜尋字數最多 60 字");
+  if(from!=null&&to!=null&&to.isBefore(from))throw new Problem(400,"INVALID_INPUT","結束日期不可早於開始日期");
+  OffsetDateTime now=OffsetDateTime.now();
+  List<Object> args=new ArrayList<>();args.add(now);args.add(now);
+  StringBuilder where=new StringBuilder(" WHERE e.status='PUBLISHED'");
+  if(!keyword.isEmpty()){
+   String like="%"+keyword.replace("\\","\\\\").replace("%","\\%").replace("_","\\_")+"%";
+   where.append(" AND (e.title ILIKE ? ESCAPE '\\' OR e.venue ILIKE ? ESCAPE '\\')");args.add(like);args.add(like);
+  }
+  if(from!=null||to!=null){
+   where.append(" AND EXISTS(SELECT 1 FROM event_session d WHERE d.event_id=e.id");
+   if(from!=null){where.append(" AND d.starts_at>=?");args.add(from.atStartOfDay(TAIPEI).toOffsetDateTime());}
+   if(to!=null){where.append(" AND d.starts_at<?");args.add(to.plusDays(1).atStartOfDay(TAIPEI).toOffsetDateTime());}
+   where.append(")");
+  }
+  if(onSale)where.append(" AND coalesce(a.selling,false)");
+  String from_=" FROM event e LEFT JOIN LATERAL (SELECT min(s.starts_at) first_starts_at,max(s.starts_at) last_starts_at,count(*) session_count,"
+   +"bool_or(s.sales_start<=? AND ?<s.sales_end) selling FROM event_session s WHERE s.event_id=e.id) a ON true"
+   +" LEFT JOIN LATERAL (SELECT min(t.price_twd) min_price,max(t.price_twd) max_price FROM ticket_type t JOIN event_session s ON s.id=t.session_id WHERE s.event_id=e.id) p ON true";
+  String order=switch(sort==null?PublicSort.NEWEST:sort){
+   case DATE->" ORDER BY a.first_starts_at ASC NULLS LAST,e.id";
+   case PRICE->" ORDER BY p.min_price ASC NULLS LAST,e.id";
+   case NEWEST->" ORDER BY e.created_at DESC,e.id";
+  };
+  long total=db.queryForObject("SELECT count(*)"+from_+where,Long.class,args.toArray());
+  List<Object> pageArgs=new ArrayList<>(args);pageArgs.add(size);pageArgs.add((page-1)*size);
+  List<PublicEvent> items=db.query("SELECT e.*,a.first_starts_at,a.last_starts_at,a.session_count,a.selling,p.min_price,p.max_price"+from_+where+order+" LIMIT ? OFFSET ?",
+   (r,n)->new PublicEvent(r.getObject("id",UUID.class),r.getString("slug"),r.getString("title"),r.getString("description"),r.getString("venue"),
+    r.getString("status"),r.getLong("version"),r.getObject("first_starts_at",OffsetDateTime.class),r.getObject("last_starts_at",OffsetDateTime.class),
+    r.getInt("session_count"),(Integer)r.getObject("min_price"),(Integer)r.getObject("max_price"),r.getBoolean("selling")),pageArgs.toArray());
+  return new Page<>(items,total,page,size);
+ }
  @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
  public Detail detail(UUID id,boolean publicOnly) {
   Event e=event(id);if(publicOnly&&!e.status().equals("PUBLISHED"))throw new Problem(404,"NOT_FOUND","找不到此活動");
