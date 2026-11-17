@@ -224,6 +224,23 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .chip.check { cursor: pointer }
 .chip.check input { width: auto; margin: 0; accent-color: var(--accent) }
 .result-count { margin: 0 0 16px }
+.poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.card-category { margin-left: 8px; padding: 1px 6px; border: 1px solid var(--line-strong); border-radius: 3px; font-family: inherit; font-size: 11px; letter-spacing: 0; color: var(--text-2) }
+.category-link { color: inherit }
+.performer-line { margin: 0 0 12px; color: var(--text-2) }
+.performer-line a { color: var(--accent-text) }
+.category-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin: 16px 0 8px }
+.category-tile { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); text-decoration: none; color: var(--text) }
+.category-tile:hover { border-color: var(--accent) }
+.category-tile span { font-size: 13px; color: var(--text-3) }
+.directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 16px }
+.directory-card { display: flex; align-items: center; gap: 14px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); text-decoration: none; color: var(--text) }
+.directory-card:hover { border-color: var(--accent) }
+.directory-card .thumb { position: relative; flex: 0 0 56px; width: 56px; height: 56px; display: grid; place-items: center; overflow: hidden; border-radius: 4px; font-family: var(--display); font-size: 26px }
+.directory-card strong, .directory-card .muted { display: block }
+.performer-picks { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 20px }
+.performer-picks .label { width: 100%; font-size: 14px; font-weight: 700; color: var(--text-2) }
+.performer-picks .chip b { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 11px }
 .fair-queue { border: 1px solid var(--line); border-radius: 6px; padding: 36px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center }
 .fair-queue .display { font-size: 72px; color: var(--accent) }
 .fair-queue > div { flex: 1 1 420px; min-width: 0 }

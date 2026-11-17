@@ -40,6 +40,10 @@ public class CatalogService {
  private static void createVersion(long v) {if(v!=0)throw new Problem(400,"INVALID_INPUT","新增資料 expectedVersion 必須為 0");}
  private String encode(Object value) {try{return json.writeValueAsString(value);}catch(Exception e){throw new IllegalStateException("Catalog encoding failed",e);}}
  private <T> T command(String actor,UUID request,String action,UUID scope,Object input,Class<T> type,Supplier<T> operation) {
+  return command(actor,request,action,scope,input,type,v->v instanceof Event e?e.id():v instanceof Session s?s.id():((Ticket)v).id(),operation);
+ }
+ /** 同一套 catalog_guard／catalog_command 原命令重送與稽核，供同套件的場館、演出者、活動檔案使用。 */
+ public <T> T command(String actor,UUID request,String action,UUID scope,Object input,Class<T> type,java.util.function.Function<T,UUID> resourceOf,Supplier<T> operation) {
   db.queryForObject("SELECT id FROM catalog_guard WHERE id=1 FOR UPDATE",Integer.class);
   var staff=db.query("SELECT id FROM staff_account WHERE username=? AND enabled AND role='MANAGER' FOR UPDATE",
    (r,n)->r.getObject(1,UUID.class),actor);
@@ -53,7 +57,7 @@ public class CatalogService {
     throw new Problem(409,"REQUEST_CONFLICT","此操作編號已使用，請核對原操作");
    try{return json.readValue((String)p.get("result"),type);}catch(Exception e){throw new IllegalStateException(e);}
   }
-  T value=operation.get();UUID resource=value instanceof Event e?e.id():value instanceof Session s?s.id():((Ticket)value).id();
+  T value=operation.get();UUID resource=resourceOf.apply(value);
   db.update("INSERT INTO catalog_command(request_id,actor_id,action,resource_id,fingerprint,result) VALUES(?,?,?,?,?,?::jsonb)",
    request,actorId,action,resource,fingerprint,encode(value));
   return value;
@@ -69,6 +73,11 @@ public class CatalogService {
  /** 公開活動搜尋：關鍵字比對標題與場館，日期以台北時間的場次開演日為準。 */
  @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
  public Page<PublicEvent> search(String q,java.time.LocalDate from,java.time.LocalDate to,PublicSort sort,boolean onSale,int page,int size) {
+  return search(q,null,null,null,from,to,sort,onSale,page,size);
+ }
+ /** category／venue／performer 為 slug；不存在的 slug 只會回傳空結果。 */
+ @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)
+ public Page<PublicEvent> search(String q,String category,String venue,String performer,java.time.LocalDate from,java.time.LocalDate to,PublicSort sort,boolean onSale,int page,int size) {
   if(page<1||page>100000||size<1||size>20)throw new Problem(400,"INVALID_INPUT","分頁超出範圍");
   String keyword=q==null?"":q.strip();
   if(keyword.length()>60)throw new Problem(400,"INVALID_INPUT","搜尋字數最多 60 字");
@@ -87,9 +96,14 @@ public class CatalogService {
    where.append(")");
   }
   if(onSale)where.append(" AND coalesce(a.selling,false)");
+  for(String slug:new String[]{category,venue,performer})if(slug!=null&&slug.length()>80)throw new Problem(400,"INVALID_INPUT","篩選條件過長");
+  if(category!=null){where.append(" AND c.slug=?");args.add(category);}
+  if(venue!=null){where.append(" AND EXISTS(SELECT 1 FROM venue v WHERE v.id=ep.venue_id AND v.slug=?)");args.add(venue);}
+  if(performer!=null){where.append(" AND EXISTS(SELECT 1 FROM event_performer x JOIN performer f ON f.id=x.performer_id WHERE x.event_id=e.id AND f.slug=?)");args.add(performer);}
   String from_=" FROM event e LEFT JOIN LATERAL (SELECT min(s.starts_at) first_starts_at,max(s.starts_at) last_starts_at,count(*) session_count,"
    +"bool_or(s.sales_start<=? AND ?<s.sales_end) selling FROM event_session s WHERE s.event_id=e.id) a ON true"
-   +" LEFT JOIN LATERAL (SELECT min(t.price_twd) min_price,max(t.price_twd) max_price FROM ticket_type t JOIN event_session s ON s.id=t.session_id WHERE s.event_id=e.id) p ON true";
+   +" LEFT JOIN LATERAL (SELECT min(t.price_twd) min_price,max(t.price_twd) max_price FROM ticket_type t JOIN event_session s ON s.id=t.session_id WHERE s.event_id=e.id) p ON true"
+   +" LEFT JOIN event_profile ep ON ep.event_id=e.id LEFT JOIN category c ON c.id=ep.category_id";
   String order=switch(sort==null?PublicSort.NEWEST:sort){
    case DATE->" ORDER BY a.first_starts_at ASC NULLS LAST,e.id";
    case PRICE->" ORDER BY p.min_price ASC NULLS LAST,e.id";
@@ -97,10 +111,11 @@ public class CatalogService {
   };
   long total=db.queryForObject("SELECT count(*)"+from_+where,Long.class,args.toArray());
   List<Object> pageArgs=new ArrayList<>(args);pageArgs.add(size);pageArgs.add((page-1)*size);
-  List<PublicEvent> items=db.query("SELECT e.*,a.first_starts_at,a.last_starts_at,a.session_count,a.selling,p.min_price,p.max_price"+from_+where+order+" LIMIT ? OFFSET ?",
+  List<PublicEvent> items=db.query("SELECT e.*,a.first_starts_at,a.last_starts_at,a.session_count,a.selling,p.min_price,p.max_price,c.slug category_slug,c.name category_name,ep.image_url"+from_+where+order+" LIMIT ? OFFSET ?",
    (r,n)->new PublicEvent(r.getObject("id",UUID.class),r.getString("slug"),r.getString("title"),r.getString("description"),r.getString("venue"),
     r.getString("status"),r.getLong("version"),r.getObject("first_starts_at",OffsetDateTime.class),r.getObject("last_starts_at",OffsetDateTime.class),
-    r.getInt("session_count"),(Integer)r.getObject("min_price"),(Integer)r.getObject("max_price"),r.getBoolean("selling")),pageArgs.toArray());
+    r.getInt("session_count"),(Integer)r.getObject("min_price"),(Integer)r.getObject("max_price"),r.getBoolean("selling"),
+    r.getString("category_slug"),r.getString("category_name"),r.getString("image_url")),pageArgs.toArray());
   return new Page<>(items,total,page,size);
  }
  @Transactional(readOnly=true,isolation=org.springframework.transaction.annotation.Isolation.REPEATABLE_READ)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { api, date, money, type Page, type PublicEvent } from '../api'
+import { api, date, money, type Category, type Page, type PublicEvent } from '../api'
 import { posterArt } from '../poster'
 import EventCard from '../components/EventCard.vue'
 const data=ref<Page<PublicEvent>|null>(null),error=ref(''),page=ref(1),loading=ref(false)
@@ -13,7 +13,8 @@ const featuredFacts=computed(()=>{
  return {from:e.minPriceTwd,when:e.firstStartsAt?date(e.firstStartsAt):null,sessions:e.sessionCount,selling:e.selling}
 })
 async function load(){loading.value=true;error.value='';try{data.value=await api<Page<PublicEvent>>(`/public/events?page=${page.value}&size=12`)}catch(e){error.value=(e as Error).message}finally{loading.value=false}}
-onMounted(load)
+const categories=ref<Category[]>([])
+onMounted(()=>{void load();api<Category[]>('/public/categories').then(c=>categories.value=c,()=>categories.value=[])})
 async function move(n:number){page.value+=n;await load()}
 </script>
 <template>
@@ -48,7 +49,8 @@ async function move(n:number){page.value+=n;await load()}
 
  <section class="content">
   <div class="block-heading"><h2>NOW ON SALE</h2><span class="sub">即將相遇</span><span class="spacer"></span><span class="muted">{{ data?.total ?? '—' }} 場活動</span></div>
-  <nav class="filter-chips" aria-label="快速探索"><RouterLink to="/search?onSale=true" class="chip">售票中</RouterLink><RouterLink to="/search?sort=date" class="chip">依演出日期</RouterLink><RouterLink to="/search?sort=price" class="chip">票價低到高</RouterLink><RouterLink to="/search" class="chip">進階搜尋 →</RouterLink></nav>
+  <nav v-if="categories.length" class="category-nav" aria-label="活動分類"><RouterLink v-for="c in categories" :key="c.id" :to="`/search?category=${c.slug}`" class="category-tile"><strong>{{c.name}}</strong><span>{{c.eventCount}} 場</span></RouterLink></nav>
+  <nav class="filter-chips" aria-label="快速探索"><RouterLink to="/search?onSale=true" class="chip">售票中</RouterLink><RouterLink to="/search?sort=date" class="chip">依演出日期</RouterLink><RouterLink to="/search?sort=price" class="chip">票價低到高</RouterLink><RouterLink to="/performers" class="chip">演出者</RouterLink><RouterLink to="/venues" class="chip">場館</RouterLink><RouterLink to="/search" class="chip">進階搜尋 →</RouterLink></nav>
   <p v-if="loading" role="status">正在載入活動…</p><div v-else-if="error" class="notice error" role="alert">{{error}} <button @click="load">重新讀取</button></div>
   <div v-else-if="!data?.items.length" class="empty"><span class="empty-icon" aria-hidden="true">ENCORE</span><h3>精彩，正在準備中</h3><p>目前沒有已發布的活動。發布後會出現在這裡。</p></div>
   <div v-else class="event-grid"><EventCard v-for="e in cards" :key="e.id" :event="e" /></div>

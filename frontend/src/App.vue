@@ -38,6 +38,8 @@ function search(){const q=keyword.value.trim().slice(0,60);keyword.value='';void
    </nav>
    <nav class="footer-col" aria-label="關於 Encore">
     <h2>關於 Encore</h2>
+    <RouterLink to="/performers">演出者</RouterLink>
+    <RouterLink to="/venues">場館</RouterLink>
     <RouterLink to="/help/terms">服務條款</RouterLink>
     <RouterLink to="/help/privacy">隱私權政策</RouterLink>
     <button type="button" class="footer-link" @click="showMock('主辦單位合作申請')">主辦單位合作</button>

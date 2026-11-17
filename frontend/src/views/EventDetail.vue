@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import { api,date,money,status,type Detail,type Session } from '../api'
+import { api,date,money,status,type Detail,type EventProfile,type Session } from '../api'
 import { posterArt } from '../poster'
 import { setTitle } from '../title'
 const route=useRoute(),data=ref<Detail|null>(null),error=ref('')
-async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title)}catch(e){error.value=(e as Error).message}}
+const profile=ref<EventProfile|null>(null)
+async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title);api<EventProfile>(`/public/events/${route.params.id}/profile`).then(p=>profile.value=p,()=>profile.value=null)}catch(e){error.value=(e as Error).message}}
 onMounted(load)
 const art=computed(()=>data.value?posterArt(data.value.event.id,data.value.event.title):null)
 const facts=computed(()=>{
@@ -27,13 +28,14 @@ const badgeTone=(s:Session)=>s.salesStatus==='SELLING'?'hot':s.salesStatus==='UP
   <section class="event-hero">
    <div class="event-hero-inner">
     <RouterLink to="/" class="back-link">← 所有活動</RouterLink>
-    <div class="poster" :class="art.tone" aria-hidden="true"><span class="poster-mark">{{art.mark}}</span><span class="poster-tag">ENCORE / LIVE</span><span class="poster-word">{{art.word}}</span></div>
+    <div class="poster" :class="art.tone" aria-hidden="true"><img v-if="profile?.imageUrl" :src="profile.imageUrl" alt="" class="poster-img"><template v-else><span class="poster-mark">{{art.mark}}</span><span class="poster-tag">ENCORE / LIVE</span><span class="poster-word">{{art.word}}</span></template></div>
     <div class="event-hero-copy">
-     <div class="eyebrow">ENCORE / LIVE EXPERIENCE</div>
+     <div class="eyebrow"><RouterLink v-if="profile?.category" :to="`/search?category=${profile.category.slug}`" class="category-link">{{profile.category.name}}</RouterLink><template v-else>ENCORE / LIVE EXPERIENCE</template></div>
      <h1>{{data.event.title}}</h1>
+     <p v-if="profile?.performers.length" class="performer-line">演出：<template v-for="(p,i) in profile.performers" :key="p.id"><span v-if="i">、</span><RouterLink :to="`/performers/${p.slug}`">{{p.name}}</RouterLink></template></p>
      <dl class="fact-grid">
       <div><dt>DATE</dt><dd>{{facts.when}}</dd></div>
-      <div><dt>VENUE</dt><dd>{{data.event.venue}}</dd></div>
+      <div><dt>VENUE</dt><dd><RouterLink v-if="profile?.venue" :to="`/venues/${profile.venue.slug}`">{{data.event.venue}} ↗</RouterLink><template v-else>{{data.event.venue}}</template></dd></div>
       <div><dt>PRICE</dt><dd>{{facts.price}}</dd></div>
       <div><dt>LIMIT</dt><dd>{{facts.limit}}</dd></div>
      </dl>

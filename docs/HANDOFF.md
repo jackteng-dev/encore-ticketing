@@ -1,5 +1,31 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M3 分類、場館、演出者與活動檔案（**含 schema 變更 V25**，疊在 M2 上）
+
+**此 PR 修改受保護路徑 `backend/src/main/resources/`（新增 `V25__catalog_taxonomy.sql`），依部署限制開 PR 後先不 merge，需作者在伺服器端以受控工具切換。**
+
+- Schema：只新增 `category`（含 6 個固定分類）、`venue`、`performer`、`event_profile`、`event_performer` 與索引。不修改既有表格，也沒有改名、刪欄或改型別。
+- 回退相容：已實測目前 main 的 jar（V24）在已套用 V25 的資料庫上可正常啟動並服務。Flyway 預設忽略 future migration。
+- 後端（`catalog` 套件內新增 `TaxonomyModels`／`TaxonomyService`／`TaxonomyController`，未新增套件）：
+  - 公開 API：`/api/public/categories`、`/venues`、`/venues/{slug}`、`/performers`、`/performers/{slug}`、`/events/{id}/profile`。
+  - `/api/public/events` 新增 `category`、`venue`、`performer`（slug）篩選；回傳新增 `categorySlug`、`categoryName`、`imageUrl`。
+  - 後台：場館與演出者的新增／修改、活動檔案 `PUT /api/admin/events/{id}/profile`。沿用 `catalog_guard`／`catalog_command` 的原命令重送、指紋、版本與稽核；`CatalogService.command` 改為可指定 resource 的公開多載。
+  - 圖片網址只接受 `https://` 或 `/` 開頭（DB CHECK＋驗證）。目前留空，前台改用文字海報。
+- 前端：
+  - 後台新增「場館與演出者」頁 `/staff/directory`，活動管理頁新增「活動檔案」區塊。
+  - 前台新增 `/venues`、`/performers` 列表與詳情頁；首頁加分類磚；搜尋頁加分類篩選。
+  - 活動頁顯示分類、演出者與場館連結；卡片顯示分類；有圖片網址時顯示圖片。
+- 實測：
+  - `mvn package` 638 tests 全過（新增 5 項，migration 數 24→25）。
+  - `npm run build` 通過。
+  - Playwright UI 腳本（`work/m3-ui-check.cjs`，ignored）13 項通過：員工建立與修改、活動檔案 v1→v2、無效圖片網址阻擋、前台各頁、首頁分類磚篩選、手機 375 無溢出。
+- Codex 交叉審查：
+  - 第 1 輪指出兩點，皆已修正：後台列表只載入前 50 筆（改為讀完所有分頁，有上限並明確報錯）；重試原操作後表單版本未更新（重試後重設表單）。
+  - 完整測試另抓到活動檔案重送時 `id` 欄位無法反序列化（`fail-on-unknown-properties`），已加 `JsonIgnoreProperties`。
+  - 第 2 輪指出兩點，皆已修正並以 Playwright 實測：場館／演出者版本衝突後未重新讀取（現在 409 時重讀並以最新資料重填）；演出者名稱前端上限 160 與後端 120 不一致。
+
+---
+
 ## 2026-11-17：M2 活動搜尋、日期篩選與排序（疊在 M1 上）
 
 無 schema 變更；後端只改 `catalog` 套件內既有檔案（未新增套件），未動 `backend/src/main/resources/`、`infra/`。
