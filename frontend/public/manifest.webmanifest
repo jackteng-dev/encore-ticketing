@@ -1,0 +1,12 @@
+{
+  "name": "Encore 售票平台",
+  "short_name": "Encore",
+  "description": "探索活動、排隊保票與 QR 電子票券（展示作品，付款為模擬）",
+  "lang": "zh-Hant",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0b0f",
+  "theme_color": "#0b0b0f",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -12,6 +12,9 @@ import StockMaintenance from './views/StockMaintenance.vue'
 import CustomerTickets from './views/CustomerTickets.vue'
 import Admissions from './views/Admissions.vue'
 import Monitoring from './views/Monitoring.vue'
+import InfoPage from './views/InfoPage.vue'
+import { findInfoPage } from './info'
+import { setTitle } from './title'
 export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/', component: Events }, { path: '/events/:id', component: EventDetail },
  { path: '/staff/login', component: Login }, { path: '/staff', component: Admin },
@@ -22,5 +25,11 @@ export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/account/login', component: CustomerLogin }, { path: '/account', component: CustomerAccount },
  { path: '/account/orders', component: Orders }, { path: '/events/:eventId/reserve/:ticketId', component: Reserve },
  { path: '/account/purchases', component: Purchases },
+ { path: '/help/:slug', component: InfoPage },
  { path: '/:pathMatch(.*)*', component: Events },
 ] })
+const titles:[RegExp,string][]=[[/^\/account\/login/,'會員登入'],[/^\/account\/orders\/.+\/tickets/,'電子票券'],[/^\/account\/orders/,'我的保票訂單'],[/^\/account\/purchases/,'購票紀錄'],[/^\/account/,'會員空間'],[/^\/staff/,'員工後台'],[/\/reserve\//,'選擇張數']]
+router.afterEach(to=>{
+ const info=to.path.startsWith('/help/')?findInfoPage(to.params.slug)?.title:undefined
+ setTitle(info||titles.find(([r])=>r.test(to.path))?.[1])
+})

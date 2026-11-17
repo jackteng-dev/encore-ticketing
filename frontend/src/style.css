@@ -76,7 +76,50 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .site-nav .nav-cta { background: var(--accent); color: var(--on-accent); padding: 8px 18px; border-radius: 4px; font-weight: 900 }
 .site-nav .nav-cta.router-link-exact-active { box-shadow: none }
 .site-footer { margin-top: 80px; border-top: 1px solid var(--line) }
-.site-footer-inner { max-width: 1320px; margin: 0 auto; padding: 32px 24px; display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; font-size: 14px; color: var(--text-3) }
+.site-footer-inner { max-width: 1320px; margin: 0 auto; padding: 40px 24px 24px; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; font-size: 14px; color: var(--text-3) }
+.footer-brand p { margin: 8px 0 0 }
+.footer-demo { color: var(--warn) }
+.footer-col { display: flex; flex-direction: column; align-items: flex-start; gap: 8px }
+.footer-col h2 { margin: 0 0 4px; font-size: 12px; letter-spacing: .14em; color: var(--text-2) }
+.footer-col h2:not(:first-child) { margin-top: 12px }
+.footer-col a, .footer-link { color: var(--text-3); text-decoration: none; background: none; border: 0; padding: 0; font-size: 14px; cursor: pointer; text-align: left }
+.footer-col a:hover, .footer-link:hover { color: var(--text) }
+.store-badges { display: flex; flex-wrap: wrap; gap: 8px }
+.store-badge { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; padding: 6px 12px; font-weight: 700; font-size: 14px }
+.store-badge small { font-size: 10px; font-weight: 400; color: var(--text-3) }
+.social-row { display: flex; gap: 8px }
+.social-dot { width: 36px; height: 36px; padding: 0; border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 13px }
+.footer-bottom { max-width: 1320px; margin: 0 auto; padding: 16px 24px 32px; border-top: 1px solid var(--line); font-size: 12px; color: var(--text-3) }
+.mock-dialog { max-width: 440px; width: calc(100% - 32px); padding: 0; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--text) }
+.mock-dialog::backdrop { background: rgb(0 0 0 / .65) }
+.mock-dialog-body { padding: 28px 24px 24px }
+.mock-dialog-body h2 { margin: 6px 0 12px; font-size: 24px }
+.mock-dialog-body p { color: var(--text-2) }
+.mock-dialog-body .primary { width: 100%; margin-top: 8px }
+.social-login { width: 100%; max-width: 440px; margin: 24px 0 }
+.social-divider { display: flex; align-items: center; gap: 12px; color: var(--text-3); font-size: 13px }
+.social-divider::before, .social-divider::after { content: ""; flex: 1; border-top: 1px solid var(--line) }
+.social-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.social-button { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700 }
+.social-mark { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 900; color: #fff }
+.brand-google .social-mark { background: #4285f4 }
+.brand-line .social-mark { background: #06c755 }
+.brand-facebook .social-mark { background: #1877f2 }
+.brand-apple .social-mark { background: #f4f2ee; color: #0b0b0f }
+.brand-apple .social-mark::before { content: "A" }
+.social-note { font-size: 13px }
+.pay-methods { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px }
+.pay-method { padding: 8px 12px; font-size: 14px; border: 1px solid var(--line-strong); border-radius: 4px; background: var(--surface-2); color: var(--text-2) }
+.pay-method.on { border-color: var(--accent); color: var(--text); box-shadow: inset 0 0 0 1px var(--accent) }
+.info-page { display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start }
+.info-nav { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 88px }
+.info-nav a { padding: 10px 12px; border-left: 2px solid var(--line); color: var(--text-2); text-decoration: none }
+.info-nav a.router-link-active { border-color: var(--accent); color: var(--text); background: var(--surface) }
+.info-article { display: flex; flex-direction: column; gap: 16px; max-width: 760px }
+.info-article h1 { margin: 0 }
+.info-article .info-card h2 { margin: 0 0 8px; font-size: 18px }
+.info-article .info-card p { margin: 0 0 8px; color: var(--text-2) }
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px }
 .site-footer .brand { font-size: 24px; color: var(--text) }
 
 /* Layout */
@@ -252,11 +295,18 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .audit-row code { overflow-wrap: anywhere }
 
 @media (max-width: 900px) {
+  .site-footer-inner { grid-template-columns: 1fr 1fr }
+  .info-page { grid-template-columns: 1fr; gap: 16px }
+  .info-nav { position: static; flex-direction: row; flex-wrap: wrap }
+  .info-nav a { border-left: 0; border-bottom: 2px solid var(--line) }
   .admin-grid { grid-template-columns: 1fr }
   .event-sidebar .event-select { display: inline-block; width: auto; max-width: 100% }
   .event-sidebar .pagination { justify-content: flex-start }
 }
 @media (max-width: 600px) {
+  .site-nav .nav-extra { display: none }
+  .site-footer-inner { grid-template-columns: 1fr }
+  .footer-bottom { padding-left: 16px; padding-right: 16px }
   h1 { font-size: 32px }
   .content { padding: 32px 16px }
   .site-header-inner, .stage-hero-inner, .event-hero-inner, .event-body, .site-footer-inner { padding-left: 16px; padding-right: 16px }

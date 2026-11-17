@@ -1,5 +1,42 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M1 網站說明頁與模擬整合入口
+
+方向（作者 2026-11-17 決定）：補齊真實售票站功能；正式金流、社群登入、簡訊、App 等外部服務只做圖示與按鈕，點擊顯示「此為模擬版本」，正式上線時再串接。活動圖片之後由作者另行產生，目前留空。每次改動除自行驗證外，再以作者本機 Codex CLI 交叉驗證。
+
+只修改 `frontend/`（疊在 `feature/stage-redesign` 上），無受保護路徑、schema、API 或旗標變更。
+
+- 完成：
+  - 共用模擬說明對話框 `components/MockNotice.vue`、`mockNotice.ts`（不送出任何資料）。
+  - 服務說明頁 `/help/:slug`：常見問題、購票須知、退換票規定、隱私權政策、服務條款、客服中心（`info.ts`、`views/InfoPage.vue`）。
+  - 頁尾改為四欄，包含說明連結，以及模擬的 App 下載與社群按鈕。
+  - 會員登入頁新增 Google／LINE／Facebook／Apple 模擬社群登入。
+  - 訂單付款區新增付款方式列：展示模擬付款可用；信用卡、ATM、超商、LINE Pay、Apple Pay、街口顯示模擬說明，不建立付款。
+  - 各路由分頁標題（`title.ts`），活動頁標題為活動名稱。
+  - OG／Twitter meta、PWA `manifest.webmanifest`、`icon.svg`、`robots.txt`。
+- 實測：
+  - `npm run build` 通過。
+  - 瀏覽器實際走過：註冊 → 等候室取得資格 → 直接保票 → 訂單頁付款方式列。點 LINE Pay 只開說明框，「建立模擬付款」仍在，未建立付款。
+  - 手機 375 寬：`/account`、`/account/orders`、`/help/contact` 無溢出。
+  - `smoke_customer_browser.cjs` 14 項通過。
+- 已知：
+  - Windows 上 `work/**/runtime.env` 若為 CRLF，smoke 腳本讀到的密碼會帶 `\r`，導致員工登入 401。本機以 LF 副本執行。
+  - `smoke_orders_browser.cjs` 依賴舊旗標組合（未開等候室與購票請求），在全旗標展示環境下找不到「確認保票 →」，本輪未改腳本。
+
+### 後續里程碑（規劃，未實作）
+- M2（後端 Java＋前端，無 schema）：活動搜尋（標題／場館）、日期篩選與排序；頁首搜尋框。
+- M3（schema）：分類、演出者、場館實體與頁面、活動圖片欄位（可 NULL，先留空）。
+- M4（schema）：收藏、開賣提醒、站內通知；Email／簡訊為模擬 outbox。
+- M5（schema）：區域座位圖與選位。
+- M6（schema）：折扣碼、早鳥票、主辦方銷售報表與匯出。
+- M7（schema）：退票申請與票券轉讓（模擬退款）。
+- M8（schema）：手機／Email 驗證（模擬 OTP）、實名資料。
+- 乾淨展示資料（另建 demo scope，不對保留資料跑 fault tests）。
+
+含 schema 的里程碑依部署限制，PR 開好後先不 merge，由作者在伺服器端做受控切換。
+
+---
+
 ## 2026-11-17：前端視覺改版（B 版「夜場舞台」）
 
 只修改 `frontend/`，未動受保護路徑（`backend/src/main/resources/`、`infra/`、套件根目錄），無 schema 變更、無 API／旗標變更。
