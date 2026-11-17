@@ -24,8 +24,9 @@ const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei' }
 const addDays = (d: string, n: number) => { const x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10) }
 const quick = [
   { label: '全部日期', from: () => '', to: () => '' },
-  { label: '7 天內', from: today, to: () => addDays(today(), 7) },
-  { label: '30 天內', from: today, to: () => addDays(today(), 30) },
+  // 結束日含當天整日（後端查詢至 to 隔日 00:00），今天算第 1 天。
+  { label: '7 天內', from: today, to: () => addDays(today(), 6) },
+  { label: '30 天內', from: today, to: () => addDays(today(), 29) },
 ]
 const invalidRange = computed(() => !!from.value && !!to.value && to.value < from.value)
 

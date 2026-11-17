@@ -6,7 +6,7 @@
 - 後端：`GET /api/public/events` 新增選填 `q`（標題／場館，萬用字元按字面比對，最多 60 字）、`from`／`to`（台北時間開演日）、`sort=newest|date|price`、`onSale`；回傳項目新增 `firstStartsAt`、`lastStartsAt`、`sessionCount`、`minPriceTwd`、`maxPriceTwd`、`selling`（只增欄位，舊前端相容）。
 - 前端：頁首搜尋框、`/search` 搜尋頁（狀態存在網址，可分享）、共用 `EventCard`（日期、票價、售票中徽章）、首頁快速探索 chips。
 - 實測：`mvn package` 633 tests 全過（新增 4 項）；`npm run build` 通過；瀏覽器驗證搜尋、售票中、價格排序、7 天內、無效日期範圍、錯誤網址參數。
-- 未完成：Codex 交叉驗證尚未執行（用量上限）；手機寬度未檢查。
+- Codex 交叉審查：指出「7 天內／30 天內」多含一天（後端 to 含整日），已改為 +6／+29 天並在瀏覽器確認（11/17→11/23、12/16）。手機 375 寬首頁與搜尋頁無溢出。
 
 ## 2026-11-17：M1 網站說明頁與模擬整合入口
 
