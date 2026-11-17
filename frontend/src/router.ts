@@ -17,6 +17,7 @@ import Search from './views/Search.vue'
 import Favorites from './views/Favorites.vue'
 import Notifications from './views/Notifications.vue'
 import StaffDirectory from './views/StaffDirectory.vue'
+import SalesReports from './views/SalesReports.vue'
 import DirectoryPage from './views/DirectoryPage.vue'
 import DirectoryList from './views/DirectoryList.vue'
 import { findInfoPage } from './info'
@@ -35,6 +36,7 @@ export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/search', component: Search },
  { path: '/account/favorites', component: Favorites }, { path: '/account/notifications', component: Notifications },
  { path: '/staff/directory', component: StaffDirectory },
+ { path: '/staff/reports', component: SalesReports },
  { path: '/venues', component: DirectoryList }, { path: '/performers', component: DirectoryList },
  { path: '/venues/:slug', component: DirectoryPage }, { path: '/performers/:slug', component: DirectoryPage },
  { path: '/:pathMatch(.*)*', component: Events },

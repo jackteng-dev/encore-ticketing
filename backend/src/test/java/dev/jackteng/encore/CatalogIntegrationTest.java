@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CatalogIntegrationTest {
- @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps;
+ @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps; @Autowired SalesReportService reports;
  @Autowired dev.jackteng.encore.customer.CustomerService customers; @Autowired dev.jackteng.encore.customer.EngagementService engagement;
  @Autowired CatalogService service; @Autowired JdbcTemplate db; @Autowired MockMvc mvc;
  @Autowired ObjectMapper json; @Autowired PasswordEncoder passwords;
@@ -276,5 +276,32 @@ class CatalogIntegrationTest {
   mvc.perform(get("/api/admin/sessions/"+sid+"/seat-map")).andExpect(status().isUnauthorized());
   String bad="{\"requestId\":\""+UUID.randomUUID()+"\",\"expectedVersion\":0,\"stageLabel\":\"舞台\",\"zones\":[{\"ticketTypeId\":\""+UUID.randomUUID()+"\",\"label\":\"A\",\"x\":0,\"y\":0,\"w\":0,\"h\":10}]}";
   mvc.perform(put("/api/admin/sessions/"+sid+"/seat-map").with(user(manager,true)).with(SecurityMockMvcRequestPostProcessors.csrf()).contentType("application/json").content(bad)).andExpect(status().isBadRequest());
+ }
+ private void order(UUID ticket,int price,int qty,String status,OffsetDateTime closedAt){
+  var owner=member();var created=closedAt==null?OffsetDateTime.now().minusMinutes(1):status.equals("EXPIRED")?closedAt.minusMinutes(11):closedAt.minusMinutes(2);var starts=OffsetDateTime.now().plusDays(5);
+  db.update("INSERT INTO ticket_order(id,customer_id,ticket_id,request_id,event_title,session_name,starts_at,ticket_name,price_twd,quantity,total_twd,status,version,created_at,expires_at,sales_end,closed_at)"
+   +" VALUES(?,?,?,?,'報表','場次',?,'票',?,?,?,?,?,?,?,?,?)",UUID.randomUUID(),owner.id(),ticket,UUID.randomUUID(),starts,price,qty,price*qty,status,status.equals("PENDING_PAYMENT")?1:3,
+   created,created.plusMinutes(10),starts.minusHours(1),closedAt);
+ }
+ @Test void salesReportAggregatesPaidOrdersOnly(){
+  var e=published("報表"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,1000,2500);var s=service.detail(e.id(),true).sessions().getFirst();
+  var cheap=s.tickets().stream().filter(t->t.priceTwd()==1000).findFirst().orElseThrow().id();var vip=s.tickets().stream().filter(t->t.priceTwd()==2500).findFirst().orElseThrow().id();
+  var paidAt=OffsetDateTime.now().minusHours(2);
+  order(cheap,1000,2,"PAID",paidAt);order(cheap,1000,1,"PAID",paidAt);order(vip,2500,2,"PAID",paidAt);
+  order(cheap,1000,1,"PENDING_PAYMENT",null);order(vip,2500,1,"CANCELLED",paidAt);order(vip,2500,1,"EXPIRED",paidAt);
+  db.update("UPDATE ticket_type SET sold=3,held=1 WHERE id=?",cheap);db.update("UPDATE ticket_type SET sold=2 WHERE id=?",vip);
+  var r=reports.event(e.id());assertEquals(8000,r.totals().revenueTwd());assertEquals(3,r.totals().paidOrders());assertEquals(20,r.totals().capacity());
+  assertEquals(5,r.totals().sold());assertEquals(1,r.totals().held());assertEquals(14,r.totals().available());
+  var tickets=r.sessions().getFirst().tickets();assertEquals(2500,tickets.getFirst().priceTwd());
+  var c=tickets.stream().filter(t->t.ticketId().equals(cheap)).findFirst().orElseThrow();assertEquals(2,c.paidOrders());assertEquals(3,c.paidQuantity());assertEquals(3000,c.paidRevenueTwd());assertEquals(1,c.pendingOrders());
+  var v=tickets.stream().filter(t->t.ticketId().equals(vip)).findFirst().orElseThrow();assertEquals(1,v.cancelledOrders());assertEquals(1,v.expiredOrders());assertEquals(5000,v.paidRevenueTwd());
+  assertEquals(1,r.daily().size());assertEquals(8000,r.daily().getFirst().revenueTwd());assertEquals(5,r.daily().getFirst().paidQuantity());
+  var summary=reports.events(1,50).items().stream().filter(x->x.eventId().equals(e.id())).findFirst();summary.ifPresent(x->assertEquals(8000,x.revenueTwd()));
+  problem(404,()->reports.event(UUID.randomUUID()));problem(400,()->reports.events(1,51));
+ }
+ @Test void salesReportHttpIsStaffOnly() throws Exception {
+  var e=published("報表HTTP"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,1000);
+  mvc.perform(get("/api/admin/reports/events/"+e.id())).andExpect(status().isUnauthorized());
+  mvc.perform(get("/api/admin/reports/events/"+e.id()).with(user(viewer,false))).andExpect(status().isOk()).andExpect(jsonPath("$.totals.capacity").value(10));
  }
 }
