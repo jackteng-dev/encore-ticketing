@@ -14,6 +14,9 @@ import Admissions from './views/Admissions.vue'
 import Monitoring from './views/Monitoring.vue'
 import InfoPage from './views/InfoPage.vue'
 import Search from './views/Search.vue'
+import StaffDirectory from './views/StaffDirectory.vue'
+import DirectoryPage from './views/DirectoryPage.vue'
+import DirectoryList from './views/DirectoryList.vue'
 import { findInfoPage } from './info'
 import { setTitle } from './title'
 export const router = createRouter({ history: createWebHistory(), routes: [
@@ -28,6 +31,9 @@ export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/account/purchases', component: Purchases },
  { path: '/help/:slug', component: InfoPage },
  { path: '/search', component: Search },
+ { path: '/staff/directory', component: StaffDirectory },
+ { path: '/venues', component: DirectoryList }, { path: '/performers', component: DirectoryList },
+ { path: '/venues/:slug', component: DirectoryPage }, { path: '/performers/:slug', component: DirectoryPage },
  { path: '/:pathMatch(.*)*', component: Events },
 ] })
 const titles:[RegExp,string][]=[[/^\/account\/login/,'會員登入'],[/^\/account\/orders\/.+\/tickets/,'電子票券'],[/^\/account\/orders/,'我的保票訂單'],[/^\/account\/purchases/,'購票紀錄'],[/^\/account/,'會員空間'],[/^\/staff/,'員工後台'],[/\/reserve\//,'選擇張數']]

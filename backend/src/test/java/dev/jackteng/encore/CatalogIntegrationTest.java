@@ -1,6 +1,7 @@
 package dev.jackteng.encore;
 import dev.jackteng.encore.catalog.*;
 import dev.jackteng.encore.catalog.Models.*;
+import dev.jackteng.encore.catalog.TaxonomyModels.*;
 import dev.jackteng.encore.common.ApiErrors.Problem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -21,6 +22,7 @@ import java.util.concurrent.*;
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CatalogIntegrationTest {
+ @Autowired TaxonomyService taxonomy;
  @Autowired CatalogService service; @Autowired JdbcTemplate db; @Autowired MockMvc mvc;
  @Autowired ObjectMapper json; @Autowired PasswordEncoder passwords;
  @Test void asyncCheckoutAvailabilityRequiresPublishedOrderingPurchaseDeliveryAndPublisher(){
@@ -48,7 +50,7 @@ class CatalogIntegrationTest {
  private org.springframework.test.web.servlet.request.RequestPostProcessor user(String u,boolean write){
   return SecurityMockMvcRequestPostProcessors.user(u).authorities(()->"CATALOG_READ",()->write?"CATALOG_WRITE":"CATALOG_VIEW");
  }
- @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(24,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
+ @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(25,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
  @Test void draftAndArchivedHidden(){var e=event();problem(404,()->service.detail(e.id(),true));service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),false);problem(404,()->service.detail(e.id(),true));}
  @Test void publishCompleteProjection(){var e=event();var s=session(e);ticket(s);service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true);var d=service.detail(e.id(),true);assertFalse(d.orderingEnabled());assertEquals(1,d.sessions().size());assertEquals(1200,d.sessions().getFirst().tickets().getFirst().priceTwd());}
  @Test void incompleteCannotPublish(){var e=event();problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));session(e);problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));}
@@ -136,5 +138,57 @@ class CatalogIntegrationTest {
    .andExpect(jsonPath("$.total").value(1)).andExpect(jsonPath("$.items[0].minPriceTwd").value(900)).andExpect(jsonPath("$.items[0].sessionCount").value(1));
   mvc.perform(get("/api/public/events").param("sort","random")).andExpect(status().isBadRequest());
   mvc.perform(get("/api/public/events").param("from","2026-13-01")).andExpect(status().isBadRequest());
+ }
+ private Venue venueOf(String token){return taxonomy.createVenue(manager,new VenueInput(UUID.randomUUID(),0L,"venue-"+token,"場館"+token,"台北","信義路","",null));}
+ private Performer performerOf(String token){return taxonomy.createPerformer(manager,new PerformerInput(UUID.randomUUID(),0L,"artist-"+token+"-"+UUID.randomUUID().toString().substring(0,4),"歌手"+token,"",null));}
+ private UUID categoryId(String slug){return taxonomy.categories().stream().filter(c->c.slug().equals(slug)).findFirst().orElseThrow().id();}
+ @Test void categoriesAreSeededInOrder(){assertEquals(List.of("concert","theatre","sports","exhibition","family","other"),taxonomy.categories().stream().map(Category::slug).toList());}
+ @Test void venueAndPerformerCommandsReplayAndRejectStale(){
+  String token=UUID.randomUUID().toString().substring(0,8);var in=new VenueInput(UUID.randomUUID(),0L,"venue-"+token,"場館","台北","地址","",null);
+  var v=taxonomy.createVenue(manager,in);assertEquals(v,taxonomy.createVenue(manager,in));
+  problem(409,()->taxonomy.createVenue(manager,new VenueInput(in.requestId(),0L,in.slug(),"改名",in.city(),in.address(),"",null)));
+  var updated=taxonomy.updateVenue(manager,v.id(),new VenueInput(UUID.randomUUID(),1L,v.slug(),"新場館","高雄","","","/images/v.png"));assertEquals(2,updated.version());assertEquals("/images/v.png",updated.imageUrl());
+  problem(409,()->taxonomy.updateVenue(manager,v.id(),new VenueInput(UUID.randomUUID(),1L,v.slug(),"舊版本","高雄","","",null)));
+  assertThrows(org.springframework.dao.DataIntegrityViolationException.class,()->taxonomy.createVenue(manager,new VenueInput(UUID.randomUUID(),0L,v.slug(),"重複","","","",null)));
+  problem(403,()->taxonomy.createPerformer(viewer,new PerformerInput(UUID.randomUUID(),0L,"viewer-"+token,"不可寫","",null)));
+  var p=performerOf(token);assertEquals(p,taxonomy.performer(p.slug()));assertEquals("新場館",taxonomy.venue(v.slug()).name());
+ }
+ @Test void eventProfileOrdersPerformersAndValidates(){
+  String token="pf"+UUID.randomUUID().toString().substring(0,8);var e=published(token+"演唱會","場地",5,false,900);
+  var empty=taxonomy.profile(e.id(),true);assertEquals(0,empty.version());assertNull(empty.category());assertTrue(empty.performers().isEmpty());
+  var venue=venueOf(token);var a=performerOf(token);var b=performerOf(token);
+  var in=new ProfileInput(UUID.randomUUID(),0L,categoryId("concert"),venue.id(),List.of(b.id(),a.id()),null);
+  var profile=taxonomy.updateProfile(manager,e.id(),in);assertEquals(1,profile.version());assertEquals("concert",profile.category().slug());
+  assertEquals(List.of(b.id(),a.id()),profile.performers().stream().map(Performer::id).toList());assertEquals(venue.id(),profile.venue().id());
+  assertEquals(profile,taxonomy.updateProfile(manager,e.id(),in));assertEquals(profile,taxonomy.profile(e.id(),true));
+  problem(409,()->taxonomy.updateProfile(manager,e.id(),new ProfileInput(UUID.randomUUID(),0L,null,null,List.of(),null)));
+  problem(400,()->taxonomy.updateProfile(manager,e.id(),new ProfileInput(UUID.randomUUID(),1L,null,null,List.of(a.id(),a.id()),null)));
+  problem(400,()->taxonomy.updateProfile(manager,e.id(),new ProfileInput(UUID.randomUUID(),1L,UUID.randomUUID(),null,List.of(),null)));
+  problem(400,()->taxonomy.updateProfile(manager,e.id(),new ProfileInput(UUID.randomUUID(),1L,null,UUID.randomUUID(),List.of(),null)));
+  var cleared=taxonomy.updateProfile(manager,e.id(),new ProfileInput(UUID.randomUUID(),1L,null,null,List.of(a.id()),""));assertEquals(2,cleared.version());assertNull(cleared.category());assertNull(cleared.imageUrl());assertEquals(1,cleared.performers().size());
+  var draft=event();problem(404,()->taxonomy.profile(draft.id(),true));assertEquals(0,taxonomy.profile(draft.id(),false).version());
+ }
+ @Test void searchFiltersByCategoryVenueAndPerformer(){
+  String token="tx"+UUID.randomUUID().toString().substring(0,8);var hit=published(token+"甲","場地",5,false,700);var other=published(token+"乙","場地",5,false,700);
+  var venue=venueOf(token);var p=performerOf(token);
+  taxonomy.updateProfile(manager,hit.id(),new ProfileInput(UUID.randomUUID(),0L,categoryId("theatre"),venue.id(),List.of(p.id()),"https://img.example/poster.jpg"));
+  taxonomy.updateProfile(manager,other.id(),new ProfileInput(UUID.randomUUID(),0L,categoryId("sports"),null,List.of(),null));
+  var byCategory=service.search(token,"theatre",null,null,null,null,PublicSort.NEWEST,false,1,20);assertEquals(List.of(hit.id()),ids(byCategory));
+  assertEquals("音樂劇／戲劇",byCategory.items().getFirst().categoryName());assertEquals("https://img.example/poster.jpg",byCategory.items().getFirst().imageUrl());
+  assertEquals(List.of(hit.id()),ids(service.search(null,null,venue.slug(),null,null,null,PublicSort.NEWEST,false,1,20)));
+  assertEquals(List.of(hit.id()),ids(service.search(null,null,null,p.slug(),null,null,PublicSort.NEWEST,false,1,20)));
+  assertEquals(0,service.search(token,"no-such",null,null,null,null,PublicSort.NEWEST,false,1,20).total());
+  assertEquals(2,service.search(token,null,null,null,null,null,PublicSort.NEWEST,false,1,20).total());
+ }
+ @Test void taxonomyHttpContract() throws Exception {
+  mvc.perform(get("/api/public/categories")).andExpect(status().isOk()).andExpect(jsonPath("$[0].slug").value("concert"));
+  mvc.perform(get("/api/admin/venues")).andExpect(status().isUnauthorized());
+  mvc.perform(get("/api/public/venues/no-such-venue")).andExpect(status().isNotFound());
+  String bad=json.writeValueAsString(new VenueInput(UUID.randomUUID(),0L,"venue-js-"+UUID.randomUUID().toString().substring(0,6),"場館","","","","javascript:alert(1)"));
+  mvc.perform(post("/api/admin/venues").with(user(manager,true)).with(SecurityMockMvcRequestPostProcessors.csrf()).contentType("application/json").content(bad)).andExpect(status().isBadRequest());
+  String ok=json.writeValueAsString(new VenueInput(UUID.randomUUID(),0L,"venue-ok-"+UUID.randomUUID().toString().substring(0,6),"場館","","","",null));
+  mvc.perform(post("/api/admin/venues").with(user(viewer,false)).with(SecurityMockMvcRequestPostProcessors.csrf()).contentType("application/json").content(ok)).andExpect(status().isForbidden());
+  mvc.perform(post("/api/admin/venues").with(user(manager,true)).contentType("application/json").content(ok)).andExpect(status().isForbidden());
+  mvc.perform(get("/api/public/events").param("category","concert")).andExpect(status().isOk());
  }
 }

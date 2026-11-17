@@ -10,13 +10,13 @@ public class CatalogController {
  private final CatalogService service;
  public CatalogController(CatalogService service){this.service=service;}
  @GetMapping("/public/events") public Page<PublicEvent> events(@RequestParam(defaultValue="1") int page,@RequestParam(defaultValue="12") int size,
-  @RequestParam(required=false) String q,
+  @RequestParam(required=false) String q,@RequestParam(required=false) String category,@RequestParam(required=false) String venue,@RequestParam(required=false) String performer,
   @RequestParam(required=false) @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate from,
   @RequestParam(required=false) @org.springframework.format.annotation.DateTimeFormat(iso=org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate to,
   @RequestParam(defaultValue="newest") String sort,@RequestParam(defaultValue="false") boolean onSale){
   PublicSort order=switch(sort){case "newest"->PublicSort.NEWEST;case "date"->PublicSort.DATE;case "price"->PublicSort.PRICE;
    default->throw new dev.jackteng.encore.common.ApiErrors.Problem(400,"INVALID_INPUT","不支援的排序");};
-  return service.search(q,from,to,order,onSale,page,size);}
+  return service.search(q,category,venue,performer,from,to,order,onSale,page,size);}
  @GetMapping("/public/events/{id}") public Detail publicDetail(@PathVariable UUID id){return service.detail(id,true);}
  @GetMapping("/admin/events") public Page<Event> adminEvents(@RequestParam(defaultValue="1") int page,@RequestParam(defaultValue="12") int size){return service.list(false,page,size);}
  @GetMapping("/admin/events/{id}") public Detail adminDetail(@PathVariable UUID id){return service.detail(id,false);}

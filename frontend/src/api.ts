@@ -1,5 +1,9 @@
 export interface CatalogEvent { id: string; slug: string; title: string; description: string; venue: string; status: string; version: number }
-export interface PublicEvent extends CatalogEvent { firstStartsAt: string | null; lastStartsAt: string | null; sessionCount: number; minPriceTwd: number | null; maxPriceTwd: number | null; selling: boolean }
+export interface PublicEvent extends CatalogEvent { firstStartsAt: string | null; lastStartsAt: string | null; sessionCount: number; minPriceTwd: number | null; maxPriceTwd: number | null; selling: boolean; categorySlug: string | null; categoryName: string | null; imageUrl: string | null }
+export interface Category { id: string; slug: string; name: string; sortOrder: number; eventCount: number }
+export interface Venue { id: string; slug: string; name: string; city: string; address: string; description: string; imageUrl: string | null; version: number }
+export interface Performer { id: string; slug: string; name: string; description: string; imageUrl: string | null; version: number }
+export interface EventProfile { id: string; eventId: string; category: { id: string; slug: string; name: string } | null; venue: Venue | null; performers: Performer[]; imageUrl: string | null; version: number }
 export interface Ticket { id: string; name: string; priceTwd: number; capacity: number; maxPerCustomer: number; version: number; available: number }
 export interface Payment { id:string; requestId:string; status:string; reason:string|null; amountTwd:number; createdAt:string; processedAt:string|null }
 export interface Order { id:string; requestId:string; ticketId:string; eventTitle:string; sessionName:string; startsAt:string; ticketName:string; priceTwd:number; quantity:number; totalTwd:number; status:string; version:number; createdAt:string; expiresAt:string; closedAt:string|null; payment:Payment|null; mockPaymentsEnabled:boolean }
@@ -32,3 +36,14 @@ export async function customerWrite<T>(path: string,body: unknown,expectedOwner?
 export const date = (s: string) => new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',dateStyle:'medium',timeStyle:'short'}).format(new Date(s))
 export const money = (n: number) => 'NT$ '+n.toLocaleString('zh-TW')
 export const status = (s: string) => ({ DRAFT:'草稿', PUBLISHED:'已發布', ARCHIVED:'已封存', UPCOMING:'尚未開賣', SELLING:'售票時段內', CLOSED:'售票已結束',PENDING_PAYMENT:'保票中・未付款',CANCELLED:'已取消',EXPIRED:'已到期',PAID:'模擬已付款',PENDING:'待核對',SUCCEEDED:'模擬成功',DECLINED:'模擬拒絕',REVIEW:'待人工核對' }[s] || s)
+/** 依序讀完所有分頁（後台下拉選單用）；最多 maxPages 頁，超過時拋錯而不是默默截斷。 */
+export async function allPages<T>(path: string, size = 50, maxPages = 40): Promise<T[]> {
+ const out: T[] = []
+ for (let page = 1; page <= maxPages; page++) {
+  const sep = path.includes('?') ? '&' : '?'
+  const p = await api<Page<T>>(`${path}${sep}page=${page}&size=${size}`)
+  out.push(...p.items)
+  if (page * p.size >= p.total || !p.items.length) return out
+ }
+ throw new ApiError(0, '資料超過可載入上限，請聯絡管理員')
+}
