@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CatalogIntegrationTest {
- @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps; @Autowired SalesReportService reports;
+ @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps; @Autowired SalesReportService reports; @Autowired dev.jackteng.encore.orders.RefundService refunds;
  @Autowired dev.jackteng.encore.customer.CustomerService customers; @Autowired dev.jackteng.encore.customer.EngagementService engagement;
  @Autowired CatalogService service; @Autowired JdbcTemplate db; @Autowired MockMvc mvc;
  @Autowired ObjectMapper json; @Autowired PasswordEncoder passwords;
@@ -51,7 +51,7 @@ class CatalogIntegrationTest {
  private org.springframework.test.web.servlet.request.RequestPostProcessor user(String u,boolean write){
   return SecurityMockMvcRequestPostProcessors.user(u).authorities(()->"CATALOG_READ",()->write?"CATALOG_WRITE":"CATALOG_VIEW");
  }
- @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(27,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
+ @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(28,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
  @Test void draftAndArchivedHidden(){var e=event();problem(404,()->service.detail(e.id(),true));service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),false);problem(404,()->service.detail(e.id(),true));}
  @Test void publishCompleteProjection(){var e=event();var s=session(e);ticket(s);service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true);var d=service.detail(e.id(),true);assertFalse(d.orderingEnabled());assertEquals(1,d.sessions().size());assertEquals(1200,d.sessions().getFirst().tickets().getFirst().priceTwd());}
  @Test void incompleteCannotPublish(){var e=event();problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));session(e);problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));}
@@ -303,5 +303,43 @@ class CatalogIntegrationTest {
   var e=published("報表HTTP"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,1000);
   mvc.perform(get("/api/admin/reports/events/"+e.id())).andExpect(status().isUnauthorized());
   mvc.perform(get("/api/admin/reports/events/"+e.id()).with(user(viewer,false))).andExpect(status().isOk()).andExpect(jsonPath("$.totals.capacity").value(10));
+ }
+ private UUID paidOrder(dev.jackteng.encore.customer.CustomerService.Principal owner,UUID ticket,String status,OffsetDateTime starts){
+  UUID id=UUID.randomUUID();var created=OffsetDateTime.now().minusMinutes(3);
+  db.update("INSERT INTO ticket_order(id,customer_id,ticket_id,request_id,event_title,session_name,starts_at,ticket_name,price_twd,quantity,total_twd,status,version,created_at,expires_at,sales_end,closed_at)"
+   +" VALUES(?,?,?,?,'退票','場次',?,'票',1500,2,3000,?,?,?,?,?,?)",id,owner.id(),ticket,UUID.randomUUID(),starts,status,status.equals("PENDING_PAYMENT")?1:3,created,created.plusMinutes(10),
+   starts.minusHours(1).isBefore(created.plusMinutes(10))?created.plusMinutes(10):starts.minusHours(1),status.equals("PENDING_PAYMENT")?null:created.plusMinutes(1));
+  return id;
+ }
+ @Test void refundRequestLifecycleAndRules(){
+  var e=published("退票"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,1500);var ticket=service.detail(e.id(),true).sessions().getFirst().tickets().getFirst().id();
+  var a=member();var other=member();var order=paidOrder(a,ticket,"PAID",OffsetDateTime.now().plusDays(5));
+  var in=new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"行程衝突");
+  var r=refunds.apply(a,order,in);assertEquals("PENDING",r.status());assertEquals(3000,r.amountTwd());assertEquals(r,refunds.apply(a,order,in));
+  problem(409,()->refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(in.requestId(),"改理由")));
+  problem(409,()->refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"再申請")));
+  problem(404,()->refunds.apply(other,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"不是我的")));
+  problem(404,()->refunds.withdraw(other,r.id(),new dev.jackteng.encore.orders.RefundService.Withdraw(1)));
+  var w=refunds.withdraw(a,r.id(),new dev.jackteng.encore.orders.RefundService.Withdraw(1));assertEquals("WITHDRAWN",w.status());
+  problem(409,()->refunds.withdraw(a,r.id(),new dev.jackteng.encore.orders.RefundService.Withdraw(2)));
+  var again=refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"還是要退"));
+  problem(403,()->refunds.review(viewer,again.id(),new dev.jackteng.encore.orders.RefundService.Review(1,true,null)));
+  problem(400,()->refunds.review(manager,again.id(),new dev.jackteng.encore.orders.RefundService.Review(1,false," ")));
+  var ok=refunds.review(manager,again.id(),new dev.jackteng.encore.orders.RefundService.Review(1,true,"已核准"));assertEquals("APPROVED",ok.status());assertNotNull(ok.mockRefundId());
+  problem(409,()->refunds.review(manager,again.id(),new dev.jackteng.encore.orders.RefundService.Review(1,false,"重複")));
+  problem(409,()->refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"核准後再申請")));
+  assertEquals("PAID",db.queryForObject("SELECT status FROM ticket_order WHERE id=?",String.class,order));assertEquals(List.of(ok.id()),refunds.latest(a,List.of(order)).stream().map(dev.jackteng.encore.orders.RefundService.Refund::id).toList());assertTrue(refunds.latest(other,List.of(order)).isEmpty());
+  assertNotNull(w.withdrawnAt());assertTrue(refunds.tickets(viewer,ok.id()).isEmpty());
+  assertTrue(refunds.queue(viewer,"APPROVED",1,50).items().stream().anyMatch(x->x.id().equals(ok.id())));problem(400,()->refunds.queue(viewer,"BAD",1,20));
+ }
+ @Test void refundRejectedForUnpaidLateOrRejectedFlow(){
+  var e=published("退票規則"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,1500);var ticket=service.detail(e.id(),true).sessions().getFirst().tickets().getFirst().id();var a=member();
+  var pending=paidOrder(a,ticket,"PENDING_PAYMENT",OffsetDateTime.now().plusDays(5));
+  problem(409,()->refunds.apply(a,pending,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"未付款")));
+  var soon=paidOrder(a,ticket,"PAID",OffsetDateTime.now().plusHours(23));
+  problem(409,()->refunds.apply(a,soon,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"太晚")));
+  var order=paidOrder(a,ticket,"PAID",OffsetDateTime.now().plusDays(5));var r=refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"理由"));
+  var rejected=refunds.review(manager,r.id(),new dev.jackteng.encore.orders.RefundService.Review(1,false,"不符合規定"));assertEquals("REJECTED",rejected.status());assertNull(rejected.mockRefundId());
+  assertEquals("PENDING",refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"補件後再申請")).status());
  }
 }

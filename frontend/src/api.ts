@@ -1,5 +1,6 @@
 export interface CatalogEvent { id: string; slug: string; title: string; description: string; venue: string; status: string; version: number }
 export interface PublicEvent extends CatalogEvent { firstStartsAt: string | null; lastStartsAt: string | null; sessionCount: number; minPriceTwd: number | null; maxPriceTwd: number | null; selling: boolean; categorySlug: string | null; categoryName: string | null; imageUrl: string | null }
+export interface Refund { id: string; orderId: string; amountTwd: number; reason: string; status: string; reviewNote: string | null; reviewedAt: string | null; mockRefundId: string | null; version: number; createdAt: string }
 export interface SeatZone { ticketTypeId: string; label: string; x: number; y: number; w: number; h: number }
 export interface SeatMap { id?: string; sessionId: string; stageLabel: string; zones: SeatZone[]; version: number }
 export interface Category { id: string; slug: string; name: string; sortOrder: number; eventCount: number }

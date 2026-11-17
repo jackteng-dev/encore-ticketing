@@ -1,5 +1,52 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M7 退票申請與審核（模擬退款，**含 schema 變更 V28**，疊在 M6 上）
+
+**此 PR 新增 `V28__refund_requests.sql`（受保護路徑），並在 `TicketService.issue` 加入一條檢查，開 PR 後先不 merge，需作者受控切換。**
+
+- 範圍決定：
+  - **做什麼**：會員申請退票 → 員工核准／駁回 → 核准記錄模擬退款編號。
+  - **核准不自動撤票、不回補票額**。撤銷的原因由既有 DB CHECK（`LOST_CODE/SECURITY/OPERATION_ERROR`）限定，改動需修改既有表格約束。
+  - **票券轉讓延後**：需改出票擁有權與 QR 憑證輪替，屬受保護流程，需另行設計。
+- Schema：只新增 `refund_request`。
+  - 狀態 CHECK 涵蓋待審、核准、駁回、撤回，並記錄撤回時間。
+  - `refund_one_open` 部分唯一索引：同訂單同時只有一筆待審或已核准。
+  - 不修改既有表格；main（V24）jar 在 V28 資料庫上實測可啟動並服務。
+- 規則：
+  - 只有 PAID 訂單、開演前 24 小時以前、無入場票券可申請。
+  - 原 requestId 重送回原申請，內容不同回 409。
+  - 員工審核以 expectedVersion 防重複；駁回需原因。
+- 並行與鎖順序：
+  - 申請：customer FOR UPDATE → order → attempt → tickets（共享鎖），與驗票相同順序。
+  - 審核：customer FOR SHARE → 申請 FOR UPDATE → order → attempt → tickets，取鎖後重新檢查入場。
+  - **已核准退票的訂單不再出票，也不可驗票入場**：
+    - `TicketService.issue` 在顧客與訂單鎖之後檢查；與審核的 customer 鎖互相序列化。
+    - `TicketService.transition`（CHECK_IN）在票券 `FOR UPDATE` 之後檢查；撤銷不受影響。
+    - 讀取端資格（會員票券 bundle、員工票券 `eligible`）同步反映退票，避免 UI 提供必定失敗的操作。
+  - **資料庫層防護（V28 trigger）**：`ticket_issuance` BEFORE INSERT 與 `issued_ticket` 改為 CHECKED_IN 前，若訂單有 APPROVED 退票即拒絕（SQLSTATE 23514）。
+    - 目的：CD 回退到不認得退票的舊版時規則仍成立。
+    - 已以 SQL 模擬舊版的出票與驗票寫入，兩者皆被擋下（交易已 ROLLBACK）；main（V24）在含 trigger 的 V28 上仍正常啟動。
+    - **這是在既有表格上新增 trigger**，雖為新增且只在有退票資料時生效，但不在 AGENTS.md 明列的直接可做清單內，需作者確認。
+- 員工撤票交接：
+  - 已核准申請可列出該訂單票券，每張連到 `/staff/admissions?ticketId=` 預選該票。
+  - 新增唯讀 `GET /api/admin/admissions/tickets/{id}`；撤銷仍需員工選原因並走原受保護流程。
+- 前端：
+  - 會員訂單頁的退票面板：申請、未確認時只能以原申請重試、撤回、狀態顯示；退票狀態隨訂單輪詢更新。
+  - `/staff/refunds` 審核頁（依狀態分頁）；退換票說明頁更新。
+- 實測：
+  - `mvn package` 650 tests 全過（新增 2 項，migration 計數 27→28）。
+  - Playwright `work/m7-ui-check.cjs` 8 項通過：真實等候室 → 保票 → 模擬付款核對為 PAID → 申請退票 → 員工核准 → 核准後票券頁顯示停用。
+  - `work/m7-checkin-check.cjs` 通過：先領票再退票 → 核准 → 讀取端資格為否、票券頁警示、驗票回 409 REFUND_APPROVED。
+  - 另以既有 ACTIVE 票驗證驗票頁預選（未執行撤銷）。
+- Codex 審查三輪：
+  - 第 1 輪 6 點已修：核准與驗票並行、撤票交接、退票狀態不隨輪詢更新、歷史上限遺失待審、審核錯誤被清除、撤回無稽核時間。
+  - 第 2 輪 3 點已修：核准後仍可出票（P1）、未確認申請可直接放棄、審核頁狀態分支錯誤。
+  - 第 3 輪 2 點已修：核准後仍可驗票（P1）、審核頁處理完最後一筆後分頁消失。
+  - 第 4 輪：讀取端資格未反映退票，已修。
+  - 第 5 輪 2 點已修：訂單頁退票狀態亂序覆蓋、已出票頁缺少停用警示。
+  - 第 6 輪：回退舊版後退票阻擋失效，已以 DB trigger 修正。
+  - 第 7 輪：未發現問題。
+
 ## 2026-11-17：M6 主辦方銷售報表與 CSV 匯出（無 schema 變更，疊在 M5 上）
 
 - 範圍決定：本里程碑只做唯讀報表與匯出。**折扣碼與早鳥票延後**。
