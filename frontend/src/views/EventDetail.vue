@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-import { api,date,money,status,type Detail,type EventProfile,type Session } from '../api'
+import { api,date,money,status,type Detail,type EventProfile,type SeatMap,type Session } from '../api'
+import SeatMapView from '../components/SeatMapView.vue'
 import { posterArt } from '../poster'
 import { showMock } from '../mockNotice'
 import { setTitle } from '../title'
@@ -10,12 +11,14 @@ import { currentCustomer, setFlag, type EventFlags } from '../engagement'
 import type { Customer } from '../api'
 const route=useRoute(),data=ref<Detail|null>(null),error=ref('')
 const profile=ref<EventProfile|null>(null)
+const seatMaps=ref<SeatMap[]>([])
+const mapFor=(id:string)=>seatMaps.value.find(m=>m.sessionId===id&&m.zones.length)
 const router=useRouter(),member=ref<Customer|null>(null),flags=ref<EventFlags|null>(null),flagBusy=ref(true),flagError=ref('')
 const upcoming=computed(()=>!!data.value?.sessions.some(s=>s.salesStatus==='UPCOMING'))
 // 初始狀態讀完前按鈕保持停用，避免較晚的讀取覆蓋剛寫入的結果。
 async function loadFlags(){flagBusy.value=true;try{member.value=await currentCustomer();if(member.value)flags.value=await api<EventFlags>(`/customer/events/${route.params.id}/engagement`,{headers:{'X-Expected-Customer-ID':member.value.id}})}catch{flags.value=null}finally{flagBusy.value=false}}
 async function toggle(kind:'favorite'|'reminder'){flagError.value='';if(!member.value){await router.push({path:'/account/login',query:{returnTo:`/events/${route.params.id}`}});return}if(flagBusy.value)return;flagBusy.value=true;try{flags.value=await setFlag(member.value,String(route.params.id),kind,!(flags.value?.[kind]))}catch(e){flagError.value=(e as Error).message}finally{flagBusy.value=false}}
-async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title);void loadFlags();api<EventProfile>(`/public/events/${route.params.id}/profile`).then(p=>profile.value=p,()=>profile.value=null)}catch(e){error.value=(e as Error).message}}
+async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title);void loadFlags();api<SeatMap[]>(`/public/events/${route.params.id}/seat-maps`).then(m=>seatMaps.value=m,()=>seatMaps.value=[]);api<EventProfile>(`/public/events/${route.params.id}/profile`).then(p=>profile.value=p,()=>profile.value=null)}catch(e){error.value=(e as Error).message}}
 onMounted(load)
 const art=computed(()=>data.value?posterArt(data.value.event.id,data.value.event.title):null)
 const facts=computed(()=>{
@@ -74,6 +77,7 @@ const badgeTone=(s:Session)=>s.salesStatus==='SELLING'?'hot':s.salesStatus==='UP
       <div><h3>{{s.name}}</h3><p class="meta" style="margin:0">{{date(s.startsAt)}} · 台北時間 · 售票 {{date(s.salesStart)}} — {{date(s.salesEnd)}}</p></div>
       <span class="badge" :class="badgeTone(s)">{{status(s.salesStatus)}}</span>
      </div>
+     <SeatMapView v-if="mapFor(s.id)" :map="mapFor(s.id)!" :tickets="s.tickets" :reserve-base="`/events/${data.event.id}/reserve`" :can-reserve="data.orderingEnabled&&s.salesStatus==='SELLING'" />
      <div class="table-scroll">
       <table class="ticket-table">
        <thead><tr><th scope="col">區域／票種</th><th scope="col">票價</th><th scope="col">剩餘</th><th scope="col">購買</th></tr></thead>

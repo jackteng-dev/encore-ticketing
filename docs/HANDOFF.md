@@ -1,5 +1,29 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M5 場次區域座位圖（**含 schema 變更 V27**，疊在 M4 上）
+
+**此 PR 新增 `V27__session_seat_map.sql`（受保護路徑），開 PR 後先不 merge，需作者受控切換。**
+
+- 範圍決定：做「區域座位圖」，也就是票種對應到場館示意圖上的區塊，點區塊進入既有選張數流程，依區域入場。
+  - **不做逐位劃位**：需要座位層級的保票，會動到既有票額、DIRTY gate 與非同步購票保護。
+  - 前台明示「本展示依區域入場、不劃位」。
+- Schema：只新增 `seat_map`（每場次一筆、舞台名稱、版本）與 `seat_zone`（票種對應區塊）。
+  - 座標為 0–100 百分比，DB CHECK 不超出畫布。
+  - 不修改既有表格；main（V24）jar 在 V27 資料庫上實測可啟動並服務。
+- 後端（`catalog` 套件內新增 `SeatMapService`／`SeatMapController`）：
+  - API：`GET /api/public/events/{id}/seat-maps`、`GET|PUT /api/admin/sessions/{id}/seat-map`。
+  - 沿用 catalog 原命令重送、版本與稽核。
+  - 驗證：區塊不重疊、不超出範圍、票種屬於該場次、每票種一區。
+  - 不鎖 `event_session`／`ticket_type`，避免與購票熱路徑競爭；發布後仍可調整版面。
+- 前端：
+  - 後台每個場次有「區域座位圖」編輯器：勾選票種、座標、即時預覽、重疊提示，以及「自動排列」（票價高者靠近舞台）。
+  - 前台活動頁顯示舞台與區塊，依剩餘數標示可購買／即將售完／已售完。可購買時區塊為連結，進入原選張數頁。
+- 實測：
+  - `mvn package` 646 tests 全過（新增 2 項，migration 計數 26→27；並確認 Catalog＋Customer 測試同跑通過）。
+  - `npm run build` 通過。
+  - Playwright `work/m5-ui-check.cjs` 7 項通過：編輯器擋重疊、自動排列並儲存、前台 3 區塊、點區塊進入保票流程、手機 375。
+- Codex 第 1 輪指出圖例寫「座位由系統配位」但出票並未配位，已改為「依區域入場、不劃位」；第 2 輪未發現缺陷。
+
 ## 2026-11-17：M4 收藏、開賣提醒與站內通知（**含 schema 變更 V26**，疊在 M3 上）
 
 **此 PR 新增 `V26__customer_engagement.sql`（受保護路徑），開 PR 後先不 merge，需作者受控切換。**

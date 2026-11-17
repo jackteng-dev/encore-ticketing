@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CatalogIntegrationTest {
- @Autowired TaxonomyService taxonomy;
+ @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps;
  @Autowired dev.jackteng.encore.customer.CustomerService customers; @Autowired dev.jackteng.encore.customer.EngagementService engagement;
  @Autowired CatalogService service; @Autowired JdbcTemplate db; @Autowired MockMvc mvc;
  @Autowired ObjectMapper json; @Autowired PasswordEncoder passwords;
@@ -51,7 +51,7 @@ class CatalogIntegrationTest {
  private org.springframework.test.web.servlet.request.RequestPostProcessor user(String u,boolean write){
   return SecurityMockMvcRequestPostProcessors.user(u).authorities(()->"CATALOG_READ",()->write?"CATALOG_WRITE":"CATALOG_VIEW");
  }
- @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(26,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
+ @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(27,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
  @Test void draftAndArchivedHidden(){var e=event();problem(404,()->service.detail(e.id(),true));service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),false);problem(404,()->service.detail(e.id(),true));}
  @Test void publishCompleteProjection(){var e=event();var s=session(e);ticket(s);service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true);var d=service.detail(e.id(),true);assertFalse(d.orderingEnabled());assertEquals(1,d.sessions().size());assertEquals(1200,d.sessions().getFirst().tickets().getFirst().priceTwd());}
  @Test void incompleteCannotPublish(){var e=event();problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));session(e);problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));}
@@ -249,5 +249,32 @@ class CatalogIntegrationTest {
   var csrf=mvc.perform(get("/api/customer/auth/csrf")).andExpect(status().isOk()).andReturn();var token=json.readTree(csrf.getResponse().getContentAsString());var csrfCookie=csrf.getResponse().getCookie("TICKET_CUSTOMER_CSRF");assertNotNull(csrfCookie);
   mvc.perform(post("/api/customer/events/"+e.id()+"/favorite").cookie(cookie,csrfCookie).header(token.get("headerName").asText(),token.get("token").asText()).contentType("application/json").content("{\"on\":true}")).andExpect(status().isOk()).andExpect(jsonPath("$.favorite").value(true));
   mvc.perform(post("/api/customer/events/"+e.id()+"/favorite").cookie(cookie,csrfCookie).header(token.get("headerName").asText(),token.get("token").asText()).contentType("application/json").content("{}")).andExpect(status().isBadRequest());
+ }
+ @Test void seatMapValidatesZonesAndReplays(){
+  var e=published("座位"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,800,1800);var d=service.detail(e.id(),true);var s=d.sessions().getFirst();
+  var a=s.tickets().get(0).id();var b=s.tickets().get(1).id();
+  assertTrue(seatMaps.forEvent(e.id()).isEmpty());assertEquals(0,seatMaps.forSession(s.id()).version());
+  var in=new SeatMapService.SeatMapInput(UUID.randomUUID(),0L,"主舞台",List.of(new SeatMapService.Zone(a,"A 區",10,20,40,30),new SeatMapService.Zone(b,"B 區",50,20,40,30)));
+  var map=seatMaps.update(manager,s.id(),in);assertEquals(1,map.version());assertEquals(2,map.zones().size());assertEquals(map,seatMaps.update(manager,s.id(),in));
+  assertEquals(List.of(map),seatMaps.forEvent(e.id()));
+  problem(409,()->seatMaps.update(manager,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),0L,"舞台",List.of())));
+  problem(400,()->seatMaps.update(manager,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),1L,"舞台",List.of(new SeatMapService.Zone(a,"A",10,10,40,40),new SeatMapService.Zone(b,"B",30,30,40,40)))));
+  problem(400,()->seatMaps.update(manager,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),1L,"舞台",List.of(new SeatMapService.Zone(a,"A",80,10,40,40)))));
+  problem(400,()->seatMaps.update(manager,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),1L,"舞台",List.of(new SeatMapService.Zone(a,"A",0,0,10,10),new SeatMapService.Zone(a,"A2",50,50,10,10)))));
+  var other=published("他場"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,800);var foreign=service.detail(other.id(),true).sessions().getFirst().tickets().getFirst().id();
+  problem(400,()->seatMaps.update(manager,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),1L,"舞台",List.of(new SeatMapService.Zone(foreign,"外",0,0,10,10)))));
+  var cleared=seatMaps.update(manager,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),1L,"舞台",List.of(new SeatMapService.Zone(b,"搖滾區",0,60,100,40))));
+  assertEquals(2,cleared.version());assertEquals(1,cleared.zones().size());
+  var available=service.detail(e.id(),true).sessions().getFirst().tickets().stream().map(Ticket::available).toList();assertEquals(List.of(10,10),available);
+  problem(403,()->seatMaps.update(viewer,s.id(),new SeatMapService.SeatMapInput(UUID.randomUUID(),2L,"舞台",List.of())));
+  var draft=event();var ds=session(draft);problem(404,()->seatMaps.forEvent(draft.id()));assertEquals(0,seatMaps.forSession(ds.id()).version());
+ }
+ @Test void seatMapHttpContract() throws Exception {
+  var e=published("座位HTTP"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,800);
+  mvc.perform(get("/api/public/events/"+e.id()+"/seat-maps")).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
+  var sid=service.detail(e.id(),true).sessions().getFirst().id();
+  mvc.perform(get("/api/admin/sessions/"+sid+"/seat-map")).andExpect(status().isUnauthorized());
+  String bad="{\"requestId\":\""+UUID.randomUUID()+"\",\"expectedVersion\":0,\"stageLabel\":\"舞台\",\"zones\":[{\"ticketTypeId\":\""+UUID.randomUUID()+"\",\"label\":\"A\",\"x\":0,\"y\":0,\"w\":0,\"h\":10}]}";
+  mvc.perform(put("/api/admin/sessions/"+sid+"/seat-map").with(user(manager,true)).with(SecurityMockMvcRequestPostProcessors.csrf()).contentType("application/json").content(bad)).andExpect(status().isBadRequest());
  }
 }

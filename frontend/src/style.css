@@ -224,6 +224,24 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .chip.check { cursor: pointer }
 .chip.check input { width: auto; margin: 0; accent-color: var(--accent) }
 .result-count { margin: 0 0 16px }
+.seat-map { margin: 8px 0 16px }
+.seat-stage { margin: 0 auto 10px; width: 60%; padding: 8px; text-align: center; border-radius: 0 0 40% 40% / 0 0 100% 100%; background: linear-gradient(180deg, var(--raised), var(--surface-2)); border: 1px solid var(--line-strong); font-weight: 900; letter-spacing: .2em; color: var(--text-2) }
+.seat-canvas { position: relative; aspect-ratio: 16 / 10; border: 1px dashed var(--line); border-radius: 8px; background: var(--surface) }
+.seat-zone { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 4px; overflow: hidden; border-radius: 6px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 22%, var(--surface)); color: var(--text); text-align: center; text-decoration: none; font-size: 13px; line-height: 1.2 }
+.seat-zone strong { font-size: 14px }
+.seat-zone small { color: var(--text-2) }
+a.seat-zone:hover, a.seat-zone:focus-visible { background: color-mix(in srgb, var(--accent) 45%, var(--surface)) }
+.seat-zone.low { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 20%, var(--surface)) }
+.seat-zone.out { border-color: var(--line); background: var(--surface-2); color: var(--text-3) }
+.seat-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 13px; color: var(--text-2) }
+.seat-legend i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; border-radius: 3px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 22%, var(--surface)) }
+.seat-legend i.low { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 20%, var(--surface)) }
+.seat-legend i.out { border-color: var(--line); background: var(--surface-2) }
+.seat-editor-table { width: 100%; border-collapse: collapse; font-size: 14px }
+.seat-editor-table th, .seat-editor-table td { padding: 6px; border-bottom: 1px solid var(--line); text-align: left }
+.seat-editor-table input[type=number] { width: 64px }
+.seat-map.preview .seat-zone { font-size: 11px }
+@media (max-width: 600px) { .seat-zone { font-size: 11px } .seat-zone strong { font-size: 12px } .seat-zone small { display: none } }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px }
 .action-toggle { padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 700 }
 .action-toggle.on { border-color: var(--accent); color: var(--accent-text); background: var(--raised) }
