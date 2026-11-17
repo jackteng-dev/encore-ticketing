@@ -3,10 +3,19 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { api,date,money,status,type Detail,type EventProfile,type Session } from '../api'
 import { posterArt } from '../poster'
+import { showMock } from '../mockNotice'
 import { setTitle } from '../title'
+import { useRouter } from 'vue-router'
+import { currentCustomer, setFlag, type EventFlags } from '../engagement'
+import type { Customer } from '../api'
 const route=useRoute(),data=ref<Detail|null>(null),error=ref('')
 const profile=ref<EventProfile|null>(null)
-async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title);api<EventProfile>(`/public/events/${route.params.id}/profile`).then(p=>profile.value=p,()=>profile.value=null)}catch(e){error.value=(e as Error).message}}
+const router=useRouter(),member=ref<Customer|null>(null),flags=ref<EventFlags|null>(null),flagBusy=ref(true),flagError=ref('')
+const upcoming=computed(()=>!!data.value?.sessions.some(s=>s.salesStatus==='UPCOMING'))
+// 初始狀態讀完前按鈕保持停用，避免較晚的讀取覆蓋剛寫入的結果。
+async function loadFlags(){flagBusy.value=true;try{member.value=await currentCustomer();if(member.value)flags.value=await api<EventFlags>(`/customer/events/${route.params.id}/engagement`,{headers:{'X-Expected-Customer-ID':member.value.id}})}catch{flags.value=null}finally{flagBusy.value=false}}
+async function toggle(kind:'favorite'|'reminder'){flagError.value='';if(!member.value){await router.push({path:'/account/login',query:{returnTo:`/events/${route.params.id}`}});return}if(flagBusy.value)return;flagBusy.value=true;try{flags.value=await setFlag(member.value,String(route.params.id),kind,!(flags.value?.[kind]))}catch(e){flagError.value=(e as Error).message}finally{flagBusy.value=false}}
+async function load(){error.value='';try{data.value=await api<Detail>(`/public/events/${route.params.id}`);setTitle(data.value.event.title);void loadFlags();api<EventProfile>(`/public/events/${route.params.id}/profile`).then(p=>profile.value=p,()=>profile.value=null)}catch(e){error.value=(e as Error).message}}
 onMounted(load)
 const art=computed(()=>data.value?posterArt(data.value.event.id,data.value.event.title):null)
 const facts=computed(()=>{
@@ -33,6 +42,12 @@ const badgeTone=(s:Session)=>s.salesStatus==='SELLING'?'hot':s.salesStatus==='UP
      <div class="eyebrow"><RouterLink v-if="profile?.category" :to="`/search?category=${profile.category.slug}`" class="category-link">{{profile.category.name}}</RouterLink><template v-else>ENCORE / LIVE EXPERIENCE</template></div>
      <h1>{{data.event.title}}</h1>
      <p v-if="profile?.performers.length" class="performer-line">演出：<template v-for="(p,i) in profile.performers" :key="p.id"><span v-if="i">、</span><RouterLink :to="`/performers/${p.slug}`">{{p.name}}</RouterLink></template></p>
+     <div class="hero-actions">
+      <button type="button" class="action-toggle" :class="{on:flags?.favorite}" :aria-pressed="!!flags?.favorite" :disabled="flagBusy" @click="toggle('favorite')">{{flags?.favorite?'♥ 已收藏':'♡ 收藏'}}</button>
+      <button v-if="flags?flags.reminder||flags.reminderAvailable:upcoming" type="button" class="action-toggle" :class="{on:flags?.reminder}" :aria-pressed="!!flags?.reminder" :disabled="flagBusy" @click="toggle('reminder')">{{flags?.reminder?'🔔 已設定開賣提醒':'🔔 開賣提醒我'}}</button>
+      <button type="button" class="action-toggle" @click="showMock('分享到社群')">↗ 分享</button>
+     </div>
+     <p v-if="flagError" class="notice error" role="alert">{{flagError}}</p>
      <dl class="fact-grid">
       <div><dt>DATE</dt><dd>{{facts.when}}</dd></div>
       <div><dt>VENUE</dt><dd><RouterLink v-if="profile?.venue" :to="`/venues/${profile.venue.slug}`">{{data.event.venue}} ↗</RouterLink><template v-else>{{data.event.venue}}</template></dd></div>

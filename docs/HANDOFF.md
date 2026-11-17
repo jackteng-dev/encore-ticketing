@@ -1,5 +1,39 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M4 收藏、開賣提醒與站內通知（**含 schema 變更 V26**，疊在 M3 上）
+
+**此 PR 新增 `V26__customer_engagement.sql`（受保護路徑），開 PR 後先不 merge，需作者受控切換。**
+
+- Schema：只新增三張表，不修改既有表格。
+  - `customer_favorite`
+  - `sale_reminder`：`due_at` 為登記當下下一個尚未開賣場次的開賣時間。
+  - `customer_notification`：`dedupe_key` 唯一，避免重複通知。
+- 回退相容：已實測 main（V24）jar 在 V26 資料庫上正常啟動並服務。
+- 後端（`customer` 套件內新增 `EngagementService`／`EngagementController`）：
+  - 本人收藏與開賣提醒為設定式 `POST {on}`，重送結果相同。
+  - 收藏列表、站內通知列表與未讀數、標為已讀。
+  - owner 一律取自已驗證身分；寫入先 `CustomerAccess.authorize`。
+  - 通知於會員讀取時才產生，不新增排程，也不需要新設定。到期提醒轉為通知時，以 `dedupe_key` 防止多個 API 同時讀取時重複建立。
+- 前端：
+  - 活動頁有「♡ 收藏」「🔔 開賣提醒我」與分享（模擬）。
+  - 頁首鈴鐺顯示未讀數；新增 `/account/favorites` 與 `/account/notifications`。
+  - Email、簡訊、LINE、App 推播為模擬按鈕。
+  - 登入的 returnTo 允許回到活動頁、收藏與通知頁。
+- 實測：
+  - `mvn package` 644 tests 全過（新增 6 項，migration 計數 25→26）。
+  - Playwright `work/m4-ui-check.cjs` 11 項通過，含真實等待開賣後鈴鐺出現 1 則未讀。
+  - `smoke_customer_browser.cjs` 14 項通過；`npm run build` 通過。
+- Codex 第 1 輪指出三點，皆已修正並加測試：
+  - 一場已開賣、另一場未開賣時，提醒會被提早消耗（改綁 `due_at`）。
+  - 售票結束後才讀取時提醒永不送出（改為只看 `due_at`）。
+  - 封存活動的收藏占滿上限無法釋放（上限只計發布中活動）。
+- Codex 第 2 輪指出三點，皆已修正：
+  - 重送 `{on:true}` 會覆寫尚未通知的原 `due_at`（現在保留原提醒）。
+  - 活動頁初始讀取可能覆蓋剛寫入的收藏狀態（讀完前停用按鈕）。
+  - 收藏與通知分頁回應亂序覆蓋（只採用最新請求，讀取中停用分頁）。
+- 完整測試另抓到我新增的 HTTP 測試誤用 `csrf()` 後處理器，汙染共用 context 的顧客 CSRF repository，導致其他測試失敗。已改用真實顧客 CSRF 流程。
+- 本機注意：V26 修改前已套用到本機 demo DB。僅在本機刪除 V26 自建的三張表與該筆 history 後重套；未影響其他資料，也未用 Flyway repair。
+
 ## 2026-11-17：M3 分類、場館、演出者與活動檔案（**含 schema 變更 V25**，疊在 M2 上）
 
 **此 PR 修改受保護路徑 `backend/src/main/resources/`（新增 `V25__catalog_taxonomy.sql`），依部署限制開 PR 後先不 merge，需作者在伺服器端以受控工具切換。**
