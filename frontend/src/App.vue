@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { refreshUnread, unread } from './engagement'
 import MockNotice from './components/MockNotice.vue'
 import { showMock } from './mockNotice'
-const router=useRouter(),keyword=ref('')
+const router=useRouter(),route=useRoute(),keyword=ref('')
+// 換頁時更新未讀數（未登入時 summary 回 401，鈴鐺會隱藏）。
+watch(()=>route.path,p=>{if(!p.startsWith('/staff'))void refreshUnread()},{immediate:true})
 function search(){const q=keyword.value.trim().slice(0,60);keyword.value='';void router.push({path:'/search',query:q?{q}:{}})}
 </script>
 <template>
@@ -16,6 +19,7 @@ function search(){const q=keyword.value.trim().slice(0,60);keyword.value='';void
     <span class="spacer" aria-hidden="true"></span>
     <form class="header-search" role="search" @submit.prevent="search"><input v-model="keyword" type="search" maxlength="60" placeholder="搜尋活動、場館" aria-label="搜尋活動"><button aria-label="送出搜尋">⌕</button></form>
     <RouterLink to="/account/orders">我的票券</RouterLink>
+    <RouterLink v-if="unread!==null" to="/account/notifications" class="nav-bell" :aria-label="unread?`通知中心，${unread} 則未讀`:'通知中心'">🔔<span v-if="unread" class="bell-count" aria-hidden="true">{{unread>99?'99+':unread}}</span></RouterLink>
     <RouterLink to="/staff">員工後台 ↗</RouterLink>
     <RouterLink to="/account" class="nav-cta">會員</RouterLink>
    </nav>

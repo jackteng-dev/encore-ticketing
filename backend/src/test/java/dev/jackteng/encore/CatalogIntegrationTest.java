@@ -23,6 +23,7 @@ import java.util.concurrent.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CatalogIntegrationTest {
  @Autowired TaxonomyService taxonomy;
+ @Autowired dev.jackteng.encore.customer.CustomerService customers; @Autowired dev.jackteng.encore.customer.EngagementService engagement;
  @Autowired CatalogService service; @Autowired JdbcTemplate db; @Autowired MockMvc mvc;
  @Autowired ObjectMapper json; @Autowired PasswordEncoder passwords;
  @Test void asyncCheckoutAvailabilityRequiresPublishedOrderingPurchaseDeliveryAndPublisher(){
@@ -50,7 +51,7 @@ class CatalogIntegrationTest {
  private org.springframework.test.web.servlet.request.RequestPostProcessor user(String u,boolean write){
   return SecurityMockMvcRequestPostProcessors.user(u).authorities(()->"CATALOG_READ",()->write?"CATALOG_WRITE":"CATALOG_VIEW");
  }
- @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(25,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
+ @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(26,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
  @Test void draftAndArchivedHidden(){var e=event();problem(404,()->service.detail(e.id(),true));service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),false);problem(404,()->service.detail(e.id(),true));}
  @Test void publishCompleteProjection(){var e=event();var s=session(e);ticket(s);service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true);var d=service.detail(e.id(),true);assertFalse(d.orderingEnabled());assertEquals(1,d.sessions().size());assertEquals(1200,d.sessions().getFirst().tickets().getFirst().priceTwd());}
  @Test void incompleteCannotPublish(){var e=event();problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));session(e);problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));}
@@ -190,5 +191,63 @@ class CatalogIntegrationTest {
   mvc.perform(post("/api/admin/venues").with(user(viewer,false)).with(SecurityMockMvcRequestPostProcessors.csrf()).contentType("application/json").content(ok)).andExpect(status().isForbidden());
   mvc.perform(post("/api/admin/venues").with(user(manager,true)).contentType("application/json").content(ok)).andExpect(status().isForbidden());
   mvc.perform(get("/api/public/events").param("category","concert")).andExpect(status().isOk());
+ }
+ private dev.jackteng.encore.customer.CustomerService.Principal member(){var issue=customers.register("m4-"+UUID.randomUUID().toString().substring(0,30),"合成會員",UUID.randomUUID().toString());return customers.authenticate(issue.token()).orElseThrow();}
+ @Test void favoritesAreIdempotentPerMemberAndHideUnpublished(){
+  var a=member();var b=member();var e=published("收藏"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,600);
+  assertTrue(engagement.setFavorite(a,e.id(),true).favorite());assertTrue(engagement.setFavorite(a,e.id(),true).favorite());
+  assertEquals(1,engagement.favorites(a,1,12).total());assertEquals(0,engagement.favorites(b,1,12).total());assertFalse(engagement.flags(b,e.id()).favorite());
+  var item=engagement.favorites(a,1,12).items().getFirst();assertEquals(600,item.minPriceTwd());assertTrue(item.selling());
+  problem(404,()->engagement.setFavorite(a,event().id(),true));
+  service.transition(manager,e.id(),new Transition(UUID.randomUUID(),2L),false);assertEquals(0,engagement.favorites(a,1,12).total());
+  assertFalse(engagement.setFavorite(a,e.id(),false).favorite());
+ }
+ @Test void saleReminderBecomesSingleNotificationWhenSalesOpen(){
+  var a=member();var e=published("提醒"+UUID.randomUUID().toString().substring(0,6),"場地",5,false,800);
+  var flags=engagement.setReminder(a,e.id(),true);assertTrue(flags.reminder());assertTrue(flags.reminderAvailable());
+  assertEquals(0,engagement.summary(a).unread());
+  db.update("UPDATE event_session SET sales_start=now()-interval '1 hour' WHERE event_id=?",e.id());db.update("UPDATE sale_reminder SET due_at=now()-interval '1 hour' WHERE customer_id=?",a.id());
+  assertEquals(1,engagement.summary(a).unread());assertEquals(1,engagement.summary(a).unread());
+  var page=engagement.notifications(a,1,20);assertEquals(1,page.total());var n=page.items().getFirst();
+  assertEquals("SALE_STARTED",n.kind());assertEquals("/events/"+e.id(),n.link());assertNull(n.readAt());
+  assertFalse(engagement.flags(a,e.id()).reminder());problem(409,()->engagement.setReminder(a,e.id(),true));
+  assertEquals(0,engagement.markRead(a,new dev.jackteng.encore.customer.EngagementService.MarkRead(List.of(n.id()),false)).unread());
+  var other=member();assertEquals(0,engagement.markRead(other,new dev.jackteng.encore.customer.EngagementService.MarkRead(List.of(),true)).unread());
+  assertNotNull(engagement.notifications(a,1,20).items().getFirst().readAt());assertEquals(0,engagement.notifications(other,1,20).total());
+ }
+ @Test void reminderWaitsForTheUpcomingOpeningAndSurvivesClosedSales(){
+  var a=member();var e=published("雙場"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,800);var now=OffsetDateTime.now();
+  db.update("UPDATE event SET status='DRAFT' WHERE id=?",e.id());
+  service.createSession(manager,e.id(),new SessionInput(UUID.randomUUID(),0L,"加場",now.plusDays(10),now.plusDays(2),now.plusDays(9)));
+  db.update("UPDATE event SET status='PUBLISHED' WHERE id=?",e.id());
+  assertTrue(engagement.setReminder(a,e.id(),true).reminder());assertEquals(0,engagement.summary(a).unread());
+  var dueBefore=db.queryForObject("SELECT due_at FROM sale_reminder WHERE customer_id=? AND event_id=?",OffsetDateTime.class,a.id(),e.id());
+  assertTrue(engagement.setReminder(a,e.id(),true).reminder());assertEquals(dueBefore,db.queryForObject("SELECT due_at FROM sale_reminder WHERE customer_id=? AND event_id=?",OffsetDateTime.class,a.id(),e.id()));
+  db.update("UPDATE event_session SET sales_start=now()-interval '3 hour',sales_end=now()-interval '1 hour' WHERE event_id=? AND name='加場'",e.id());
+  db.update("UPDATE sale_reminder SET due_at=now()-interval '3 hour' WHERE customer_id=? AND event_id=?",a.id(),e.id());
+  assertEquals(1,engagement.summary(a).unread());assertFalse(engagement.flags(a,e.id()).reminder());
+ }
+ @Test void archivedFavoritesDoNotConsumeTheLimit(){
+  var a=member();var keep=published("上限"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,800);var archived=published("封存"+UUID.randomUUID().toString().substring(0,6),"場地",5,true,800);
+  engagement.setFavorite(a,archived.id(),true);service.transition(manager,archived.id(),new Transition(UUID.randomUUID(),2L),false);
+  db.update("INSERT INTO customer_favorite(customer_id,event_id) SELECT ?,id FROM event WHERE status='ARCHIVED' AND id<>? LIMIT ? ON CONFLICT DO NOTHING",a.id(),archived.id(),dev.jackteng.encore.customer.EngagementService.MAX_FAVORITES);
+  assertTrue(engagement.setFavorite(a,keep.id(),true).favorite());assertEquals(1,engagement.favorites(a,1,12).total());
+  assertFalse(engagement.setFavorite(a,archived.id(),false).favorite());
+ }
+ @Test void concurrentReadsCreateOneNotification() throws Exception {
+  var a=member();var e=published("併發"+UUID.randomUUID().toString().substring(0,6),"場地",5,false,800);engagement.setReminder(a,e.id(),true);
+  db.update("UPDATE event_session SET sales_start=now()-interval '1 hour' WHERE event_id=?",e.id());db.update("UPDATE sale_reminder SET due_at=now()-interval '1 hour' WHERE customer_id=?",a.id());
+  try(var pool=Executors.newFixedThreadPool(4)){var tasks=new ArrayList<Callable<Long>>();for(int i=0;i<4;i++)tasks.add(()->engagement.summary(a).unread());for(var f:pool.invokeAll(tasks))assertEquals(1L,f.get());}
+  assertEquals(1,db.queryForObject("SELECT count(*) FROM customer_notification WHERE customer_id=?",Long.class,a.id()));
+ }
+ @Test void engagementHttpRequiresMemberAndCsrf() throws Exception {
+  var e=published("HTTP"+UUID.randomUUID().toString().substring(0,6),"場地",5,false,800);
+  mvc.perform(get("/api/customer/notifications/summary")).andExpect(status().isUnauthorized());
+  var issue=customers.register("m4h-"+UUID.randomUUID().toString().substring(0,28),"合成",UUID.randomUUID().toString());var cookie=new jakarta.servlet.http.Cookie(dev.jackteng.encore.customer.CustomerAuthenticationFilter.COOKIE,issue.token());
+  mvc.perform(get("/api/customer/events/"+e.id()+"/engagement").cookie(cookie)).andExpect(status().isOk()).andExpect(jsonPath("$.reminderAvailable").value(true));
+  mvc.perform(post("/api/customer/events/"+e.id()+"/favorite").cookie(cookie).contentType("application/json").content("{\"on\":true}")).andExpect(status().isForbidden());
+  var csrf=mvc.perform(get("/api/customer/auth/csrf")).andExpect(status().isOk()).andReturn();var token=json.readTree(csrf.getResponse().getContentAsString());var csrfCookie=csrf.getResponse().getCookie("TICKET_CUSTOMER_CSRF");assertNotNull(csrfCookie);
+  mvc.perform(post("/api/customer/events/"+e.id()+"/favorite").cookie(cookie,csrfCookie).header(token.get("headerName").asText(),token.get("token").asText()).contentType("application/json").content("{\"on\":true}")).andExpect(status().isOk()).andExpect(jsonPath("$.favorite").value(true));
+  mvc.perform(post("/api/customer/events/"+e.id()+"/favorite").cookie(cookie,csrfCookie).header(token.get("headerName").asText(),token.get("token").asText()).contentType("application/json").content("{}")).andExpect(status().isBadRequest());
  }
 }

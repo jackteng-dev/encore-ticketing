@@ -224,6 +224,22 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .chip.check { cursor: pointer }
 .chip.check input { width: auto; margin: 0; accent-color: var(--accent) }
 .result-count { margin: 0 0 16px }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px }
+.action-toggle { padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 700 }
+.action-toggle.on { border-color: var(--accent); color: var(--accent-text); background: var(--raised) }
+.nav-bell { position: relative; font-size: 18px; line-height: 1 }
+.bell-count { position: absolute; top: -8px; right: -12px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: var(--accent); color: var(--on-accent); font-size: 11px; font-weight: 900; display: grid; place-items: center }
+.fav-list, .notice-list { list-style: none; padding: 0; margin: 16px 0; display: flex; flex-direction: column; gap: 8px }
+.fav-row { display: flex; align-items: center; gap: 14px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface) }
+.fav-row .thumb { flex: 0 0 56px; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 4px; font-family: var(--display); font-size: 26px; text-decoration: none }
+.fav-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px }
+.fav-main a { color: var(--text) }
+.notice-item { width: 100%; display: flex; gap: 12px; align-items: flex-start; text-align: left; padding: 14px 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font-weight: 400 }
+.notice-item > span:last-child { display: flex; flex-direction: column; gap: 4px }
+.notice-item .dot { flex: 0 0 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: transparent }
+.notice-list li.unread .notice-item { border-color: var(--line-strong) }
+.notice-list li.unread .dot { background: var(--accent) }
+.channel-card { margin-top: 32px }
 .poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
 .card-category { margin-left: 8px; padding: 1px 6px; border: 1px solid var(--line-strong); border-radius: 3px; font-family: inherit; font-size: 11px; letter-spacing: 0; color: var(--text-2) }
 .category-link { color: inherit }

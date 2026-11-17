@@ -14,6 +14,8 @@ import Admissions from './views/Admissions.vue'
 import Monitoring from './views/Monitoring.vue'
 import InfoPage from './views/InfoPage.vue'
 import Search from './views/Search.vue'
+import Favorites from './views/Favorites.vue'
+import Notifications from './views/Notifications.vue'
 import StaffDirectory from './views/StaffDirectory.vue'
 import DirectoryPage from './views/DirectoryPage.vue'
 import DirectoryList from './views/DirectoryList.vue'
@@ -31,12 +33,13 @@ export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/account/purchases', component: Purchases },
  { path: '/help/:slug', component: InfoPage },
  { path: '/search', component: Search },
+ { path: '/account/favorites', component: Favorites }, { path: '/account/notifications', component: Notifications },
  { path: '/staff/directory', component: StaffDirectory },
  { path: '/venues', component: DirectoryList }, { path: '/performers', component: DirectoryList },
  { path: '/venues/:slug', component: DirectoryPage }, { path: '/performers/:slug', component: DirectoryPage },
  { path: '/:pathMatch(.*)*', component: Events },
 ] })
-const titles:[RegExp,string][]=[[/^\/account\/login/,'會員登入'],[/^\/account\/orders\/.+\/tickets/,'電子票券'],[/^\/account\/orders/,'我的保票訂單'],[/^\/account\/purchases/,'購票紀錄'],[/^\/account/,'會員空間'],[/^\/staff/,'員工後台'],[/\/reserve\//,'選擇張數']]
+const titles:[RegExp,string][]=[[/^\/account\/login/,'會員登入'],[/^\/account\/orders\/.+\/tickets/,'電子票券'],[/^\/account\/orders/,'我的保票訂單'],[/^\/account\/purchases/,'購票紀錄'],[/^\/account\/favorites/,'我的收藏'],[/^\/account\/notifications/,'通知中心'],[/^\/account/,'會員空間'],[/^\/staff/,'員工後台'],[/\/reserve\//,'選擇張數']]
 router.afterEach(to=>{
  const info=to.path.startsWith('/help/')?findInfoPage(to.params.slug)?.title:undefined
  setTitle(info||titles.find(([r])=>r.test(to.path))?.[1])
