@@ -15,6 +15,7 @@ import Monitoring from './views/Monitoring.vue'
 import InfoPage from './views/InfoPage.vue'
 import Search from './views/Search.vue'
 import Favorites from './views/Favorites.vue'
+import Profile from './views/Profile.vue'
 import Notifications from './views/Notifications.vue'
 import StaffDirectory from './views/StaffDirectory.vue'
 import SalesReports from './views/SalesReports.vue'
@@ -35,7 +36,7 @@ export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/account/purchases', component: Purchases },
  { path: '/help/:slug', component: InfoPage },
  { path: '/search', component: Search },
- { path: '/account/favorites', component: Favorites }, { path: '/account/notifications', component: Notifications },
+ { path: '/account/profile', component: Profile }, { path: '/account/favorites', component: Favorites }, { path: '/account/notifications', component: Notifications },
  { path: '/staff/directory', component: StaffDirectory },
  { path: '/staff/reports', component: SalesReports },
  { path: '/staff/refunds', component: StaffRefunds },
@@ -43,7 +44,7 @@ export const router = createRouter({ history: createWebHistory(), routes: [
  { path: '/venues/:slug', component: DirectoryPage }, { path: '/performers/:slug', component: DirectoryPage },
  { path: '/:pathMatch(.*)*', component: Events },
 ] })
-const titles:[RegExp,string][]=[[/^\/account\/login/,'會員登入'],[/^\/account\/orders\/.+\/tickets/,'電子票券'],[/^\/account\/orders/,'我的保票訂單'],[/^\/account\/purchases/,'購票紀錄'],[/^\/account\/favorites/,'我的收藏'],[/^\/account\/notifications/,'通知中心'],[/^\/account/,'會員空間'],[/^\/staff/,'員工後台'],[/\/reserve\//,'選擇張數']]
+const titles:[RegExp,string][]=[[/^\/account\/login/,'會員登入'],[/^\/account\/orders\/.+\/tickets/,'電子票券'],[/^\/account\/orders/,'我的保票訂單'],[/^\/account\/purchases/,'購票紀錄'],[/^\/account\/favorites/,'我的收藏'],[/^\/account\/profile/,'會員資料'],[/^\/account\/notifications/,'通知中心'],[/^\/account/,'會員空間'],[/^\/staff/,'員工後台'],[/\/reserve\//,'選擇張數']]
 router.afterEach(to=>{
  const info=to.path.startsWith('/help/')?findInfoPage(to.params.slug)?.title:undefined
  setTitle(info||titles.find(([r])=>r.test(to.path))?.[1])

@@ -224,6 +224,12 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0 }
 .chip.check { cursor: pointer }
 .chip.check input { width: auto; margin: 0; accent-color: var(--accent) }
 .result-count { margin: 0 0 16px }
+.profile-page .panel { margin-bottom: 16px }
+.verify-card .section-heading { align-items: center }
+.otp-box { margin-top: 12px }
+.otp-code { font-family: var(--display); font-size: 22px; letter-spacing: .3em; color: var(--text) }
+.otp-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end }
+.otp-form input { width: 160px; letter-spacing: .3em; font-size: 18px }
 .refund-panel { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line) }
 .refund-form textarea { width: 100% }
 .refund-card .section-heading strong { font-size: 20px }

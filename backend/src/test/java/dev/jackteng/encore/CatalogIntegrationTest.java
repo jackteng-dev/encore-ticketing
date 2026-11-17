@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CatalogIntegrationTest {
- @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps; @Autowired SalesReportService reports; @Autowired dev.jackteng.encore.orders.RefundService refunds;
+ @Autowired TaxonomyService taxonomy; @Autowired SeatMapService seatMaps; @Autowired SalesReportService reports; @Autowired dev.jackteng.encore.orders.RefundService refunds; @Autowired dev.jackteng.encore.customer.ProfileService profiles;
  @Autowired dev.jackteng.encore.customer.CustomerService customers; @Autowired dev.jackteng.encore.customer.EngagementService engagement;
  @Autowired CatalogService service; @Autowired JdbcTemplate db; @Autowired MockMvc mvc;
  @Autowired ObjectMapper json; @Autowired PasswordEncoder passwords;
@@ -51,7 +51,7 @@ class CatalogIntegrationTest {
  private org.springframework.test.web.servlet.request.RequestPostProcessor user(String u,boolean write){
   return SecurityMockMvcRequestPostProcessors.user(u).authorities(()->"CATALOG_READ",()->write?"CATALOG_WRITE":"CATALOG_VIEW");
  }
- @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(28,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
+ @Test void realPostgresMigration(){assertEquals("PostgreSQL",db.execute((org.springframework.jdbc.core.ConnectionCallback<String>)c->c.getMetaData().getDatabaseProductName()));assertEquals(29,db.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success",Integer.class));}
  @Test void draftAndArchivedHidden(){var e=event();problem(404,()->service.detail(e.id(),true));service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),false);problem(404,()->service.detail(e.id(),true));}
  @Test void publishCompleteProjection(){var e=event();var s=session(e);ticket(s);service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true);var d=service.detail(e.id(),true);assertFalse(d.orderingEnabled());assertEquals(1,d.sessions().size());assertEquals(1200,d.sessions().getFirst().tickets().getFirst().priceTwd());}
  @Test void incompleteCannotPublish(){var e=event();problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));session(e);problem(409,()->service.transition(manager,e.id(),new Transition(UUID.randomUUID(),1L),true));}
@@ -341,5 +341,42 @@ class CatalogIntegrationTest {
   var order=paidOrder(a,ticket,"PAID",OffsetDateTime.now().plusDays(5));var r=refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"理由"));
   var rejected=refunds.review(manager,r.id(),new dev.jackteng.encore.orders.RefundService.Review(1,false,"不符合規定"));assertEquals("REJECTED",rejected.status());assertNull(rejected.mockRefundId());
   assertEquals("PENDING",refunds.apply(a,order,new dev.jackteng.encore.orders.RefundService.Apply(UUID.randomUUID(),"補件後再申請")).status());
+ }
+ @Test void profileVerificationFlow(){
+  var a=member();var b=member();
+  assertEquals(0,profiles.read(a).version());
+  problem(400,()->profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(0,"王小明","not-an-email",null)));
+  problem(400,()->profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(0,"王小明",null,"12345")));
+  problem(409,()->profiles.start(a,new dev.jackteng.encore.customer.ProfileService.Start("EMAIL")));
+  var p1=profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(0," 王小明 ","Me@Example.COM","0912345678"));
+  assertEquals(1,p1.version());assertEquals("王小明",p1.realName());assertEquals("me@example.com",p1.email());
+  problem(409,()->profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(0,"x",null,null)));
+  var sent=profiles.start(a,new dev.jackteng.encore.customer.ProfileService.Start("EMAIL"));assertEquals("m***@example.com",sent.maskedTarget());assertTrue(sent.demoCode().matches("[0-9]{6}"));
+  problem(429,()->profiles.start(a,new dev.jackteng.encore.customer.ProfileService.Start("EMAIL")));
+  String wrong=sent.demoCode().equals("000000")?"111111":"000000";
+  assertThrows(dev.jackteng.encore.customer.ProfileService.WrongCode.class,()->profiles.confirm(a,new dev.jackteng.encore.customer.ProfileService.Confirm("EMAIL",wrong)));
+  assertEquals(1,db.queryForObject("SELECT attempts FROM contact_verification WHERE customer_id=? AND channel='EMAIL'",Integer.class,a.id()));
+  problem(409,()->profiles.confirm(b,new dev.jackteng.encore.customer.ProfileService.Confirm("EMAIL",sent.demoCode())));
+  var ok=profiles.confirm(a,new dev.jackteng.encore.customer.ProfileService.Confirm("EMAIL",sent.demoCode()));assertNotNull(ok.emailVerifiedAt());assertNull(ok.phoneVerifiedAt());
+  problem(409,()->profiles.confirm(a,new dev.jackteng.encore.customer.ProfileService.Confirm("EMAIL",sent.demoCode())));
+  problem(409,()->profiles.start(a,new dev.jackteng.encore.customer.ProfileService.Start("EMAIL")));
+  var same=profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(ok.version(),"王小明","me@example.com","0912345678"));assertNotNull(same.emailVerifiedAt());
+  var changed=profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(same.version(),"王小明","new@example.com","0912345678"));assertNull(changed.emailVerifiedAt());
+  var phone=profiles.start(a,new dev.jackteng.encore.customer.ProfileService.Start("PHONE"));assertEquals("0912***678",phone.maskedTarget());
+  db.update("UPDATE contact_verification SET attempts=5 WHERE customer_id=? AND channel='PHONE'",a.id());
+  problem(409,()->profiles.confirm(a,new dev.jackteng.encore.customer.ProfileService.Confirm("PHONE",phone.demoCode())));
+  db.update("UPDATE contact_verification SET attempts=0,created_at=created_at-interval '20 minutes',expires_at=clock_timestamp()-interval '1 minute' WHERE customer_id=? AND channel='PHONE'",a.id());
+  problem(409,()->profiles.confirm(a,new dev.jackteng.encore.customer.ProfileService.Confirm("PHONE",phone.demoCode())));
+  assertEquals(0,profiles.read(b).version());
+ }
+ @Test void profileHttpWrongCodeIs400AndKeepsAttempt() throws Exception {
+  var issue=customers.register("m8h-"+UUID.randomUUID().toString().substring(0,28),"合成",UUID.randomUUID().toString());var cookie=new jakarta.servlet.http.Cookie(dev.jackteng.encore.customer.CustomerAuthenticationFilter.COOKIE,issue.token());
+  var a=customers.authenticate(issue.token()).orElseThrow();profiles.update(a,new dev.jackteng.encore.customer.ProfileService.Update(0,null,"h@example.com",null));var sent=profiles.start(a,new dev.jackteng.encore.customer.ProfileService.Start("EMAIL"));
+  var csrf=mvc.perform(get("/api/customer/auth/csrf")).andReturn();var token=json.readTree(csrf.getResponse().getContentAsString());var csrfCookie=csrf.getResponse().getCookie("TICKET_CUSTOMER_CSRF");
+  String wrong=sent.demoCode().equals("000000")?"111111":"000000";
+  mvc.perform(post("/api/customer/profile/verifications/confirm").cookie(cookie,csrfCookie).header(token.get("headerName").asText(),token.get("token").asText()).contentType("application/json").content("{\"channel\":\"EMAIL\",\"code\":\""+wrong+"\"}"))
+   .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("WRONG_CODE"));
+  assertEquals(1,db.queryForObject("SELECT attempts FROM contact_verification WHERE customer_id=?",Integer.class,a.id()));
+  mvc.perform(get("/api/customer/profile")).andExpect(status().isUnauthorized());
  }
 }

@@ -1,5 +1,35 @@
 # Encore 售票平台交接
 
+## 2026-11-17：M8 會員實名資料與聯絡方式驗證（模擬寄送，**含 schema 變更 V29**，疊在 M7 上）
+
+**此 PR 新增 `V29__customer_profile.sql`（受保護路徑），開 PR 後先不 merge，需作者受控切換。**
+
+- 範圍：
+  - **做什麼**：會員填寫真實姓名、Email、手機，並以驗證碼驗證 Email 與手機。
+  - **模擬寄送**：尚未串接 Email／簡訊服務，驗證碼於本人畫面標示「此為模擬版本」直接顯示。
+  - **不蒐集身分證字號**：身分證實名認證、LINE／Google 綁定、兩步驟驗證為模擬按鈕。
+- Schema：只新增兩張表，不修改既有表格；main（V24）jar 在 V29 上實測可啟動並服務。
+  - `customer_profile`：格式 CHECK、驗證時間須有對應值。
+  - `contact_verification`：驗證碼只存 SHA-256(id:code)，有效期 10 分鐘，最多 5 次嘗試。
+- 後端（`customer` 套件新增 `ProfileService`／`ProfileController`）：
+  - 資料更新以 expectedVersion 防衝突；變更 Email／手機只清除該項驗證。
+  - 寄送限制 60 秒一次、每小時 5 次（429）。
+  - 驗證碼比對用常數時間；錯誤次數以 `noRollbackFor` 保存。
+  - 驗證時再次確認目標仍等於目前資料；寫入先 `CustomerAccess.authorize`。
+- 前端：`/account/profile`（會員空間連結「會員資料與驗證」）。
+  - 已驗證／未驗證徽章、寄送冷卻倒數、驗證碼輸入。
+  - 登入 returnTo 允許回到此頁。
+- 實測：
+  - `mvn package` 652 tests 全過（新增 2 項，migration 計數 28→29）。
+  - `npm run build` 通過。
+  - Playwright `work/m8-ui-check.cjs` 10 項通過：登入返回、儲存、模擬碼與冷卻、錯碼、驗證不覆蓋未儲存編輯、手機驗證、重新整理保留、改手機只重設手機、身分證為模擬、手機 375。
+- Codex 第 1 輪指出確認驗證會覆蓋未儲存的表單編輯，已修正（只更新已存資料與驗證狀態）。
+- Codex 第 2 輪 2 點已修：
+  - 驗證後前進版本可能覆蓋其他分頁的變更：改以「編輯起點」版本儲存，只有伺服器資料仍等於起點時才前進。
+  - 只改姓名也會清掉有效的驗證碼：只有聯絡方式變更的管道才清除。
+- 自測另抓到版本衝突時重新讀取會清掉錯誤訊息，已修正。
+- Codex 第 3 輪未發現缺陷。Playwright 增至 12 項，含另一分頁修改後本頁儲存偵測衝突。
+
 ## 2026-11-17：M7 退票申請與審核（模擬退款，**含 schema 變更 V28**，疊在 M6 上）
 
 **此 PR 新增 `V28__refund_requests.sql`（受保護路徑），並在 `TicketService.issue` 加入一條檢查，開 PR 後先不 merge，需作者受控切換。**

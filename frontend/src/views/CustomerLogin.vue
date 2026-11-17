@@ -10,7 +10,7 @@ async function submit(){
  const registration=register.value
  try {
   await customerWrite('/customer/auth/'+(registration?'register':'login'),{handle:handle.value,password:password.value,...(registration?{displayName:displayName.value}:{})})
-  password.value='';const target=route.query.returnTo;await router.push(typeof target==='string'&&(target==='/account/orders'||target==='/account/purchases'||target==='/account/favorites'||target==='/account/notifications'||/^\/events\/[0-9a-f-]{36}$/.test(target)||/^\/events\/[0-9a-f-]{36}\/reserve\/[0-9a-f-]{36}$/.test(target))?target:'/account')
+  password.value='';const target=route.query.returnTo;await router.push(typeof target==='string'&&(target==='/account/orders'||target==='/account/purchases'||target==='/account/favorites'||target==='/account/profile'||target==='/account/notifications'||/^\/events\/[0-9a-f-]{36}$/.test(target)||/^\/events\/[0-9a-f-]{36}\/reserve\/[0-9a-f-]{36}$/.test(target))?target:'/account')
  } catch(e){
   password.value='';error.value=(e as Error).message
   if(registration)error.value+='。若剛才回覆中斷，請用相同帳號登入確認；不要重複註冊。'
