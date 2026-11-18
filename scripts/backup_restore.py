@@ -70,7 +70,7 @@ class Database:
         table_parts = []
         for table in tables:
             table_parts.append('SELECT ' + literal(table) + " name,(SELECT json_build_object('rows',count(*),'sha256',encode(sha256(convert_to("
-                               "COALESCE(string_agg(row_to_json(x)::text,E'\\n' ORDER BY row_to_json(x)::text),''),'UTF8')),'hex')) FROM " + table + ' x) proof')
+                               "COALESCE(string_agg(row_to_json(__fp_row)::text,E'\\n' ORDER BY row_to_json(__fp_row)::text),''),'UTF8')),'hex')) FROM " + table + ' __fp_row) proof')
         sequence_parts = []
         for name in sequences:
             sequence_parts.append('SELECT ' + literal(name) + ' name,(SELECT last_value::text||\'|\'||is_called::text FROM ' + name + ') proof')
