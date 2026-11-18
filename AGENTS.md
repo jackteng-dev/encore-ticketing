@@ -9,7 +9,8 @@
 3. **受保護路徑（CD 資料契約）**：PR 若修改下列路徑，CD 會拒絕自動部署。請先停下，告知作者在伺服器端執行受控切換（contract switch）後才能 merge：
    - `backend/src/main/resources/`
    - `infra/`
-   - `backend/src/main/java/dev/jackteng/encore/`（套件根目錄的結構變更）
+   - `backend/src/main/java/dev/jackteng/encore/` 底下的 `admission`、`delivery`、`inventory`、`monitoring`、`operations`、`orders`、`runtime`、`tickets`（購票／佇列／庫存／出票／入場／Worker 心跳；**任何檔案變更**都算）
+   - 其他套件（`catalog`、`customer`、`identity`、`common`）與前端可一般 PR 自動部署
 4. 只在本機跑測試、編譯、啟動，不會修改上述檔案（Maven 會把 resources 複製到 `target/`，該目錄已被忽略）。
 5. 保留 DIRTY gate、排隊與非同步購票的既有保護；不要弱化測試或 guard。
 

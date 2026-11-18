@@ -26,7 +26,7 @@ SERVICES = {'developer-portfolio': ['api','gateway'], 'fadaiting-camp': ['backen
 FENCES = {'developer-portfolio':['backend/src/main/resources/db/migration','infra','scripts/portfolio_deploy.py','scripts/portfolio_db.py'],
           'fadaiting-camp':['db/init','backend/src/main/resources/application.yml'],
           'shop_bak_ap':['scripts/demo-identity-schema.sql','src/main/resources'], 'Shop_back':['package-lock.json'],
-          'ticket-platform':['backend/src/main/resources','infra','backend/src/main/java/dev/jackteng/encore'],
+          'ticket-platform':['backend/src/main/resources','infra','backend/src/main/java/dev/jackteng/encore/admission','backend/src/main/java/dev/jackteng/encore/delivery','backend/src/main/java/dev/jackteng/encore/inventory','backend/src/main/java/dev/jackteng/encore/monitoring','backend/src/main/java/dev/jackteng/encore/operations','backend/src/main/java/dev/jackteng/encore/orders','backend/src/main/java/dev/jackteng/encore/runtime','backend/src/main/java/dev/jackteng/encore/tickets'],
           'ai-knowledge-assistant':['config','scripts/local-deploy.py','scripts/local-model-runtime.py','backend/src/main/resources']}
 
 
