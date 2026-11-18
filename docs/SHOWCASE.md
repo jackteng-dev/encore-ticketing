@@ -2,6 +2,22 @@
 
 範圍：免費mock、全新隔離合成資料、loopback HTTP，約15分鐘操作。進度／證據見[FEATURE_STATUS](FEATURE_STATUS.md)，本輪核對見[M6D](verification/showcase-m6d-2026-10-12.md)。真手機、HTTPS與正式營運另驗。不要使用真帳號／個資／票碼公開截圖。
 
+## 0. 展示資料（虛構活動、場館、演出者與海報）
+
+`scripts/seed_showcase.py` 會在**已啟動的乾淨環境**建立 12 個虛構活動、5 個場館、8 個演出者，並設定分類、海報與區域座位圖。
+- 資料在 `scripts/showcase/showcase-data.json`，圖片在 `frontend/public/demo/`，皆為虛構原創，名稱、文案與圖片由 Codex 產生。
+- 只透過員工 API 寫入，遵守原命令重送、版本與稽核。
+- 原命令編號由 slug 與錨定日期推導：同一天重跑只會重送，已存在的 slug 會跳過。
+- 預設只連 127.0.0.1；帳密從 `work/` 下的私密 env 讀取，不印出。
+
+```bash
+python scripts/seed_showcase.py --env work/showcase-demo/runtime.env
+```
+
+- 場次與開賣時間以執行當天（台北）為錨點；其中 4 個活動「尚未開賣」，可示範開賣提醒。
+- Windows 產生的 env 若為 CRLF，請先轉為 LF 再給腳本與 `docker compose` 使用。
+- 要讓首頁只顯示展示資料，請在全新的 compose project（新的 `work/<路徑>/runtime.env`）執行，不要對跑過測試的資料庫執行。
+
 ## 1. 全新環境與完整測試
 
 需JDK21、Maven3.9、Node>=22.12、Python3、Docker Compose v2；下列在repository根目錄的bash／WSL2執行。確認25432／26379／25672／19110／15180未被其他作品占用；不足磁碟／記憶體先停下，VFS尤其不能只看image標示大小。
