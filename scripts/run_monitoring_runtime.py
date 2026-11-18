@@ -59,7 +59,7 @@ def main():
   e=env.copy();e['TICKET_MONITORING_ENABLED']='false';run(jvm+['-Dloader.path='+str(archive),'-Dloader.main=dev.jackteng.encore.inventory.ReturnDiscoverySeedProbe','-cp',str(seed),'org.springframework.boot.loader.launch.PropertiesLauncher','seed',str(scope/'fixture.json')],'seed',e)
   old=api('api-v23',baseline,extra=e);require(sql('SELECT max(version::int) FROM flyway_schema_history;')=='23','Actual V23 upgrade boundary required')
   tables=sql("SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename<>'flyway_schema_history' ORDER BY tablename;").splitlines()
-  def rows():return{t:hashlib.sha256(sql('SELECT row_to_json(x)::text FROM "'+t+'" x ORDER BY row_to_json(x)::text;').encode()).hexdigest()for t in tables}
+  def rows():return{t:hashlib.sha256(sql('SELECT row_to_json(__fp_row)::text FROM "'+t+'" __fp_row ORDER BY row_to_json(__fp_row)::text;').encode()).hexdigest()for t in tables}
   before=rows();stop(old);a1=api('api-a',final);a2=api('api-b',final,19111);require(rows()==before and sql('SELECT max(version::int) FROM flyway_schema_history;')=='24','V23 to V24 changed business data');extraChecks.append('actual V23 to V24 leaves all old public rows unchanged; only operational heartbeat rows added')
   launch('preview',['node',str(ROOT/'frontend/node_modules/vite/bin/vite.js'),'preview','--host','127.0.0.1','--port','15180','--strictPort',str(ROOT/'frontend')]);until(lambda:ready())
   # Preview health is an HTTP root, not the API readiness function.
