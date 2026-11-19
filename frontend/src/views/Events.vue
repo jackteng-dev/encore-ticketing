@@ -21,8 +21,9 @@ async function move(n:number){page.value+=n;await load()}
  <section v-if="lead" class="stage-hero" aria-label="焦點活動">
   <div class="stage-hero-inner">
    <RouterLink :to="`/events/${lead.id}`" class="poster" :class="lead.art.tone">
-    <span class="poster-mark" aria-hidden="true">{{lead.art.mark}}</span>
-    <span class="poster-word">{{lead.art.word}}</span>
+    <img v-if="lead.imageUrl" :src="lead.imageUrl" alt="" class="poster-img hero-img">
+    <template v-else><span class="poster-mark" aria-hidden="true">{{lead.art.mark}}</span>
+    <span class="poster-word">{{lead.art.word}}</span></template>
     <h1>{{lead.title}}</h1>
     <span class="hero-meta">{{lead.venue}}</span>
    </RouterLink>
@@ -38,7 +39,7 @@ async function move(n:number){page.value+=n;await load()}
     </div>
     <div v-if="cards.length>1" class="hero-list">
      <RouterLink v-for="e in cards.slice(1,4)" :key="e.id" :to="`/events/${e.id}`">
-      <span class="poster thumb" :class="e.art.tone" aria-hidden="true">{{e.art.mark}}</span>
+      <span class="poster thumb" :class="e.art.tone" aria-hidden="true"><img v-if="e.imageUrl" :src="e.imageUrl" alt="" class="poster-img" loading="lazy"><template v-else>{{e.art.mark}}</template></span>
       <span><strong>{{e.title}}</strong><span>{{e.venue}}</span></span>
      </RouterLink>
     </div>

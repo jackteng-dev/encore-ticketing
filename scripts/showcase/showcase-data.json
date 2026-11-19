@@ -1,0 +1,639 @@
+{
+  "venues": [
+    {
+      "slug": "mist-isle-hall",
+      "name": "霧嶼聲景館",
+      "city": "台北市",
+      "address": "台北市霧帆路二段168號",
+      "description": "以層疊屋簷與霧面玻璃構成的城市展演空間，入口穿越一座種滿蕨類的中庭。館內採可調式座席與吸音木牆，適合樂團演出、室內音樂會與小型劇場。傍晚燈光沿著廊道亮起，讓進場前的等候也成為觀演體驗的一部分。",
+      "imagePrompt": "Architectural photograph of an original fictional performance hall in an urban Taiwanese setting, layered floating eaves, frosted glass facade, fern courtyard, warm illuminated corridors at dusk, realistic materials, cinematic architectural lighting, wide 16:10 landscape composition, no text, letters, numbers, signage, logos, or watermarks."
+    },
+    {
+      "slug": "folded-river-stage",
+      "name": "摺河藝文聚場",
+      "city": "新北市",
+      "address": "新北市摺川路86號",
+      "description": "由折紙般的金屬屋頂包覆多功能黑盒子劇場，外側設有寬敞的階梯廣場與雨遮步道。室內舞台可依演出調整方向，觀眾能近距離感受台詞、舞步與現場節奏。柔和的公共區域照明，讓親子觀眾與初次看戲的人都能自在停留。",
+      "imagePrompt": "Architectural photograph of a fictional contemporary arts venue in suburban Taiwan, folded origami-like metal roof, broad stepped plaza, sheltered pedestrian walkway, inviting amber interior lighting, blue hour, wide 16:10 landscape composition, no text, letters, numbers, signs, logos, or watermarks."
+    },
+    {
+      "slug": "amber-cove-forum",
+      "name": "琥灣展演所",
+      "city": "台中市",
+      "address": "台中市琥灣路三段205號",
+      "description": "以琥珀色陶板與弧形天窗打造的複合展演場地，白天能看見自然光在牆面緩慢移動。館內串連開放展廳、可變式舞台與休憩長廊，適合聲音展覽、跨域演出及參與式活動。空間保留寬裕動線，方便觀眾依自己的步調探索。",
+      "imagePrompt": "Interior architectural photograph of an original fictional cultural venue, amber ceramic walls, curved skylights, flexible exhibition floor connected to a small performance stage, generous circulation, soft natural daylight, refined contemporary Taiwanese architecture, wide 16:10 landscape composition, no text, letters, numbers, signs, logos, or watermarks."
+    },
+    {
+      "slug": "banyan-cloud-theatre",
+      "name": "榕雲故事劇院",
+      "city": "台南市",
+      "address": "台南市榕雲街72號",
+      "description": "紅土色外牆與樹影庭院圍出溫暖的觀演場所，低矮入口後方藏著挑高的鏡框式舞台。座席以緩坡排列，搭配清楚的視線與細緻聲響，適合戲劇、親子節目及敘事音樂演出。演出前可在半戶外廊下歇腳，感受南方城市的緩慢節奏。",
+      "imagePrompt": "Architectural photograph of a fictional intimate theatre in southern Taiwan, terracotta plaster walls, shaded courtyard with mature banyan-like trees, low entrance opening into a tall auditorium, warm late afternoon sunlight, quiet welcoming atmosphere, wide 16:10 landscape composition, no text, letters, numbers, signs, logos, or watermarks."
+    },
+    {
+      "slug": "tide-wing-arena",
+      "name": "潮翼競演館",
+      "city": "高雄市",
+      "address": "高雄市潮翼路一段320號",
+      "description": "流線型屋頂像張開的羽翼，包覆明亮的室內球場與環形觀眾席。場館採清楚的分區動線，中央場地可安排籃球賽事、街舞演出與大型交流活動。外圍廣場設有遮蔭座椅，夜間立面以柔和光帶呼應港都晚風，營造熱鬧而舒適的聚會氣氛。",
+      "imagePrompt": "Architectural photograph of an original fictional indoor sports and performance arena in a southern Taiwanese city, sweeping wing-shaped roof, illuminated curved facade, shaded public plaza, subtle evening light strips, no visible scoreboard, wide 16:10 landscape composition, no text, letters, numbers, signage, logos, or watermarks."
+    }
+  ],
+  "performers": [
+    {
+      "slug": "neon-isle-route",
+      "name": "霓嶼航線",
+      "description": "由四位虛構音樂人組成的流行樂團，以明亮吉他、合成器與層次和聲描繪城市裡的日常心事。作品從通勤、深夜便利店與朋友重逢取材，旋律輕快卻藏著細膩情緒。現場重視團員互動與觀眾合唱，讓每段節奏都像一封寄給生活的短信。",
+      "imagePrompt": "Editorial group portrait of four entirely fictional Taiwanese adult pop musicians, original facial features with no resemblance to any real celebrity, pastel utility jackets, electric guitar and compact synthesizer, softly glowing coastal-inspired studio set, candid warmth, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "cen-cheng-he",
+      "name": "岑澄禾",
+      "description": "以木吉他與鋼琴創作的虛構獨立歌手，擅長把難以說出口的情緒寫成簡單而耐聽的旋律。歌聲帶著輕微沙啞，編曲保留呼吸與指尖聲響。演出常穿插生活觀察及歌曲故事，邀請觀眾在安靜片刻裡，重新聽見自己的步調。",
+      "imagePrompt": "Intimate editorial portrait of one entirely fictional Taiwanese adult singer-songwriter with original facial features, short wavy hair, linen clothing, holding an acoustic guitar beside an upright piano, soft window light, muted olive and cream palette, no resemblance to any real celebrity, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "prism-return",
+      "name": "稜光迴路",
+      "description": "由兩位虛構聲音創作者組成的電子音樂組合，融合碎拍、環境採樣與溫暖的類比音色。演出從細微脈動逐步推向鮮明節奏，搭配抽象光影建立流動的空間感。兩人喜歡留下即興段落，讓每場聲響都隨觀眾的呼吸與身體反應改變。",
+      "imagePrompt": "Portrait of two entirely fictional Taiwanese adult electronic music artists with original faces, sculptural dark clothing, modular synthesizers without labels, translucent prism installation, cyan and violet rim lighting, thoughtful experimental mood, no resemblance to real celebrities, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "clear-vault-orchestra",
+      "name": "澄穹管弦樂團",
+      "description": "由虛構樂手共同組成的管弦樂團，以原創曲目與跨領域敘事為演出核心。弦樂、木管、銅管及打擊聲部交織出細緻景色，從微風般的弱音延伸至開闊合奏。樂團重視親近觀眾的導聆，讓第一次走進音樂廳的人也能找到聆聽入口。",
+      "imagePrompt": "Wide editorial ensemble portrait of an entirely fictional Taiwanese orchestra, adult musicians with original diverse faces, strings woodwinds brass and percussion, contemporary charcoal concert attire, softly illuminated timber rehearsal hall, elegant natural atmosphere, no identifiable real people, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "folded-day-theatre",
+      "name": "摺晝劇團",
+      "description": "關注日常關係與記憶縫隙的虛構劇團，運用演員肢體、物件與燈光轉換，將普通房間變成充滿想像的故事現場。作品常從一個未被回答的問題出發，在幽默對話與安靜停頓之間推進，邀請觀眾重新思考陪伴、告別與選擇。",
+      "imagePrompt": "Ensemble portrait of five entirely fictional Taiwanese adult theatre performers with original facial features, standing among suspended translucent fabric and simple wooden frames, expressive poses, warm theatrical side lighting, contemporary intimate theatre aesthetic, no resemblance to real actors, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "offbeat-grid-crew",
+      "name": "逆拍格街舞團",
+      "description": "由六位虛構舞者組成的街舞團，將俐落排舞、地板動作與即興交流融入演出。團隊擅長用身體回應城市聲響，從腳步摩擦到整齊定點，都帶著鮮明個性。舞台設計重視彼此接應與觀眾參與，讓不同程度的舞蹈愛好者都能感受節奏。",
+      "imagePrompt": "Dynamic group portrait of six entirely fictional Taiwanese adult street dancers with original faces, coordinated rust orange and slate streetwear without branding, varied dance poses in a minimalist concrete studio, crisp directional lighting, energetic editorial photography, no real celebrity resemblance, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "cotton-star-pocket",
+      "name": "棉星口袋親子劇團",
+      "description": "以布偶、物件劇場與現場音樂陪伴孩子探索世界的虛構親子劇團。故事圍繞分享、好奇與情緒表達，演員會用簡單提問及節奏遊戲邀請大小觀眾加入。視覺採柔和色彩與可辨識造型，讓第一次進劇場的孩子也能安心跟上冒險。",
+      "imagePrompt": "Warm studio portrait of four entirely fictional Taiwanese adult family theatre performers with original faces, handmade cloud and seed puppets, soft cotton costumes, peach and mint storybook set, playful welcoming expressions, no resemblance to real performers or existing characters, no text, lettering, logos, or watermarks."
+    },
+    {
+      "slug": "kaohsiung-radiant-fins",
+      "name": "高雄曜鰭職業籃球隊",
+      "description": "以團隊防守與快速傳導為特色的虛構職業籃球隊，球員來自不同成長背景，共同建立充滿活力的比賽風格。球隊以海流與魚鰭象徵默契，主場活動結合賽事解說、訓練觀察及觀眾互動，讓資深球迷與初次觀賽者都能理解場上選擇。",
+      "imagePrompt": "Professional team portrait of an entirely fictional adult Taiwanese basketball squad with original diverse faces and athletic builds, plain teal and copper uniforms without numbers or emblems, indoor basketball court, strong arena lighting, confident cooperative mood, no resemblance to real athletes, no text, lettering, numbers, logos, or watermarks."
+    }
+  ],
+  "events": [
+    {
+      "slug": "neon-isle-night-sailing",
+      "title": "霓嶼航線：把夜色唱成海",
+      "category": "concert",
+      "venueSlug": "mist-isle-hall",
+      "performerSlugs": [
+        "neon-isle-route"
+      ],
+      "description": "當城市的窗一格格亮起，霓嶼航線邀你登上一段由旋律領航的夜間旅程。四位團員將以流行搖滾、合成器與層次和聲，串起關於出發、繞路與重逢的原創歌曲。演出從輕盈的日常片段開始，逐漸走向適合一起揮手合唱的熱烈段落，並加入重新編排的木吉他篇章。舞台以流動色光描繪想像中的海面，讓熟悉的城市心事有了新的輪廓。無論獨自前來或與朋友同行，都能在今晚找到屬於自己的停靠位置。",
+      "sessions": [
+        {
+          "name": "首場晚場",
+          "startsInDays": 12,
+          "startHour": 19,
+          "salesOpen": true
+        },
+        {
+          "name": "加開晚場",
+          "startsInDays": 13,
+          "startHour": 19,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "前排搖滾區",
+          "priceTwd": 2800,
+          "capacity": 100,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "一般搖滾區",
+          "priceTwd": 2200,
+          "capacity": 300,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "看台席",
+          "priceTwd": 1600,
+          "capacity": 200,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 concert key visual, an imaginary island made of luminous sound waves floating above a midnight sea, four small abstract silhouettes on a translucent boat, electric coral and deep indigo palette, layered screenprint textures, joyful cinematic atmosphere, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "cen-cheng-he-slow-letter",
+      "title": "岑澄禾：慢慢寄出的信",
+      "category": "concert",
+      "venueSlug": "banyan-cloud-theatre",
+      "performerSlugs": [
+        "cen-cheng-he"
+      ],
+      "description": "有些話需要走過幾條街、等過幾場雨，才終於找到適合的旋律。岑澄禾帶著木吉他與鋼琴，將那些尚未寄出的心情整理成一晚的原創歌曲。這次演出保留樂器最貼近耳邊的聲響，也透過少量弦樂與環境音，展開關於家、朋友及自我對話的片段。歌曲之間，她會分享創作時留下的筆記，讓觀眾看見一句歌詞如何慢慢長成故事。柔和燈光與安靜座席將陪伴整段旅程，邀你暫時放慢腳步，聽見平常被忙碌蓋過的聲音。",
+      "sessions": [
+        {
+          "name": "午後場",
+          "startsInDays": 16,
+          "startHour": 15,
+          "salesOpen": true
+        },
+        {
+          "name": "晚場",
+          "startsInDays": 16,
+          "startHour": 19,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "近舞台席",
+          "priceTwd": 2000,
+          "capacity": 60,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "標準席",
+          "priceTwd": 1400,
+          "capacity": 180,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "後排席",
+          "priceTwd": 900,
+          "capacity": 80,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 intimate acoustic concert key visual, an open blank envelope releasing tiny paper birds and delicate botanical shapes beside an acoustic guitar, warm cream paper grain, muted olive and terracotta watercolor, spacious poetic composition, all paper surfaces completely blank, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "prism-return-pulse-garden",
+      "title": "稜光迴路：脈衝花園",
+      "category": "concert",
+      "venueSlug": "amber-cove-forum",
+      "performerSlugs": [
+        "prism-return",
+        "offbeat-grid-crew"
+      ],
+      "description": "當低頻像根系向下延伸，光線便沿著節奏慢慢開花。稜光迴路將以模組合成器、環境採樣與即興編排，在琥灣展演所打造一座持續變化的聲音花園。逆拍格街舞團也將加入部分段落，以身體線條回應細碎節拍與飽滿重音。演出從適合凝神聆聽的微小聲響出發，逐步累積成可以自由擺動的共同脈動。抽象投影隨音色改變形狀，讓每個角落都有不同景色，邀請觀眾依自己的步調靠近舞台、停留觀察，或跟著節奏一起呼吸。",
+      "sessions": [
+        {
+          "name": "首場",
+          "startsInDays": 20,
+          "startHour": 19,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "前區站席",
+          "priceTwd": 2400,
+          "capacity": 120,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "一般站席",
+          "priceTwd": 1800,
+          "capacity": 260,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "後區座席",
+          "priceTwd": 1200,
+          "capacity": 80,
+          "maxPerCustomer": 2
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 experimental electronic concert key visual, translucent crystalline flowers growing from concentric bass ripples, abstract jointed shapes suggesting dance movement, ultraviolet purple and acid mint against deep black, glossy sculptural rendering with fine analog grain, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "clear-vault-wind-atlas",
+      "title": "澄穹管弦樂團：風的地形",
+      "category": "concert",
+      "venueSlug": "mist-isle-hall",
+      "performerSlugs": [
+        "clear-vault-orchestra"
+      ],
+      "description": "如果風也能留下地圖，它會如何描繪山谷、街角與尚未抵達的遠方？澄穹管弦樂團以全場原創曲目回應這個想像，透過弦樂的細密紋理、木管的輕盈呼吸與銅管的開闊聲響，勾勒一段由近而遠的聆聽旅程。演出將在曲目之間安排簡短導聆，介紹不同聲部如何接力塑造景色，讓初次接觸管弦樂的觀眾也能自在進入。舞台以柔和色溫呼應音樂層次，從清晨般的寧靜走向明亮合奏，陪你在座席上展開一次無須行囊的旅行。",
+      "sessions": [
+        {
+          "name": "午後首場",
+          "startsInDays": 38,
+          "startHour": 14,
+          "salesOpen": false
+        },
+        {
+          "name": "晚場",
+          "startsInDays": 38,
+          "startHour": 19,
+          "salesOpen": false
+        }
+      ],
+      "tickets": [
+        {
+          "name": "中央景觀席",
+          "priceTwd": 3200,
+          "capacity": 80,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "前區席",
+          "priceTwd": 2400,
+          "capacity": 160,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "側區席",
+          "priceTwd": 1600,
+          "capacity": 120,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "後區席",
+          "priceTwd": 1000,
+          "capacity": 100,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 orchestral concert key visual, sweeping ribbons of air forming imaginary topographic contours above a tiny abstract orchestra, ivory embossed paper sculpture, pale blue and brushed copper accents, restrained elegant lighting, no musical notation, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "folded-day-room-of-rain",
+      "title": "摺晝劇團：房間裡的候雨人",
+      "category": "theatre",
+      "venueSlug": "folded-river-stage",
+      "performerSlugs": [
+        "folded-day-theatre"
+      ],
+      "description": "一間總是聽得見雨聲的公寓，迎來三位各自帶著行李的陌生人。他們都說只住一晚，卻在一次停電之後，開始交換那些原本打算藏好的故事。摺晝劇團以原創劇本、細膩對話與物件轉換，讓餐桌、雨傘和一扇窗逐漸拼出人物之間的距離。觀眾將跟著角色經歷尷尬的笑聲、突如其來的爭執，以及終於願意留下的片刻。舞台上的雨始終沒有真正落下，等待卻慢慢有了不同意義，邀你在幽默與溫柔之間，想起曾經為誰保留的一個位置。",
+      "sessions": [
+        {
+          "name": "首演晚場",
+          "startsInDays": 18,
+          "startHour": 19,
+          "salesOpen": true
+        },
+        {
+          "name": "週末午場",
+          "startsInDays": 19,
+          "startHour": 14,
+          "salesOpen": true
+        },
+        {
+          "name": "週末晚場",
+          "startsInDays": 19,
+          "startHour": 19,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "前區席",
+          "priceTwd": 1800,
+          "capacity": 60,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "中央席",
+          "priceTwd": 1400,
+          "capacity": 120,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "後區席",
+          "priceTwd": 800,
+          "capacity": 80,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 contemporary theatre key visual, a small floating apartment room with three empty chairs, a suspended umbrella and a window holding a cloud, theatrical miniature set photography, rain-blue shadows and a single amber lamp, surreal intimate mood, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "folded-day-pocket-dusk",
+      "title": "摺晝劇團：口袋裡的黃昏",
+      "category": "theatre",
+      "venueSlug": "banyan-cloud-theatre",
+      "performerSlugs": [
+        "folded-day-theatre"
+      ],
+      "description": "小鎮上有一家只在黃昏開門的修補店，店主聲稱能修好破掉的口袋，卻總會在裡面找到別人遺忘的片刻。一位急著離開的旅人帶來一件舊外套，讓原本平靜的工作檯出現了意料之外的變化。摺晝劇團以肢體、光影與少量道具，將記憶化作能被摺疊、交換與重新收藏的物件。故事沿著一件外套的縫線展開，在輕巧笑點之後，慢慢觸及關於失去與成長的提問。邀請觀眾走進這間想像中的店，看看那些未曾說完的告別，是否還有另一種安放方式。",
+      "sessions": [
+        {
+          "name": "首場",
+          "startsInDays": 45,
+          "startHour": 19,
+          "salesOpen": false
+        },
+        {
+          "name": "午後場",
+          "startsInDays": 46,
+          "startHour": 14,
+          "salesOpen": false
+        }
+      ],
+      "tickets": [
+        {
+          "name": "近舞台席",
+          "priceTwd": 2000,
+          "capacity": 50,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "標準席",
+          "priceTwd": 1500,
+          "capacity": 150,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "後排席",
+          "priceTwd": 900,
+          "capacity": 80,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 poetic theatre key visual, an oversized coat pocket containing a miniature sunset village, a spool of glowing thread connecting tiny windows, tactile fabric collage and handcrafted paper scenery, plum shadows and apricot light, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "radiant-fins-wave-scrimmage",
+      "title": "曜鰭主場：浪起對抗賽",
+      "category": "sports",
+      "venueSlug": "tide-wing-arena",
+      "performerSlugs": [
+        "kaohsiung-radiant-fins"
+      ],
+      "description": "球鞋摩擦地板的聲音響起，高雄曜鰭職業籃球隊即將以隊內分組對抗，展現新一輪訓練累積的默契。兩組球員將輪番測試不同陣容，從快速推進、外圍傳導到禁區協防，讓觀眾近距離觀察每一次選擇如何改變攻守節奏。現場安排賽前暖身觀察與中場戰術說明，協助第一次進場的觀眾掌握比賽重點。這是一場充滿競爭感的主場交流，既能為漂亮配合歡呼，也能看見球員如何在失誤後重新接應，一起感受團隊籃球的熱度。",
+      "sessions": [
+        {
+          "name": "主場午後賽",
+          "startsInDays": 10,
+          "startHour": 15,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "場邊席",
+          "priceTwd": 3000,
+          "capacity": 40,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "中央看台席",
+          "priceTwd": 1600,
+          "capacity": 240,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "側區看台席",
+          "priceTwd": 1000,
+          "capacity": 300,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "上層看台席",
+          "priceTwd": 600,
+          "capacity": 400,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 basketball event key visual, a copper basketball slicing through sculptural teal ocean currents above an abstract indoor court, dynamic low perspective, energetic cut-paper geometry with realistic ball texture, dramatic arena light beams, no uniforms or scoreboards, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "radiant-fins-night-challenge",
+      "title": "曜鰭主場：夜潮挑戰日",
+      "category": "sports",
+      "venueSlug": "tide-wing-arena",
+      "performerSlugs": [
+        "kaohsiung-radiant-fins"
+      ],
+      "description": "一個夜晚，從精準投射到快速攻防，跟著高雄曜鰭職業籃球隊看見球場上的多種本領。活動先以球員技巧挑戰揭開序幕，再由隊內兩組陣容進行完整對抗，觀察個人能力如何在團隊配合中找到位置。每個段落皆安排現場解說，分享跑位、傳球時機與防守溝通的觀察重點。場邊也將透過大範圍燈光變化回應攻守氣氛，陪伴觀眾投入每次回合。無論你熟悉戰術細節，或只是喜歡進球瞬間的歡呼，都能在這場主場聚會中找到參與的樂趣。",
+      "sessions": [
+        {
+          "name": "挑戰日晚場",
+          "startsInDays": 51,
+          "startHour": 18,
+          "salesOpen": false
+        }
+      ],
+      "tickets": [
+        {
+          "name": "場邊觀賽席",
+          "priceTwd": 2600,
+          "capacity": 40,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "中央看台席",
+          "priceTwd": 1400,
+          "capacity": 240,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "側區看台席",
+          "priceTwd": 800,
+          "capacity": 320,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 sports event key visual, a luminous basketball suspended inside a curling wave shaped like a fin, dark petrol blue background, copper foil textures and sharp turquoise motion trails, bold sculptural composition, no scoreboard or emblems, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "listening-to-invisible-islands",
+      "title": "聽見未命名的島",
+      "category": "exhibition",
+      "venueSlug": "amber-cove-forum",
+      "performerSlugs": [],
+      "description": "如果一座島嶼只能透過聲音被辨認，你會先聽見海岸、森林，還是某個人的腳步？本展以原創聲音裝置、半透明雕塑與互動光影，搭建數個沒有既定地名的想像場景。觀眾可沿著不同路徑移動，讓距離與停留時間改變聽見的細節，也能透過簡單操作，為空間加入短暫的聲響。每個區域皆保留安靜觀察的位置，適合獨自探索或與同行者交換感受。展覽鼓勵放慢速度，從耳朵出發，拼湊一張只屬於自己、無須標示方向的島嶼地圖。",
+      "sessions": [
+        {
+          "name": "首日午後梯次",
+          "startsInDays": 9,
+          "startHour": 13,
+          "salesOpen": true
+        },
+        {
+          "name": "首日傍晚梯次",
+          "startsInDays": 9,
+          "startHour": 17,
+          "salesOpen": true
+        },
+        {
+          "name": "次日午後梯次",
+          "startsInDays": 10,
+          "startHour": 13,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "導覽體驗票",
+          "priceTwd": 900,
+          "capacity": 30,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "一般參觀票",
+          "priceTwd": 600,
+          "capacity": 120,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "學生票",
+          "priceTwd": 400,
+          "capacity": 60,
+          "maxPerCustomer": 2
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 sound art exhibition key visual, floating translucent islands formed from rippling glass and delicate acoustic wave surfaces, misty pearl background, seafoam green and pale lavender highlights, contemplative museum photography aesthetic, no maps with labels, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "light-keeps-small-things",
+      "title": "光替小事留了位置",
+      "category": "exhibition",
+      "venueSlug": "folded-river-stage",
+      "performerSlugs": [],
+      "description": "一只杯子的影子、一段窗邊的午後，以及風吹動布料時短暫形成的形狀，都可能成為值得停留的風景。本展以原創微型場景、紙材雕塑與緩慢變化的光源，將日常小事放大成可以走近觀察的空間。觀眾能從不同高度與角度觀看同一件作品，發現輪廓如何隨位置改變，也能在互動區調整光的方向，試著留下自己的構圖。展場以分區梯次安排參觀，保留觀看與交流的餘裕，邀請你把注意力交給那些平常匆匆經過、卻從未仔細看過的片刻。",
+      "sessions": [
+        {
+          "name": "開展午後梯次",
+          "startsInDays": 42,
+          "startHour": 13,
+          "salesOpen": false
+        },
+        {
+          "name": "開展傍晚梯次",
+          "startsInDays": 42,
+          "startHour": 17,
+          "salesOpen": false
+        }
+      ],
+      "tickets": [
+        {
+          "name": "導覽體驗票",
+          "priceTwd": 1000,
+          "capacity": 20,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "一般參觀票",
+          "priceTwd": 700,
+          "capacity": 100,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "學生票",
+          "priceTwd": 400,
+          "capacity": 60,
+          "maxPerCustomer": 2
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 contemporary art exhibition key visual, oversized shadows from a tiny ceramic cup, folded paper window and suspended fabric, meticulous miniature installation on a warm cream surface, apricot sunlight and powder blue shadows, quiet surreal editorial style, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "cotton-star-cloud-seed",
+      "title": "棉星口袋：雲朵種子找新家",
+      "category": "family",
+      "venueSlug": "banyan-cloud-theatre",
+      "performerSlugs": [
+        "cotton-star-pocket"
+      ],
+      "description": "一顆總是飄錯方向的雲朵種子，決定帶著小布包出門，尋找能讓自己安心長大的地方。旅途中，它遇見怕黑的紙燈、喜歡唱歌的石頭，以及不知道怎麼說再見的小風。棉星口袋親子劇團以布偶、物件變化與現場音樂，陪孩子一起練習表達需要、理解差異，也看見陪伴可以有好多種模樣。演出安排簡單的拍手節奏與口語互動，大小觀眾都能自在加入。柔和色彩與清楚敘事串起整段冒險，讓一家人在笑聲之後，帶著新的聊天話題回家。",
+      "sessions": [
+        {
+          "name": "親子午場",
+          "startsInDays": 24,
+          "startHour": 13,
+          "salesOpen": true
+        },
+        {
+          "name": "親子午後場",
+          "startsInDays": 24,
+          "startHour": 16,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "前區席",
+          "priceTwd": 1200,
+          "capacity": 60,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "中央席",
+          "priceTwd": 900,
+          "capacity": 140,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "後區席",
+          "priceTwd": 600,
+          "capacity": 80,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 family theatre key visual, an original fluffy cloud seed character carrying a tiny blank cloth pouch, friendly folded-paper lantern and rounded singing pebble on a winding garden path, handmade felt and paper diorama, peach mint and butter yellow palette, no existing characters, no text, letters, numerals, logos, watermarks, or real people."
+    },
+    {
+      "slug": "offbeat-grid-city-rhythm",
+      "title": "逆拍格：城市節奏實驗日",
+      "category": "other",
+      "venueSlug": "tide-wing-arena",
+      "performerSlugs": [
+        "offbeat-grid-crew"
+      ],
+      "description": "把等紅燈時的腳步、轉身避讓的動作與放學後的雀躍，重新組合成一段屬於自己的舞。逆拍格街舞團帶來結合演出、示範與入門體驗的節奏實驗日，先以完整排舞展現團隊默契，再拆解律動、重心與簡單接拍方法。參與者可依自己的舒適程度選擇觀看或加入，透過循序練習感受身體與音樂的關係。活動後段安排小組交流與共同收尾，讓不同經驗的人都能找到發揮空間。穿著方便活動的服裝，就能帶著好奇心走進這場熱鬧的城市聚會。",
+      "sessions": [
+        {
+          "name": "午後體驗場",
+          "startsInDays": 28,
+          "startHour": 14,
+          "salesOpen": true
+        },
+        {
+          "name": "傍晚體驗場",
+          "startsInDays": 28,
+          "startHour": 18,
+          "salesOpen": true
+        }
+      ],
+      "tickets": [
+        {
+          "name": "近台體驗區",
+          "priceTwd": 1400,
+          "capacity": 40,
+          "maxPerCustomer": 2
+        },
+        {
+          "name": "一般體驗區",
+          "priceTwd": 1000,
+          "capacity": 100,
+          "maxPerCustomer": 4
+        },
+        {
+          "name": "看台觀賞席",
+          "priceTwd": 500,
+          "capacity": 160,
+          "maxPerCustomer": 4
+        }
+      ],
+      "posterPrompt": "Vertical 3:4 participatory street dance event key visual, abstract articulated human-like sculptures stepping across a playful geometric city grid, rust orange cobalt and warm gray palette, crisp risograph texture, dynamic rhythmic repetition, original faceless figures only, no text, letters, numerals, logos, watermarks, or real people."
+    }
+  ]
+}

@@ -284,6 +284,9 @@ a.seat-zone:hover, a.seat-zone:focus-visible { background: color-mix(in srgb, va
 .notice-list li.unread .dot { background: var(--accent) }
 .channel-card { margin-top: 32px }
 .poster-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+/* 焦點海報有圖片時，加暗色漸層讓標題可讀 */
+.stage-hero-inner > .poster:has(.hero-img)::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgb(0 0 0 / .75)); pointer-events: none }
+.stage-hero-inner > .poster:has(.hero-img) > h1, .stage-hero-inner > .poster:has(.hero-img) > .hero-meta { position: relative; z-index: 1; color: #f4f2ee; text-shadow: 0 2px 12px rgb(0 0 0 / .6) }
 .card-category { margin-left: 8px; padding: 1px 6px; border: 1px solid var(--line-strong); border-radius: 3px; font-family: inherit; font-size: 11px; letter-spacing: 0; color: var(--text-2) }
 .category-link { color: inherit }
 .performer-line { margin: 0 0 12px; color: var(--text-2) }
